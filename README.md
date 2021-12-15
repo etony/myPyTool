@@ -1,2 +1,3 @@
 # Python-Study
-Python-Study
+
+Python study notes
