@@ -16,7 +16,7 @@ if response.status_code == 200:
     page = round(total/ps)
     print("共 " + str(page) +" 页")
     for pageNum  in range(1, page+1):
-        print(pageNum)
+        print("第" + str(pageNum) + "页")
         json =  {"cmsNews":{"categoryId":18,"isWebsite":"Y"},"pageDomain":{"pageNum":pageNum,"pageSize":ps,"orderByColumn":"publish_time","isAsc":"desc"}}
         response = requests.post('http://www.ngchina.com.cn/api/ex/cms/news/list', json=json, timeout=timeout)
         if response.status_code == 200:
