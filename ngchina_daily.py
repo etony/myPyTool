@@ -32,7 +32,7 @@ if response.status_code == 200:
                     if pic.status_code == 200:                    
                         open((picname+'.jpg'),'wb').write(pic.content)
                 except:
-                    print("图片获取失败。")
+                    print("图片获取失败！")
                 
 
 
