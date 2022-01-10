@@ -2,6 +2,7 @@
 
 import requests
 import json
+import os
 
 ps = 12
 timeout = 5
@@ -16,7 +17,7 @@ if response.status_code == 200:
     page = round(total/ps)
     print("共 " + str(page) +" 页")
     for pageNum  in range(1, page+1):
-        print("第" + str(pageNum) + "页")
+        print(pageNum)
         json =  {"cmsNews":{"categoryId":18,"isWebsite":"Y"},"pageDomain":{"pageNum":pageNum,"pageSize":ps,"orderByColumn":"publish_time","isAsc":"desc"}}
         response = requests.post('http://www.ngchina.com.cn/api/ex/cms/news/list', json=json, timeout=timeout)
         if response.status_code == 200:
@@ -26,13 +27,16 @@ if response.status_code == 200:
                 im = res['rows'][i]
                 pichref = im['pic']
                 picname = im['title']
+                ext = os.path.splitext(pichref)[-1]
+                print(ext)
                 print("{:<20}  {:<}".format(picname, pichref))
                 try:
                     pic = requests.get(pichref, timeout=15)
-                    if pic.status_code == 200:                    
-                        open((picname+'.jpg'),'wb').write(pic.content)
+                    if pic.status_code == 200:   
+                        
+                        open((picname+ext),'wb').write(pic.content)
                 except:
-                    print("图片获取失败！")
+                    print("图片获取失败。")
                 
 
 
