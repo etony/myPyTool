@@ -6,9 +6,9 @@ Created on Fri Jan 14 14:11:22 2022
 """
 
 import sys
-from PyQt5.QtWidgets import (QWidget, QToolTip, QLineEdit, QLabel,
-                             QPushButton, QApplication)
-from PyQt5.QtGui import QFont,QCursor
+from PyQt5.QtWidgets import (QWidget, QToolTip, QLineEdit, QLabel, QPushButton,
+                             QApplication, QSystemTrayIcon, QAction, QMenu, QMessageBox, QDesktopWidget)
+from PyQt5.QtGui import QFont, QCursor, QIcon
 from PyQt5 import QtCore
 
 
@@ -18,6 +18,7 @@ class Example(QWidget):
         super().__init__()
 
         self.initUI()
+        self.icon_quit()
 
     def initUI(self):
         self.setWindowTitle("加法计算")
@@ -31,15 +32,15 @@ class Example(QWidget):
         self.pushButton.resize(50, 20)
         self.pushButton.move(294, 40)
         self.pushButton.setFont(font)
-                      
+
         self.pushButton2 = QPushButton("重置", self)
         self.pushButton2.resize(50, 20)
         self.pushButton2.move(360, 70)
-        
+
         self.pushButton3 = QPushButton("退出", self)
         self.pushButton3.resize(50, 20)
         self.pushButton3.move(425, 70)
-        
+
         self.lineEdit = QLineEdit("0", self)
         self.lineEdit.resize(113, 20)
         self.lineEdit.move(20, 40)
@@ -56,7 +57,7 @@ class Example(QWidget):
         self.label.resize(21, 21)
         self.label.setFont(font)
         self.label.move(144, 40)
-        
+
         # self.label = QLabel("-", self)
         # self.label.resize(21, 21)
         # self.label.setFont(font)
@@ -70,16 +71,19 @@ class Example(QWidget):
         # self.label = QLabel("/", self)
         # self.label.resize(21, 21)
         # self.label.setFont(font)
-        # self.label.move(144, 100)        
+        # self.label.move(144, 100)
 
         QtCore.QMetaObject.connectSlotsByName(self)
         self.pushButton.clicked.connect(self.click_success)
         self.pushButton2.clicked.connect(self.click_reset)
         self.pushButton3.clicked.connect(self.quit)
-        
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.SubWindow)
+
+        self.setWindowFlags(QtCore.Qt.FramelessWindowHint |
+                            QtCore.Qt.WindowStaysOnTopHint | QtCore.Qt.SubWindow)
         self.setAutoFillBackground(False)
-        
+
+        self.tocenter()
+
         self.show()
 
     def click_success(self):
@@ -110,9 +114,34 @@ class Example(QWidget):
             print(self.pos())
             self.x, self.y = self.pos().x, self.pos().y
             QMouseEvent.accept()
+
+    def icon_quit(self):
+        mini_icon = QSystemTrayIcon(self)
+        mini_icon.setIcon(QIcon('./trayicon.png'))
+        quit_menu = QAction('Exit', self, triggered=self.quit)
+        tpMenu = QMenu(self)
+        tpMenu.addAction(quit_menu)
+        mini_icon.setContextMenu(tpMenu)
+        mini_icon.show()
+
+    def closeEvent(self, event):
+        reply = QMessageBox.question(
+            self, '关闭', "确认关闭?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+
+        if reply == QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()
+
     def quit(self):
         self.close()
         sys.exit()
+
+    def tocenter(self):
+        fg = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        fg.moveCenter(cp)
+        self.move(fg.topLeft())
 
 
 if __name__ == '__main__':
