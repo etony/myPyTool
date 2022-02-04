@@ -225,7 +225,7 @@ class PAThread(QThread):
             for a in range(1, pages + 1):
                 if not stop:
 
-                    urlss = ['http://www.xmsj.org/','http://y.yin2s.com/','http://tool.zlog.top/music/']
+                    urlss = ['http://www.xmsj.org/','http://y.yin2s.com/','http://tool.zlog.top/music/','https://music.iw233.cn/','https://music.haom.ren/']
                     print(tryed)
                     if tryed > 3:
 
