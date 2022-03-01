@@ -6,11 +6,10 @@ Module implementing Music.
 
 from PyQt6.QtCore import pyqtSlot, QModelIndex, QTimer, QPoint, Qt
 from PyQt6.QtWidgets import QDialog, QApplication, QFileDialog
-from PyQt6 import QtWidgets
 from Ui_music import Ui_Dialog
 import pygame
 from mutagen import mp3
-from PyQt6 import QtCore
+from PyQt6 import QtCore, QtGui, QtWidgets
 
 class Music(QDialog, Ui_Dialog):
     """
@@ -30,24 +29,28 @@ class Music(QDialog, Ui_Dialog):
         self.timer = QTimer()
         self.timer.setInterval(1000)
         self.timer.start()
-        self.timer.timeout.connect(self.test)
+        self.timer.timeout.connect(self.timer_music)
         self.musiclength = 1
         self.flag = 0 
         self.paused = False
+        self.label.setText('')
+        self.lb_time.setText('')
         self.listWidget.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
         
         
-    def test(self):
+    def timer_music(self):
         #self.label.setText(str(self.musiclength))
-        cu=pygame.mixer.music.get_pos()
-        if cu > 0:
-            self.horizontalSlider.setValue(int((cu/self.musiclength)/10) +self.flag+1)
-            self.horizontalSlider.setEnabled(True)
-        else:
-            self.horizontalSlider.setEnabled(False)
-        #print(pygame.mixer.music.get_pos()/1000, self.musiclength)
         
-        self.lb_time.setText(str(int(self.horizontalSlider.value()*self.musiclength/100))+':'+str(int(self.musiclength)))
+        if self.musiclength >1:             
+            cu=pygame.mixer.music.get_pos()
+            if cu > 0:
+                self.horizontalSlider.setValue(int((cu/self.musiclength)/10) +self.flag+1)
+                self.horizontalSlider.setEnabled(True)
+            else:
+                self.horizontalSlider.setEnabled(False)
+            #print(pygame.mixer.music.get_pos()/1000, self.musiclength)
+            
+            self.lb_time.setText(str(int(self.horizontalSlider.value()*self.musiclength/100))+':'+str(int(self.musiclength)))
         
         
 
@@ -140,11 +143,11 @@ class Music(QDialog, Ui_Dialog):
         if self.paused:
             pygame.mixer.music.unpause()
             self.paused=False
-            self.pbPause.setText(_translate("Dialog", "暂停"))
+            self.pbPause.setText("暂停")
         else:
             pygame.mixer.music.pause()
             self.paused=True
-            self.pbPause.setText(_translate("Dialog", "继续"))
+            self.pbPause.setText("继续")
     
     @pyqtSlot(int)
     def on_hsVule_valueChanged(self, value):
@@ -173,7 +176,14 @@ class Music(QDialog, Ui_Dialog):
             elif self.action == self.item2:
                 self.listWidget.clear()
                 
-
+    def generateMenu(self, pos):
+        menu = QtWidgets.QMenu()
+        ico_del = QtGui.QIcon('del.png')
+        ico_clear = QtGui.QIcon('clear.png') 
+        self.item1 = menu.addAction(ico_del,u"删除")
+        self.item2 = menu.addAction(ico_clear,u"清空")
+        #menu.popup(QtGui.QCursor.pos())
+        self.action = menu.exec(self.listWidget.mapToGlobal(pos))
 
 if __name__ == "__main__":
     import sys
