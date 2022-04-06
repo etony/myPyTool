@@ -22,7 +22,7 @@ Created on Mon Feb 14 15:16:03 2022
 
 import random
 import collections
-colors = ["红桃", "黑桃", "方块", "梅花"]  # 牌色
+colors = ["♥", "♠", "♦", "♣"]  # 牌色
 
 digi = [str(i) for i in range(2, 11)] + ['J', 'Q', 'K', 'A']  # 点数
 
@@ -33,9 +33,9 @@ n = 5  # 玩家
 
 def getscore(pk_lst):  # 检查大小
     # print(pk_lst,end="  ")
-    colors = len(set(pk_color[:2] for pk_color in pk_lst))  # 是否同色
-
-    lst = list(sc[2:] for sc in pk_lst)  # 转换分值
+    colors = len(set(pk_color[:1] for pk_color in pk_lst))  # 是否同色
+    #print("color:", set(pk_color[:1] for pk_color in pk_lst) )
+    lst = list(sc[1:] for sc in pk_lst)  # 转换分值
     for i in range(3):
         if lst[i] == "A":
             lst[i] = 14
@@ -47,6 +47,8 @@ def getscore(pk_lst):  # 检查大小
             lst[i] = 13
         else:
             lst[i] = int(lst[i])
+            
+    print(f"分值：{str(lst):<15}", end="      " )
 
     info = {}
     info['score'] = 0
@@ -113,7 +115,7 @@ if __name__ == '__main__':
         print(f'{player:<5}{str(pk_lst):<23}', end="      ")
         info = getscore(pk_list[player])
         result[player] = info['score']
-    print(pk_list)
+    #print(pk_list)
     print("\n比较-----")
 
     for key, value in result.items():
