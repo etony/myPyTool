@@ -30,6 +30,8 @@ class Image_Conver(QMainWindow, Ui_MainWindow):
         """
         super().__init__(parent)
         self.setupUi(self)
+        self.pbstart.setDisabled(True)
+        self.pbsave.setDisabled(True)
     
     @pyqtSlot()
     def on_pbselect_clicked(self):
@@ -48,6 +50,8 @@ class Image_Conver(QMainWindow, Ui_MainWindow):
         self.label_2.repaint()
         # 显示所选图片的路径
         self.lineEdit_2.setText(imgNamepath)
+        self.pbstart.setEnabled(True)
+        
         
         
     @pyqtSlot()
@@ -76,6 +80,7 @@ class Image_Conver(QMainWindow, Ui_MainWindow):
         self.label.setScaledContents(True)
         self.label.setPixmap(imgShow)
         print(f"image saved: {image_name}")
+        self.pbsave.setEnabled(True)
         
     @pyqtSlot()
     def on_pbsave_clicked(self):
@@ -83,7 +88,9 @@ class Image_Conver(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        raise NotImplementedError
+        img = self.label.pixmap().toImage()
+        fpath, ftype = QFileDialog.getSaveFileName(self, "保存", "D:\\", "*.jpg;;*.png;;All Files(*)")
+        img.save(fpath)
         
     def load_image(self, image_path, x32=False):
         img = Image.open(image_path).convert("RGB")

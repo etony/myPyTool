@@ -68,6 +68,9 @@
        </item>
        <item>
         <widget class="QPushButton" name="pbstart">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>开始</string>
          </property>
@@ -75,6 +78,9 @@
        </item>
        <item>
         <widget class="QPushButton" name="pbsave">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>保存</string>
          </property>

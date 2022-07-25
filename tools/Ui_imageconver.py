@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'D:\work\GIT\Python-Study\music\imageconver.ui'
+# Form implementation generated from reading ui file 'D:\work\GIT\Python-Study\tools\imageconver.ui'
 #
 # Created by: PyQt6 UI code generator 6.2.2
 #
@@ -40,9 +40,11 @@ class Ui_MainWindow(object):
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.horizontalLayout_2.addWidget(self.lineEdit_2)
         self.pbstart = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        self.pbstart.setEnabled(False)
         self.pbstart.setObjectName("pbstart")
         self.horizontalLayout_2.addWidget(self.pbstart)
         self.pbsave = QtWidgets.QPushButton(self.verticalLayoutWidget)
+        self.pbsave.setEnabled(False)
         self.pbsave.setObjectName("pbsave")
         self.horizontalLayout_2.addWidget(self.pbsave)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
