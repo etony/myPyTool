@@ -16,6 +16,7 @@ class Ui_MainWindow(object):
         self.centralWidget = QtWidgets.QWidget(MainWindow)
         self.centralWidget.setObjectName("centralWidget")
         self.lineEdit = QtWidgets.QLineEdit(self.centralWidget)
+        self.lineEdit.setEnabled(False)
         self.lineEdit.setGeometry(QtCore.QRect(20, 20, 731, 41))
         font = QtGui.QFont()
         font.setPointSize(14)
@@ -53,6 +54,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.lineEdit_3 = QtWidgets.QLineEdit(self.verticalLayoutWidget)
+        self.lineEdit_3.setEnabled(False)
         font = QtGui.QFont()
         font.setPointSize(12)
         self.lineEdit_3.setFont(font)
@@ -68,6 +70,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.lineEdit_4 = QtWidgets.QLineEdit(self.verticalLayoutWidget)
+        self.lineEdit_4.setEnabled(False)
         font = QtGui.QFont()
         font.setPointSize(12)
         self.lineEdit_4.setFont(font)
@@ -93,7 +96,7 @@ class Ui_MainWindow(object):
         self.pbstart.setText(_translate("MainWindow", "开始"))
         self.pbsave.setText(_translate("MainWindow", "保存"))
         self.lineEdit_3.setText(_translate("MainWindow", "原图"))
-        self.lineEdit_4.setText(_translate("MainWindow", "动漫"))
+        self.lineEdit_4.setText(_translate("MainWindow", "效果"))
 
 
 if __name__ == "__main__":
