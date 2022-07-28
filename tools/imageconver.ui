@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>774</width>
     <height>541</height>
    </rect>
   </property>
@@ -86,6 +86,33 @@
          </property>
          <property name="text">
           <string>保存</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <property name="spacing">
+        <number>6</number>
+       </property>
+       <property name="sizeConstraint">
+        <enum>QLayout::SetMinimumSize</enum>
+       </property>
+       <item>
+        <widget class="QRadioButton" name="rbtn_dm">
+         <property name="text">
+          <string>动漫风</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="rbtn_sm">
+         <property name="text">
+          <string>素描风</string>
          </property>
         </widget>
        </item>
