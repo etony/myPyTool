@@ -31,7 +31,7 @@
       <rect>
        <x>230</x>
        <y>20</y>
-       <width>157</width>
+       <width>158</width>
        <height>22</height>
       </rect>
      </property>
@@ -46,7 +46,10 @@
       <item>
        <widget class="QCheckBox" name="cb_forms">
         <property name="text">
-         <string>--forms</string>
+         <string>--forms </string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -71,8 +74,13 @@
       </item>
       <item>
        <widget class="QCheckBox" name="cb_batch">
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
         <property name="text">
-         <string>--batch</string>
+         <string>--batch </string>
         </property>
        </widget>
       </item>
@@ -83,7 +91,7 @@
       <rect>
        <x>230</x>
        <y>50</y>
-       <width>136</width>
+       <width>140</width>
        <height>22</height>
       </rect>
      </property>
@@ -98,7 +106,7 @@
       <item>
        <widget class="QCheckBox" name="cb_osshell">
         <property name="text">
-         <string>--os-shell</string>
+         <string>--os-shell </string>
         </property>
        </widget>
       </item>
@@ -109,7 +117,7 @@
       <rect>
        <x>10</x>
        <y>50</y>
-       <width>175</width>
+       <width>179</width>
        <height>22</height>
       </rect>
      </property>
@@ -124,7 +132,7 @@
       <item>
        <widget class="QCheckBox" name="cb_random">
         <property name="text">
-         <string>--random-agent</string>
+         <string>--random-agent </string>
         </property>
        </widget>
       </item>
@@ -135,7 +143,7 @@
       <rect>
        <x>10</x>
        <y>170</y>
-       <width>140</width>
+       <width>144</width>
        <height>22</height>
       </rect>
      </property>
@@ -150,7 +158,7 @@
       <item>
        <widget class="QCheckBox" name="cb_o">
         <property name="text">
-         <string>-o</string>
+         <string>-o </string>
         </property>
        </widget>
       </item>
@@ -161,7 +169,7 @@
       <rect>
        <x>230</x>
        <y>80</y>
-       <width>160</width>
+       <width>164</width>
        <height>22</height>
       </rect>
      </property>
@@ -176,7 +184,7 @@
       <item>
        <widget class="QCheckBox" name="cb_sqlshell">
         <property name="text">
-         <string>--sql-shell</string>
+         <string>--sql-shell </string>
         </property>
        </widget>
       </item>
@@ -204,6 +212,9 @@
         <property name="text">
          <string>--keep-alive </string>
         </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
      </layout>
@@ -213,7 +224,7 @@
       <rect>
        <x>10</x>
        <y>110</y>
-       <width>138</width>
+       <width>142</width>
        <height>22</height>
       </rect>
      </property>
@@ -228,7 +239,7 @@
       <item>
        <widget class="QCheckBox" name="cb_level3">
         <property name="text">
-         <string>--level=3</string>
+         <string>--level=3 </string>
         </property>
        </widget>
       </item>
@@ -239,7 +250,7 @@
       <rect>
        <x>230</x>
        <y>110</y>
-       <width>133</width>
+       <width>137</width>
        <height>22</height>
       </rect>
      </property>
@@ -254,7 +265,7 @@
       <item>
        <widget class="QCheckBox" name="cb_risk2">
         <property name="text">
-         <string>--risk=2</string>
+         <string>--risk=2 </string>
         </property>
        </widget>
       </item>
@@ -265,7 +276,7 @@
       <rect>
        <x>10</x>
        <y>140</y>
-       <width>138</width>
+       <width>142</width>
        <height>22</height>
       </rect>
      </property>
@@ -280,7 +291,10 @@
       <item>
        <widget class="QCheckBox" name="cb_level5">
         <property name="text">
-         <string>--level=5</string>
+         <string>--level=5 </string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -291,7 +305,7 @@
       <rect>
        <x>230</x>
        <y>140</y>
-       <width>133</width>
+       <width>137</width>
        <height>22</height>
       </rect>
      </property>
@@ -306,7 +320,10 @@
       <item>
        <widget class="QCheckBox" name="cb_risk3">
         <property name="text">
-         <string>--risk=3</string>
+         <string>--risk=3 </string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -330,7 +347,7 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>187</width>
+       <width>191</width>
        <height>22</height>
       </rect>
      </property>
@@ -345,7 +362,7 @@
       <item>
        <widget class="QCheckBox" name="cb_banner">
         <property name="text">
-         <string>-b  --banner</string>
+         <string>-b  --banner </string>
         </property>
        </widget>
       </item>
@@ -356,7 +373,7 @@
       <rect>
        <x>220</x>
        <y>20</y>
-       <width>123</width>
+       <width>127</width>
        <height>22</height>
       </rect>
      </property>
@@ -371,7 +388,10 @@
       <item>
        <widget class="QCheckBox" name="cb_dbs">
         <property name="text">
-         <string>--dbs</string>
+         <string>--dbs </string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -382,7 +402,7 @@
       <rect>
        <x>10</x>
        <y>50</y>
-       <width>196</width>
+       <width>200</width>
        <height>22</height>
       </rect>
      </property>
@@ -397,7 +417,7 @@
       <item>
        <widget class="QCheckBox" name="cb_currentuser">
         <property name="text">
-         <string>--current-user</string>
+         <string>--current-user </string>
         </property>
        </widget>
       </item>
@@ -408,7 +428,7 @@
       <rect>
        <x>220</x>
        <y>50</y>
-       <width>187</width>
+       <width>191</width>
        <height>22</height>
       </rect>
      </property>
@@ -423,7 +443,7 @@
       <item>
        <widget class="QCheckBox" name="cb_currentdb">
         <property name="text">
-         <string>--current-db</string>
+         <string>--current-db </string>
         </property>
        </widget>
       </item>
@@ -434,7 +454,7 @@
       <rect>
        <x>10</x>
        <y>80</y>
-       <width>160</width>
+       <width>164</width>
        <height>22</height>
       </rect>
      </property>
@@ -449,7 +469,10 @@
       <item>
        <widget class="QCheckBox" name="cb_tables">
         <property name="text">
-         <string>--tables</string>
+         <string>--tables </string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -460,7 +483,7 @@
       <rect>
        <x>220</x>
        <y>80</y>
-       <width>173</width>
+       <width>177</width>
        <height>22</height>
       </rect>
      </property>
@@ -475,7 +498,7 @@
       <item>
        <widget class="QCheckBox" name="cb_columns">
         <property name="text">
-         <string>--columns</string>
+         <string>--columns </string>
         </property>
        </widget>
       </item>
@@ -486,7 +509,7 @@
       <rect>
        <x>10</x>
        <y>110</y>
-       <width>137</width>
+       <width>141</width>
        <height>22</height>
       </rect>
      </property>
@@ -501,7 +524,7 @@
       <item>
        <widget class="QCheckBox" name="cb_isdba">
         <property name="text">
-         <string>--is-dba</string>
+         <string>--is-dba </string>
         </property>
        </widget>
       </item>
@@ -512,7 +535,7 @@
       <rect>
        <x>220</x>
        <y>140</y>
-       <width>152</width>
+       <width>156</width>
        <height>22</height>
       </rect>
      </property>
@@ -527,7 +550,7 @@
       <item>
        <widget class="QCheckBox" name="cb_passwords">
         <property name="text">
-         <string>--passwords</string>
+         <string>--passwords </string>
         </property>
        </widget>
       </item>
@@ -538,7 +561,7 @@
       <rect>
        <x>10</x>
        <y>140</y>
-       <width>145</width>
+       <width>149</width>
        <height>22</height>
       </rect>
      </property>
@@ -553,7 +576,7 @@
       <item>
        <widget class="QCheckBox" name="cb_privileges">
         <property name="text">
-         <string>--privileges</string>
+         <string>--privileges </string>
         </property>
        </widget>
       </item>
@@ -564,7 +587,7 @@
       <rect>
        <x>220</x>
        <y>110</y>
-       <width>156</width>
+       <width>160</width>
        <height>22</height>
       </rect>
      </property>
@@ -579,7 +602,7 @@
       <item>
        <widget class="QCheckBox" name="cb_users">
         <property name="text">
-         <string>--users</string>
+         <string>--users </string>
         </property>
        </widget>
       </item>
@@ -590,7 +613,7 @@
       <rect>
        <x>10</x>
        <y>170</y>
-       <width>142</width>
+       <width>146</width>
        <height>22</height>
       </rect>
      </property>
@@ -603,9 +626,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="cd_roles">
+       <widget class="QCheckBox" name="cb_roles">
         <property name="text">
-         <string>--roles</string>
+         <string>--roles </string>
         </property>
        </widget>
       </item>
@@ -616,7 +639,7 @@
       <rect>
        <x>220</x>
        <y>170</y>
-       <width>194</width>
+       <width>198</width>
        <height>22</height>
       </rect>
      </property>
@@ -631,7 +654,7 @@
       <item>
        <widget class="QCheckBox" name="cb_mysql">
         <property name="text">
-         <string>--dbms=mysql</string>
+         <string>--dbms=mysql </string>
         </property>
        </widget>
       </item>
@@ -642,7 +665,7 @@
       <rect>
        <x>10</x>
        <y>200</y>
-       <width>202</width>
+       <width>206</width>
        <height>22</height>
       </rect>
      </property>
@@ -657,7 +680,7 @@
       <item>
        <widget class="QCheckBox" name="cb_oracle">
         <property name="text">
-         <string>--dbms=oracle</string>
+         <string>--dbms=oracle </string>
         </property>
        </widget>
       </item>
@@ -668,7 +691,7 @@
       <rect>
        <x>220</x>
        <y>200</y>
-       <width>195</width>
+       <width>199</width>
        <height>22</height>
       </rect>
      </property>
@@ -683,7 +706,7 @@
       <item>
        <widget class="QCheckBox" name="cb_mssql">
         <property name="text">
-         <string>--dbms=mssql</string>
+         <string>--dbms=mssql </string>
         </property>
        </widget>
       </item>
@@ -708,7 +731,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="le_url"/>
+      <widget class="QLineEdit" name="le_url">
+       <property name="text">
+        <string>www.baidu.com</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -723,7 +750,13 @@
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QTextBrowser" name="tb_command"/>
+      <widget class="QTextBrowser" name="tb_command">
+       <property name="font">
+        <font>
+         <pointsize>12</pointsize>
+        </font>
+       </property>
+      </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_27">
@@ -744,6 +777,32 @@
       </layout>
      </item>
     </layout>
+   </widget>
+   <widget class="QLineEdit" name="le_sqlmap">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>50</y>
+      <width>391</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>sqlmap.py</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_selectSqlmap">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>50</y>
+      <width>51</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Sqlmap</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

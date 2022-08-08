@@ -1,21 +1,22 @@
 # -*- coding: utf-8 -*-
-
 """
 Module implementing SqlmapUI.
 """
 
-from PyQt6.QtCore import pyqtSlot
-from PyQt6.QtWidgets import QMainWindow, QApplication
+from PyQt6.QtCore import pyqtSlot, Qt
+from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog
 
 from Ui_sqlmap import Ui_SqlmapUI
 
 import subprocess
+import os
 
 
 class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     """
     Class documentation goes here.
     """
+
     def __init__(self, parent=None):
         """
         Constructor
@@ -26,9 +27,10 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         super().__init__(parent)
         self.setupUi(self)
         url = self.le_url.text()
-        if len(url.strip()) <2:
+        if len(url.strip()) < 2:
             self.pb_getcommand.setDisabled(True)
         self.str_commad = ""
+
     @pyqtSlot(bool)
     def on_cb_forms_clicked(self, checked):
         """
@@ -39,7 +41,6 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         """
         # TODO: not implemented yet
 
-    
     @pyqtSlot(bool)
     def on_cb_batch_clicked(self, checked):
         """
@@ -49,7 +50,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         @type bool
         """
         # TODO: not implemented yet
-    
+
     @pyqtSlot(bool)
     def on_cb_osshell_clicked(self, checked):
         """
@@ -60,7 +61,6 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         """
         # TODO: not implemented yet
 
-    
     @pyqtSlot(bool)
     def on_cb_random_clicked(self, checked):
         """
@@ -70,7 +70,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         @type bool
         """
         # TODO: not implemented yet
-    
+
     @pyqtSlot(bool)
     def on_cb_o_clicked(self, checked):
         """
@@ -81,7 +81,6 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         """
         # TODO: not implemented yet
 
-    
     @pyqtSlot(bool)
     def on_cb_sqlshell_clicked(self, checked):
         """
@@ -92,7 +91,6 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         """
         # TODO: not implemented yet
 
-    
     @pyqtSlot(bool)
     def on_cb_keeplive_clicked(self, checked):
         """
@@ -103,7 +101,6 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         """
         # TODO: not implemented yet
 
-    
     @pyqtSlot(bool)
     def on_cb_level3_clicked(self, checked):
         """
@@ -115,7 +112,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         # TODO: not implemented yet
         if checked:
             self.cb_level5.setChecked(False)
-    
+
     @pyqtSlot(bool)
     def on_cb_risk2_clicked(self, checked):
         """
@@ -127,7 +124,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         # TODO: not implemented yet
         if checked:
             self.cb_risk3.setChecked(False)
-    
+
     @pyqtSlot(bool)
     def on_cb_level5_clicked(self, checked):
         """
@@ -139,7 +136,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         # TODO: not implemented yet
         if checked:
             self.cb_level3.setChecked(False)
-    
+
     @pyqtSlot(bool)
     def on_cb_risk3_clicked(self, checked):
         """
@@ -151,7 +148,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         # TODO: not implemented yet
         if checked:
             self.cb_risk2.setChecked(False)
-    
+
     @pyqtSlot(bool)
     def on_cb_banner_clicked(self, checked):
         """
@@ -162,7 +159,6 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         """
         # TODO: not implemented yet
 
-    
     @pyqtSlot(bool)
     def on_cb_dbs_clicked(self, checked):
         """
@@ -173,7 +169,6 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         """
         # TODO: not implemented yet
 
-    
     @pyqtSlot(bool)
     def on_cb_currentuser_clicked(self, checked):
         """
@@ -184,7 +179,6 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         """
         # TODO: not implemented yet
 
-    
     @pyqtSlot(bool)
     def on_cb_currentdb_clicked(self, checked):
         """
@@ -195,7 +189,6 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         """
         # TODO: not implemented yet
 
-    
     @pyqtSlot(bool)
     def on_cb_tables_clicked(self, checked):
         """
@@ -206,7 +199,6 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         """
         # TODO: not implemented yet
 
-    
     @pyqtSlot(bool)
     def on_cb_columns_clicked(self, checked):
         """
@@ -217,7 +209,6 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         """
         # TODO: not implemented yet
 
-    
     @pyqtSlot(bool)
     def on_cb_isdba_clicked(self, checked):
         """
@@ -228,7 +219,6 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         """
         # TODO: not implemented yet
 
-    
     @pyqtSlot(bool)
     def on_cb_passwords_clicked(self, checked):
         """
@@ -239,7 +229,6 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         """
         # TODO: not implemented yet
 
-    
     @pyqtSlot(bool)
     def on_cb_privileges_clicked(self, checked):
         """
@@ -250,7 +239,6 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         """
         # TODO: not implemented yet
 
-    
     @pyqtSlot(bool)
     def on_cb_users_clicked(self, checked):
         """
@@ -261,7 +249,6 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         """
         # TODO: not implemented yet
 
-    
     @pyqtSlot(bool)
     def on_cb_roles_clicked(self, checked):
         """
@@ -272,7 +259,6 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         """
         # TODO: not implemented yet
 
-    
     @pyqtSlot(bool)
     def on_cb_mysql_clicked(self, checked):
         """
@@ -285,7 +271,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         if checked:
             self.cb_mssql.setChecked(False)
             self.cb_oracle.setChecked(False)
-    
+
     @pyqtSlot(bool)
     def on_cb_oracle_clicked(self, checked):
         """
@@ -298,7 +284,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         if checked:
             self.cb_mysql.setChecked(False)
             self.cb_mssql.setChecked(False)
-    
+
     @pyqtSlot(bool)
     def on_cb_mssql_clicked(self, checked):
         """
@@ -311,7 +297,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         if checked:
             self.cb_oracle.setChecked(False)
             self.cb_mysql.setChecked(False)
-    
+
     @pyqtSlot(str)
     def on_le_url_textChanged(self, p0):
         """
@@ -321,18 +307,20 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         @type str
         """
         # TODO: not implemented yet
-        if len(self.le_url.text().strip()) >2:
+        if len(self.le_url.text().strip()) > 2:
             self.pb_getcommand.setEnabled(True)
         else:
             self.pb_getcommand.setDisabled(True)
-    
+
     @pyqtSlot()
     def on_pb_getcommand_clicked(self):
         """
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        self.str_commad = "python E:\装机必备\工具\sqlmap-master\sqlmap.py -u " + self.le_url.text() + " "
+        sqlmap = self.le_sqlmap.text().strip()
+        self.str_commad = "python " + sqlmap + " -u " + self.le_url.text(
+        ) + " "
         if self.cb_batch.isChecked():
             self.str_commad += self.cb_batch.text()
         if self.cb_banner.isChecked():
@@ -384,9 +372,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         if self.cb_roles.isChecked():
             self.str_commad += self.cb_roles.text()
 
-
-
-
+        self.tb_command.setTextColor(Qt.GlobalColor.blue)
         self.tb_command.setText(self.str_commad)
         self.pb_startscan.setEnabled(True)
 
@@ -399,7 +385,21 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         cmd = self.str_commad
         self.pb_startscan.setDisabled(True)
         print(cmd)
-        p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = subprocess.Popen(cmd,
+                             shell=True,
+                             stdin=subprocess.PIPE,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE)
+
+    @pyqtSlot()
+    def on_pb_selectSqlmap_clicked(self):
+        fileName_choose, filetype = QFileDialog.getOpenFileName(
+            self,
+            "指定sqlmap.py位置",
+            os.getcwd(),  # 起始路径
+            "Sqlmap Files (sqlmap.py);")
+        if fileName_choose != "":
+            self.le_sqlmap.setText(fileName_choose)
 
 
 if __name__ == "__main__":
