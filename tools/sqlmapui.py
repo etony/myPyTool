@@ -30,6 +30,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         if len(url.strip()) < 2:
             self.pb_getcommand.setDisabled(True)
         self.str_commad = ""
+        self.cbb_tampers.addItem("")
 
     @pyqtSlot(bool)
     def on_cb_forms_clicked(self, checked):
@@ -373,6 +374,11 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
             self.str_commad += self.cb_roles.text()
 
         self.tb_command.setTextColor(Qt.GlobalColor.blue)
+        if self.cbb_tampers.currentIndex() > 0:
+            self.str_commad += " --tamper " + self.cbb_tampers.currentText()
+
+        if len(self.le_options.text().strip()) >= 2:
+            self.str_commad += self.le_options.text()
         self.tb_command.setText(self.str_commad)
         self.pb_startscan.setEnabled(True)
 
@@ -401,11 +407,18 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         if fileName_choose != "":
             self.le_sqlmap.setText(fileName_choose)
 
+        dir = os.path.dirname(fileName_choose) + "/tamper/"
+        tampers = [x for x in os.listdir(dir) if x.endswith('.py')]
+        for tamp_list in sorted(tampers):
+            if tamp_list not in "__init__.py":
+                self.cbb_tampers.addItem(tamp_list)
+
 
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
     SqlmapUI = SqlmapUI()
+    SqlmapUI.setFixedSize(SqlmapUI.width(), SqlmapUI.height())
 
     SqlmapUI.show()
     sys.exit(app.exec())
