@@ -12,7 +12,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_SqlmapUI(object):
     def setupUi(self, SqlmapUI):
         SqlmapUI.setObjectName("SqlmapUI")
-        SqlmapUI.resize(515, 783)
+        SqlmapUI.resize(515, 765)
         self.centralwidget = QtWidgets.QWidget(SqlmapUI)
         self.centralwidget.setObjectName("centralwidget")
         self.groupBox = QtWidgets.QGroupBox(self.centralwidget)
@@ -173,7 +173,7 @@ class Ui_SqlmapUI(object):
         self.cb_banner.setObjectName("cb_banner")
         self.horizontalLayout_3.addWidget(self.cb_banner)
         self.layoutWidget12 = QtWidgets.QWidget(self.groupBox_2)
-        self.layoutWidget12.setGeometry(QtCore.QRect(220, 20, 191, 22))
+        self.layoutWidget12.setGeometry(QtCore.QRect(220, 20, 201, 22))
         self.layoutWidget12.setObjectName("layoutWidget12")
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.layoutWidget12)
         self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
