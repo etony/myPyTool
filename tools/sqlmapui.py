@@ -397,7 +397,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
             self,
             "指定sqlmap.py位置",
             os.getcwd(),  # 起始路径
-            "Sqlmap Files (sqlmap.py);")
+            "Sqlmap Files (sqlmap.py);;Python Files (*.py)")
         if fileName_choose != "":
             self.le_sqlmap.setText(fileName_choose)
 
