@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>515</width>
-    <height>783</height>
+    <height>765</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,18 +20,18 @@
       <x>30</x>
       <y>80</y>
       <width>451</width>
-      <height>211</height>
+      <height>201</height>
      </rect>
     </property>
     <property name="title">
-     <string>查询</string>
+     <string>查询参数</string>
     </property>
     <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>230</x>
        <y>20</y>
-       <width>158</width>
+       <width>201</width>
        <height>22</height>
       </rect>
      </property>
@@ -60,7 +60,7 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>160</width>
+       <width>181</width>
        <height>22</height>
       </rect>
      </property>
@@ -91,7 +91,7 @@
       <rect>
        <x>230</x>
        <y>50</y>
-       <width>140</width>
+       <width>201</width>
        <height>22</height>
       </rect>
      </property>
@@ -117,7 +117,7 @@
       <rect>
        <x>10</x>
        <y>50</y>
-       <width>179</width>
+       <width>191</width>
        <height>22</height>
       </rect>
      </property>
@@ -143,7 +143,7 @@
       <rect>
        <x>10</x>
        <y>170</y>
-       <width>144</width>
+       <width>181</width>
        <height>22</height>
       </rect>
      </property>
@@ -151,7 +151,7 @@
       <item>
        <widget class="QLabel" name="label_12">
         <property name="text">
-         <string>开启所有优化开关</string>
+         <string>开启所有优化</string>
         </property>
        </widget>
       </item>
@@ -169,7 +169,7 @@
       <rect>
        <x>230</x>
        <y>80</y>
-       <width>164</width>
+       <width>201</width>
        <height>22</height>
       </rect>
      </property>
@@ -195,7 +195,7 @@
       <rect>
        <x>10</x>
        <y>80</y>
-       <width>177</width>
+       <width>191</width>
        <height>22</height>
       </rect>
      </property>
@@ -224,7 +224,7 @@
       <rect>
        <x>10</x>
        <y>110</y>
-       <width>142</width>
+       <width>181</width>
        <height>22</height>
       </rect>
      </property>
@@ -250,7 +250,7 @@
       <rect>
        <x>230</x>
        <y>110</y>
-       <width>137</width>
+       <width>201</width>
        <height>22</height>
       </rect>
      </property>
@@ -276,7 +276,7 @@
       <rect>
        <x>10</x>
        <y>140</y>
-       <width>142</width>
+       <width>181</width>
        <height>22</height>
       </rect>
      </property>
@@ -305,7 +305,7 @@
       <rect>
        <x>230</x>
        <y>140</y>
-       <width>137</width>
+       <width>201</width>
        <height>22</height>
       </rect>
      </property>
@@ -334,13 +334,13 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>300</y>
+      <y>290</y>
       <width>451</width>
-      <height>241</height>
+      <height>231</height>
      </rect>
     </property>
     <property name="title">
-     <string>数据库</string>
+     <string>数据库参数</string>
     </property>
     <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
@@ -373,7 +373,7 @@
       <rect>
        <x>220</x>
        <y>20</y>
-       <width>127</width>
+       <width>201</width>
        <height>22</height>
       </rect>
      </property>
@@ -428,7 +428,7 @@
       <rect>
        <x>220</x>
        <y>50</y>
-       <width>191</width>
+       <width>201</width>
        <height>22</height>
       </rect>
      </property>
@@ -454,7 +454,7 @@
       <rect>
        <x>10</x>
        <y>80</y>
-       <width>164</width>
+       <width>171</width>
        <height>22</height>
       </rect>
      </property>
@@ -483,7 +483,7 @@
       <rect>
        <x>220</x>
        <y>80</y>
-       <width>177</width>
+       <width>191</width>
        <height>22</height>
       </rect>
      </property>
@@ -509,7 +509,7 @@
       <rect>
        <x>10</x>
        <y>110</y>
-       <width>141</width>
+       <width>171</width>
        <height>22</height>
       </rect>
      </property>
@@ -535,7 +535,7 @@
       <rect>
        <x>220</x>
        <y>140</y>
-       <width>156</width>
+       <width>201</width>
        <height>22</height>
       </rect>
      </property>
@@ -561,7 +561,7 @@
       <rect>
        <x>10</x>
        <y>140</y>
-       <width>149</width>
+       <width>181</width>
        <height>22</height>
       </rect>
      </property>
@@ -587,7 +587,7 @@
       <rect>
        <x>220</x>
        <y>110</y>
-       <width>160</width>
+       <width>191</width>
        <height>22</height>
       </rect>
      </property>
@@ -613,7 +613,7 @@
       <rect>
        <x>10</x>
        <y>170</y>
-       <width>146</width>
+       <width>171</width>
        <height>22</height>
       </rect>
      </property>
@@ -639,7 +639,7 @@
       <rect>
        <x>220</x>
        <y>170</y>
-       <width>198</width>
+       <width>211</width>
        <height>22</height>
       </rect>
      </property>
@@ -691,7 +691,7 @@
       <rect>
        <x>220</x>
        <y>200</y>
-       <width>199</width>
+       <width>211</width>
        <height>22</height>
       </rect>
      </property>
@@ -716,36 +716,10 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>20</y>
-      <width>451</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>url:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="le_url">
-       <property name="text">
-        <string>www.baidu.com</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
       <x>40</x>
-      <y>540</y>
-      <width>411</width>
-      <height>171</height>
+      <y>560</y>
+      <width>441</width>
+      <height>151</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -778,31 +752,98 @@
      </item>
     </layout>
    </widget>
-   <widget class="QLineEdit" name="le_sqlmap">
+   <widget class="QComboBox" name="cbb_tampers">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>50</y>
-      <width>391</width>
-      <height>21</height>
+      <x>70</x>
+      <y>530</y>
+      <width>171</width>
+      <height>22</height>
      </rect>
-    </property>
-    <property name="text">
-     <string>sqlmap.py</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pb_selectSqlmap">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>50</y>
-      <width>51</width>
-      <height>24</height>
+      <x>40</x>
+      <y>10</y>
+      <width>441</width>
+      <height>57</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_28">
+       <item>
+        <widget class="QPushButton" name="pb_selectSqlmap">
+         <property name="text">
+          <string>Sqlmap</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="le_sqlmap">
+         <property name="text">
+          <string>sqlmap.py</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>  扫 描 目 标  </string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="le_url">
+         <property name="text">
+          <string>www.baidu.com</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="label_28">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>530</y>
+      <width>24</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="text">
-     <string>Sqlmap</string>
+     <string>模板</string>
     </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>530</y>
+      <width>211</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_29">
+     <item>
+      <widget class="QLabel" name="label_27">
+       <property name="text">
+        <string>附加参数</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="le_options"/>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

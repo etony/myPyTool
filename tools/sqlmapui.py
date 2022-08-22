@@ -10,7 +10,7 @@ from Ui_sqlmap import Ui_SqlmapUI
 
 import subprocess
 import os
-
+import platform
 
 class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     """
@@ -30,6 +30,12 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         if len(url.strip()) < 2:
             self.pb_getcommand.setDisabled(True)
         self.str_commad = ""
+        self.cbb_tampers.addItem("")
+        #dir = os.getcwd() + "/tamper/"
+        dir = os.path.join(os.getcwd(), "tamper")
+        if os.path.exists(dir):
+            self.load_temperfile(dir)
+        self.pb_startscan.setDisabled(True)
 
     @pyqtSlot(bool)
     def on_cb_forms_clicked(self, checked):
@@ -373,6 +379,11 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
             self.str_commad += self.cb_roles.text()
 
         self.tb_command.setTextColor(Qt.GlobalColor.blue)
+        if self.cbb_tampers.currentIndex() > 0:
+            self.str_commad += " --tamper " + self.cbb_tampers.currentText()
+
+        if len(self.le_options.text().strip()) >= 2:
+            self.str_commad += self.le_options.text()
         self.tb_command.setText(self.str_commad)
         self.pb_startscan.setEnabled(True)
 
@@ -385,11 +396,19 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         cmd = self.str_commad
         self.pb_startscan.setDisabled(True)
         print(cmd)
-        p = subprocess.Popen(cmd,
-                             shell=True,
-                             stdin=subprocess.PIPE,
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
+        # p = subprocess.Popen(cmd,
+        #                      shell=True,
+        #                      stdin=subprocess.PIPE,
+        #                      stdout=subprocess.PIPE,
+        #                      stderr=subprocess.PIPE)
+        SYSTEM_PLATFORM = platform.system()
+        if(SYSTEM_PLATFORM == "Linux"):
+            os.system("x-terminal-emulator -e '"+ cmd + "'")
+        elif (SYSTEM_PLATFORM == "Windows"):
+            os.system("start cmd.exe /k " + cmd)
+            
+        #os.system("start cmd.exe /k " + cmd)
+        #os.system("x-terminal-emulator -e '"+ cmd + "'")
 
     @pyqtSlot()
     def on_pb_selectSqlmap_clicked(self):
@@ -397,15 +416,31 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
             self,
             "指定sqlmap.py位置",
             os.getcwd(),  # 起始路径
-            "Sqlmap Files (sqlmap.py);;Python Files (*.py)")
+            "Sqlmap File (sqlmap.py);;Python Files (*.py)")
         if fileName_choose != "":
             self.le_sqlmap.setText(fileName_choose)
+
+        dir = os.path.join(os.path.dirname(fileName_choose), "tamper")
+
+        if os.path.exists(dir):
+            self.load_temperfile(dir)
+        # tampers = [x for x in os.listdir(dir) if x.endswith('.py')]
+        # for tamp_list in sorted(tampers):
+        #     if tamp_list not in "__init__.py":
+        #         self.cbb_tampers.addItem(tamp_list)
+
+    def load_temperfile(self, dir):
+        tampers = [x for x in os.listdir(dir) if x.endswith('.py')]
+        for tamp_list in sorted(tampers):
+            if tamp_list not in "__init__.py":
+                self.cbb_tampers.addItem(tamp_list)
 
 
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
     SqlmapUI = SqlmapUI()
+    SqlmapUI.setFixedSize(SqlmapUI.width(), SqlmapUI.height())
 
     SqlmapUI.show()
     sys.exit(app.exec())
