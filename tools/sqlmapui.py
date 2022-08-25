@@ -7,7 +7,7 @@ from PyQt6.QtCore import pyqtSlot, Qt
 from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog
 
 from Ui_sqlmap import Ui_SqlmapUI
-
+from PyQt6.QtGui import QIcon
 import subprocess
 import os
 import platform
@@ -36,6 +36,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         if os.path.exists(dir):
             self.load_temperfile(dir)
         self.pb_startscan.setDisabled(True)
+        self.setWindowIcon(QIcon("gui.ico"))
 
     @pyqtSlot(bool)
     def on_cb_forms_clicked(self, checked):
