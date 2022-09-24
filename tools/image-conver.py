@@ -13,6 +13,7 @@ import torch
 from torchvision.transforms.functional import to_tensor, to_pil_image
 from PIL import Image
 import cv2
+import numpy as np
 
 
 class Image_Conver(QMainWindow, Ui_MainWindow):
@@ -85,7 +86,8 @@ class Image_Conver(QMainWindow, Ui_MainWindow):
             print("图片保存成功！！")
 
         if self.rbtn_sm.isChecked():
-            img = cv2.imread(imgNamepath)
+            #img = cv2.imread(imgNamepath)
+            img = self.cv2_imread(imgNamepath)
             # img = cv2.resize(img, dsize=(768, 1080))
             gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             inverted_gray_image = cv2.bitwise_not(gray_image)
@@ -94,7 +96,8 @@ class Image_Conver(QMainWindow, Ui_MainWindow):
             image_name = imgNamepath.split(".")[0]
             invblur_img = cv2.bitwise_not(blurred_inverted_gray_image)
             sketch_img_test = cv2.divide(gray_image, invblur_img, scale=256.0)
-            cv2.imwrite(image_name + '_sumiao.png', sketch_img_test)
+            #cv2.imwrite(image_name + '_sumiao.png', sketch_img_test)
+            self.cv2_imsave(image_name + '_sumiao.png', sketch_img_test)
             img_after = image_name + '_sumiao.png'
             print("图片保存成功！！")
 
@@ -132,6 +135,14 @@ class Image_Conver(QMainWindow, Ui_MainWindow):
             img = img.resize((to_32s(w), to_32s(h)))
         return img
 
+    def cv2_imread(self,filepath):
+        #解决 cv2.imread() 不支持中文路径的问题
+        cv2_img = cv2.imdecode(np.fromfile(filepath,dtype=np.uint8),-1)
+        return cv2_img
+
+    def cv2_imsave(self,filepath,out):
+        # 解决 cv2.imwrite() 不支持中文路径的问题
+        cv2.imencode('.png', out)[1].tofile(filepath)
 
 if __name__ == "__main__":
     import sys
