@@ -172,7 +172,8 @@ class ImageExifWindow(QMainWindow, Ui_MainWindow):
         self.label.setText("")
         self.label_2.clear()
         self.pbreset.setDisabled(True)
-
+        self.pbsave.setDisabled(True)
+        self.pbread.setDisabled(True)
 
 if __name__ == '__main__':
     import sys
