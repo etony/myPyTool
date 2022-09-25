@@ -33,7 +33,6 @@ class Image_Conver(QMainWindow, Ui_MainWindow):
         self.pbstart.setDisabled(True)
         self.pbsave.setDisabled(True)
 
-
     @pyqtSlot()
     def on_pbselect_clicked(self):
         """
@@ -50,16 +49,17 @@ class Image_Conver(QMainWindow, Ui_MainWindow):
             img = QtGui.QPixmap(imgNamepath)
             print("img: ", img.width(), img.height())
             if img.width() > img.height():
-                self.label_2.setFixedSize(363, int(img.height()/img.width()*363))
+                self.label_2.setFixedSize(
+                    363, int(img.height() / img.width() * 363))
             else:
-                self.label_2.setFixedSize(int(img.width()/img.height()*363), 363)
+                self.label_2.setFixedSize(
+                    int(img.width() / img.height() * 363), 363)
             # 在label控件上显示选择的图片
             self.label_2.setPixmap(img)
             self.label_2.repaint()
             # 显示所选图片的路径
             self.lineEdit_2.setText(imgNamepath)
             self.pbstart.setEnabled(True)
-
 
     @pyqtSlot()
     def on_pbstart_clicked(self):
@@ -104,9 +104,11 @@ class Image_Conver(QMainWindow, Ui_MainWindow):
         #imgShow = QtGui.QPixmap(img_after).scaled(self.label.size())
         imgShow = QtGui.QPixmap(img_after)
         if imgShow.width() > imgShow.height():
-            self.label.setFixedSize(363, int(imgShow.height() / imgShow.width() * 363))
+            self.label.setFixedSize(
+                363, int(imgShow.height() / imgShow.width() * 363))
         else:
-            self.label.setFixedSize(int(imgShow.width() / imgShow.height() * 363), 363)
+            self.label.setFixedSize(
+                int(imgShow.width() / imgShow.height() * 363), 363)
         # self.label.setFixedSize(imgShow.width(), imgShow.height())
         self.label.setScaledContents(True)
         self.label.setPixmap(imgShow)
@@ -135,20 +137,21 @@ class Image_Conver(QMainWindow, Ui_MainWindow):
             img = img.resize((to_32s(w), to_32s(h)))
         return img
 
-    def cv2_imread(self,filepath):
+    def cv2_imread(self, filepath):
         #解决 cv2.imread() 不支持中文路径的问题
-        cv2_img = cv2.imdecode(np.fromfile(filepath,dtype=np.uint8),-1)
+        cv2_img = cv2.imdecode(np.fromfile(filepath, dtype=np.uint8), -1)
         return cv2_img
 
-    def cv2_imsave(self,filepath,out):
+    def cv2_imsave(self, filepath, out):
         # 解决 cv2.imwrite() 不支持中文路径的问题
         cv2.imencode('.png', out)[1].tofile(filepath)
+
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Imageconver = Image_Conver()
-    Imageconver.setFixedSize(Imageconver.width(),Imageconver.height())
+    Imageconver.setFixedSize(Imageconver.width(), Imageconver.height())
 
     Imageconver.show()
     sys.exit(app.exec())
