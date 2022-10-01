@@ -470,6 +470,7 @@ class Ui_SqlmapUI(object):
         self.label_27.setText(_translate("SqlmapUI", "附加参数"))
 
 
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)

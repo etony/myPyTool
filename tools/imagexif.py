@@ -9,7 +9,6 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from Ui_imagexif import Ui_MainWindow
 import exifread
 import datetime
-
 from PIL import Image, ImageFont, ImageDraw
 
 
@@ -40,7 +39,7 @@ class ImageExifWindow(QMainWindow, Ui_MainWindow):
 
         if imgNamepath != "":
             self.label_2.setScaledContents(True)
-            #img = QtGui.QPixmap(imgNamepath).scaled(self.label_2.size())
+            # img = QtGui.QPixmap(imgNamepath).scaled(self.label_2.size())
             img = QtGui.QPixmap(imgNamepath)
             print("img: ", img.width(), img.height())
             if img.width() > img.height():
@@ -64,8 +63,7 @@ class ImageExifWindow(QMainWindow, Ui_MainWindow):
         """
         # TODO: not implemented yet
         f = open(imgNamepath, 'rb')
-        tags = exifread.process_file(f)
-
+        # tags = exifread.process_file(f)
         try:
             tags = exifread.process_file(f)
             exifinfo = "手机品牌:  " + str(tags["Image Make"])
@@ -76,23 +74,30 @@ class ImageExifWindow(QMainWindow, Ui_MainWindow):
             exifinfo += "<br>拍摄时间:  " + datetime.datetime.strptime(
                 str(tags["Image DateTime"]),
                 '%Y:%m:%d %H:%M:%S').strftime('%Y年%m月%d日 %H:%M:%S')
-            exifinfo += '<br>  经度值:  　' + str(
-                tags['GPS GPSLongitudeRef']) + str(tags['GPS GPSLongitude'])
-            exifinfo += '<br>  纬度值:  　' + str(
-                tags['GPS GPSLatitudeRef']) + str(tags['GPS GPSLatitude'])
-            exifinfo += '<br>  高度值:  　' + str(
-                eval(str(tags['GPS GPSAltitude']))) + '米'
-            #  print(tags)
-            #  print('拍摄时间：', tags['EXIF DateTimeOriginal'])
-            #  print('照相机制造商：', tags['Image Make'])
-            #  print('照相机型号：', tags['Image Model'])
-            #  print('照片尺寸：', tags['EXIF ExifImageWidth'], tags['EXIF ExifImageLength'])
-            # print(str(tags['GPS GPSLatitude'].printable))
-            # print(str(tags['GPS GPSLongitude'].printable))
+            try:
+                exifinfo += '<br>  经度值:  　' + str(
+                    tags['GPS GPSLongitudeRef']) + str(
+                        tags['GPS GPSLongitude'])
+                exifinfo += '<br>  纬度值:  　' + str(
+                    tags['GPS GPSLatitudeRef']) + str(tags['GPS GPSLatitude'])
+                exifinfo += '<br>  高度值:  　' + str(
+                    eval(str(tags['GPS GPSAltitude']))) + '米'
 
-            loc = self.locations(str(tags['GPS GPSLongitude']),
-                                 str(tags['GPS GPSLatitude']))
-            exifinfo += '<br>坐标值:  ' + str(loc)
+                #  print(tags)
+                #  print('拍摄时间：', tags['EXIF DateTimeOriginal'])
+                #  print('照相机制造商：', tags['Image Make'])
+                #  print('照相机型号：', tags['Image Model'])
+                #  print('照片尺寸：', tags['EXIF ExifImageWidth'], tags['EXIF ExifImageLength'])
+                # print(str(tags['GPS GPSLatitude'].printable))
+                # print(str(tags['GPS GPSLongitude'].printable))
+
+                loc = locations(str(tags['GPS GPSLongitude']),
+                                str(tags['GPS GPSLatitude']))
+                exifinfo += '<br>坐标值:  ' + str(loc)
+            except Exception as e:
+                exifinfo += "<br>GPS信息:  N/A"
+                print(e)
+                pass
             exifinfo += "<br>  分辨率:  " + str(
                 tags["Image XResolution"]) + " x " + str(
                     tags["Image YResolution"]) + ' dpi'
@@ -100,7 +105,8 @@ class ImageExifWindow(QMainWindow, Ui_MainWindow):
             self.label.setText(exifinfo)
             self.pbsave.setEnabled(True)
 
-        except:
+        except Exception as e:
+            print(e)
             self.label.setText("不包含EXIF信息")
             pass
 
@@ -120,25 +126,25 @@ class ImageExifWindow(QMainWindow, Ui_MainWindow):
         text = self.label.text()
         liens = text.split('<br>')
         print(liens)
-        #画布颜色
+        # 画布颜色
         im = Image.open(imgNamepath)
-        #im = Image.new("RGB", (480, len(liens)*(fontSize+5)), (255, 0, 0))
+        # im = Image.new("RGB", (480, len(liens)*(fontSize+5)), (255, 0, 0))
         dr = ImageDraw.Draw(im)
-        #字体样式，文章结尾我会放上连接
+        # 字体样式，文章结尾我会放上连接
         fontPath = r"C:\Windows\Fonts\simkai.ttf"
 
         font = ImageFont.truetype(fontPath, fontSize)
-        #文字颜色
+        # 文字颜色
         n = 0
         for tex in liens:
             n += 100
             dr.text((10, 10 + n), tex.lstrip(), font=font, fill="#485FD3")
         image_name = imgNamepath.split(".")[0]
-        img_after = image_name + '_output.png'
+        img_after = image_name + '_exif.png'
         im.save(img_after)
 
         self.label_2.setScaledContents(True)
-        #img = QtGui.QPixmap(imgNamepath).scaled(self.label_2.size())
+        # img = QtGui.QPixmap(imgNamepath).scaled(self.label_2.size())
         img = QtGui.QPixmap(img_after)
         print("img: ", img.width(), img.height())
         if img.width() > img.height():
@@ -151,16 +157,17 @@ class ImageExifWindow(QMainWindow, Ui_MainWindow):
         self.label_2.setPixmap(img)
         self.label_2.repaint()
 
-    def locations(self, eLon, eLat):
+    @staticmethod
+    def locations(eLon, eLat):
         lon = eLon[1:-1].replace(' ', '').replace('/', ',').split(',')
-        #'[116, 29, 10533/500]' to [116,29,10533,500]  type==(list)
+        # '[116, 29, 10533/500]' to [116,29,10533,500]  type==(list)
         lon = float(
             lon[0]) + float(lon[1]) / 60 + float(lon[2]) / float(lon[3]) / 3600
         lat = eLat[1:-1].replace(' ', '').replace('/', ',').split(',')
         lat = float(
             lat[0]) + float(lat[1]) / 60 + float(lat[2]) / float(lat[3]) / 3600
 
-        return [lon, lat]  #经度,纬度,拍摄时间
+        return [lon, lat]
 
     @pyqtSlot()
     def on_pbreset_clicked(self):
@@ -175,8 +182,10 @@ class ImageExifWindow(QMainWindow, Ui_MainWindow):
         self.pbsave.setDisabled(True)
         self.pbread.setDisabled(True)
 
+
 if __name__ == '__main__':
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     ImageExif = ImageExifWindow()
     ImageExif.setFixedSize(ImageExif.width(), ImageExif.height())
