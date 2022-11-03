@@ -25,6 +25,7 @@ class Rpwd(QWidget, Ui_Form):
         """
         super().__init__(parent)
         self.setupUi(self)
+        self.setFixedSize(self.width(), self.height())
         self.passwLen.setValidator(QtGui.QIntValidator())
     
     @pyqtSlot()
