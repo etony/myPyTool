@@ -22,7 +22,6 @@ import shutil
 from datetime import datetime, timedelta
 
 
-
 class Bpassword(object):
     def __init__(self):
         pass
@@ -62,10 +61,9 @@ class Bpassword(object):
                 # not supported
                 return ""
 
-    def get_password(self,browser_name="Chrome"):
+    def get_password(self, browser_name="Chrome"):
         #browser_name = "Edge"
-        
-        
+
         # print('*'*50)
         # print(browser_name)
         browser = ["Google", "Chrome"]
@@ -80,7 +78,8 @@ class Bpassword(object):
         if not os.path.exists(db_path):
             db_path = os.path.join(os.environ["USERPROFILE"], "AppData", "Local",
                                    browser[0], browser[1], "User Data", "Profile 1", "Login Data")
-
+        if not os.path.exists(db_path):
+            return []
         # db_path = os.path.join(os.environ["USERPROFILE"], "AppData", "Local",
         #                        "Microsoft", "Edge", "User Data", "default", "Login Data")
         filename = "ChromeData.db"
@@ -116,13 +115,15 @@ class Bpassword(object):
             if date_created != 86400000000 and date_created:
                 # print(
                 #     f"Creation date: {str(self.get_chrome_datetime(date_created))}")
-                passwd.append(str(self.get_chrome_datetime(date_created).strftime("%Y-%m-%d %H:%M:%S")))
+                passwd.append(str(self.get_chrome_datetime(
+                    date_created).strftime("%Y-%m-%d %H:%M:%S")))
             else:
                 passwd.append("")
             if date_last_used != 86400000000 and date_last_used:
                 # print(
                 #     f"Last Used: {str(self.get_chrome_datetime(date_last_used))}")
-                passwd.append(str(self.get_chrome_datetime(date_last_used).strftime("%Y-%m-%d %H:%M:%S")))
+                passwd.append(str(self.get_chrome_datetime(
+                    date_last_used).strftime("%Y-%m-%d %H:%M:%S")))
             else:
                 passwd.append("")
             bpasswds.append(passwd)
@@ -130,15 +131,14 @@ class Bpassword(object):
 
         cursor.close()
         db.close()
-        bpasswds.sort(key=lambda x:x[3], reverse=True)
-        
-        
+        bpasswds.sort(key=lambda x: x[3], reverse=True)
+
         try:
             # try to remove the copied db file
             os.remove(filename)
         except:
             pass
-        
+
         return(bpasswds)
 
 
