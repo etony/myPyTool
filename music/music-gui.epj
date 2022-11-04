@@ -2,7 +2,7 @@
   "header": {
     "comment": "eric project file for project music-gui",
     "copyright": "Copyright (C) 2022 , ",
-    "saved": "2022-02-28, 08:53:56"
+    "saved": "2022-07-22, 17:26:29"
   },
   "project": {
     "AUTHOR": "",
@@ -34,6 +34,7 @@
       "makefile": "OTHERS"
     },
     "FORMS": [
+      "imageconver.ui",
       "music.ui"
     ],
     "HASH": "838e2a34c0c0de8f95f3eea1462df92c72302a9f",
@@ -69,9 +70,11 @@
     },
     "RESOURCES": [],
     "SOURCES": [
-      "music.py",
+      "Ui_imageconver.py",
       "Ui_music.py",
-      "__init__.py"
+      "__init__.py",
+      "image-conver.py",
+      "music.py"
     ],
     "SPELLEXCLUDES": "",
     "SPELLLANGUAGE": "en_US",
