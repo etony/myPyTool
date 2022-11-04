@@ -92,7 +92,7 @@ class Bpassword(object):
         for row in cursor.fetchall():
             passwd = []
             origin_url = row[0]
-            action_url = row[1]
+            # action_url = row[1]
             username = row[2]
             password = self.decrypt_password(row[3], key)
             date_created = row[4]
@@ -139,5 +139,5 @@ class Bpassword(object):
         return(bpasswds)
 
 
-# bp = Bpassword()
-# print(bp.get_password())
+bp = Bpassword()
+print(bp.get_password())
