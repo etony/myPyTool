@@ -25,12 +25,15 @@
      <rect>
       <x>10</x>
       <y>60</y>
-      <width>841</width>
+      <width>842</width>
       <height>501</height>
      </rect>
     </property>
+    <attribute name="verticalHeaderVisible">
+     <bool>false</bool>
+    </attribute>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -61,6 +64,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="toolTip">
+        <string>选择要查询的浏览器</string>
+       </property>
        <property name="editable">
         <bool>false</bool>
        </property>
@@ -84,6 +90,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="toolTip">
+        <string>查询</string>
+       </property>
        <property name="text">
         <string>Go!</string>
        </property>
@@ -96,6 +105,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>导出查询内容到文件</string>
        </property>
        <property name="text">
         <string>导    出</string>
@@ -116,6 +128,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;仅在当前显示内容中查找。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>

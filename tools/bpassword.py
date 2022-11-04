@@ -142,5 +142,5 @@ class Bpassword(object):
         return(bpasswds)
 
 
-bp = Bpassword()
-print(bp.get_password())
+# bp = Bpassword()
+# print(bp.get_password())
