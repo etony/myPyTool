@@ -141,6 +141,14 @@ class Bpassword(object):
 
         return(bpasswds)
 
+if __name__ == "__main__":
+    bp = Bpassword()
+    for passwd in bp.get_password():
+        print("hostname:"+passwd[2])
+        print("username:"+passwd[0])
+        print("password:"+passwd[1])
+        print("timeCreated:"+passwd[3])
+        print("timeLastUsed:"+passwd[4])
+        print("*"*30)
+        
 
-# bp = Bpassword()
-# print(bp.get_password())

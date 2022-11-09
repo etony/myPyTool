@@ -68,7 +68,7 @@ class c_char_p_fromstr(ct.c_char_p):
         return self.encode(DEFAULT_ENCODING)
 
 
-def ask_password(profile: str, interactive: bool) -> str:
+def ask_password(profile: str, interactive: bool) -> str: ### 获取保护密码
     """
     Prompt for profile password
     """
@@ -83,6 +83,7 @@ def ask_password(profile: str, interactive: bool) -> str:
         # Ability to read the password from stdin (echo "pass" | ./firefox_...)
         passwd = sys.stdin.readline().rstrip("\n")
 
+    # return '123321'
     return passwd
 
 
@@ -196,6 +197,7 @@ class NSSProxy:
             # Avoid leaking PK11KeySlot
             self._PK11_FreeSlot(keyslot)
 
+
     def handle_error(self, exitcode: int, *logerror: Any):
         """If an error happens in libnss, handle it and print some debug information
         """
@@ -204,7 +206,7 @@ class NSSProxy:
         name = self._PR_ErrorToName(code)
         name = "NULL" if name is None else name
 
-        raise Exit(exitcode)
+        # raise Exit(exitcode)
 
     def decrypt(self, data64):
         data = b64decode(data64)
@@ -388,10 +390,11 @@ class FireFoxPasswd(object):
             if section.startswith("Profile"):
                 sections[str(i)] = profiles.get(section, "Path")
                 i += 1
-
-        profile = os.path.join(basepath, sections["1"])
-
-
+        for n in range(1,i):
+            profile = os.path.join(basepath, sections[str(n)])
+            if os.path.exists(os.path.join(profile, "logins.json")):
+                break
+        
         proxy = NSSProxy()
         proxy.initialize(profile)
 
@@ -410,7 +413,15 @@ class FireFoxPasswd(object):
                 else:                    
                     user = proxy.decrypt(i["encryptedUsername"])
                     passw = proxy.decrypt(i["encryptedPassword"])
-                    loginpass.append({"hostname":i["hostname"], "username":user, "password":passw, "encType":i["encType"],"timeCreated":time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(i["timeCreated"]/1000)),"timeLastUsed":time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(i["timeLastUsed"]/1000))})
+                    # loginpass.append({"hostname":i["hostname"], "username":user, 
+                    #                   "password":passw, "encType":i["encType"],
+                    #                   "timeCreated":time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(i["timeCreated"]/1000)),
+                    #                   "timeLastUsed":time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(i["timeLastUsed"]/1000))})
+                    loginpass.append([user,passw,i["hostname"], 
+                                      time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(i["timeCreated"]/1000)),
+                                      time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(i["timeLastUsed"]/1000))])
+
+
 
         return loginpass
         
@@ -427,3 +438,22 @@ class FireFoxPasswd(object):
 #     print("timeCreated:"+apass["timeCreated"])
 #     print("timeLastUsed:"+apass["timeLastUsed"])
 #     print("*"*30)
+if __name__ == "__main__":
+    ff = FireFoxPasswd()
+    loginpass = ff.get_firefox_passwd()
+
+    # for apass in loginpass:
+    #     print("hostname:"+apass["hostname"])
+    #     print("username:"+apass["username"])
+    #     print("password:"+apass["password"])
+    #     print("timeCreated:"+apass["timeCreated"])
+    #     print("timeLastUsed:"+apass["timeLastUsed"])
+    #     print("*"*30)
+    
+    for passwd in loginpass:
+        print("hostname:"+passwd[2])
+        print("username:"+passwd[0])
+        print("password:"+passwd[1])
+        print("timeCreated:"+passwd[3])
+        print("timeLastUsed:"+passwd[4])
+        print("*"*30)    
