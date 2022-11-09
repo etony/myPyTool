@@ -11,6 +11,7 @@ from PyQt6 import QtGui
 from Ui_BrowerPasswd import Ui_MainWindow
 
 from bpassword import Bpassword
+from getfirefox import FireFoxPasswd
 import pandas as pd
 import os
 
@@ -78,7 +79,11 @@ class BrowerPasswd(QMainWindow, Ui_MainWindow):
         # TODO: not implemented yet
 
         self.passwds = bps.get_password(self.br)
-
+        if self.br == 'FireFox':
+            fps = FireFoxPasswd()
+            self.passwds = fps.get_firefox_passwd()
+            
+        
         # if len(self.passwds) == 0:
         #     self.pb_export.setEnabled(False)
         #     self.pb_search.setEnabled(False)
