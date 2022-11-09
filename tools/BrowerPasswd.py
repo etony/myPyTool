@@ -73,11 +73,11 @@ class BrowerPasswd(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
 
-        br = self.cb_brower.currentText().strip('-').strip()
+        self.br = self.cb_brower.currentText().strip('-').strip()
         bps = Bpassword()
         # TODO: not implemented yet
 
-        self.passwds = bps.get_password(br)
+        self.passwds = bps.get_password(self.br)
 
         # if len(self.passwds) == 0:
         #     self.pb_export.setEnabled(False)
@@ -126,7 +126,7 @@ class BrowerPasswd(QMainWindow, Ui_MainWindow):
                           '用户名', '密码', '网址', '创建时间', '更新时间'], dtype=str)
 
         fpath, ftype = QFileDialog.getSaveFileName(
-            self, "保存", os.path.join(os.getcwd(), "brower_password.csv"), "*.csv")
+            self, "保存", os.path.join(os.getcwd(), "brower_password_"+self.br+".csv"), "*.csv")
 
         if ftype:
             df.to_csv(fpath)
