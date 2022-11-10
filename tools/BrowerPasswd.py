@@ -38,7 +38,7 @@ class BrowerPasswd(QMainWindow, Ui_MainWindow):
 
         self.model = QtGui.QStandardItemModel()
         self.model.setHorizontalHeaderLabels(
-            ['用户名', '密码', '网址', '创建时间', '更新时间'])
+            ['用户名', '密码', '网址', '创建时间', '最后使用'])
         #self.model = TableModel(bps.get_password())
         self.tv_namepasswd.setModel(self.model)
         # self.tv_namepasswd.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch) #Stretch
@@ -67,6 +67,7 @@ class BrowerPasswd(QMainWindow, Ui_MainWindow):
         self.tv_namepasswd.setStyleSheet(
             "selection-background-color:#E6E6E6;selection-color:black")
         # https://blog.csdn.net/qq_42250189/article/details/105199339
+        self.le_askpass.setVisible(False)
 
     @pyqtSlot()
     def on_pb_getit_clicked(self):
@@ -75,27 +76,29 @@ class BrowerPasswd(QMainWindow, Ui_MainWindow):
         """
 
         self.br = self.cb_brower.currentText().strip('-').strip()
-        bps = Bpassword()
-        # TODO: not implemented yet
 
-        self.passwds = bps.get_password(self.br)
-        if self.br == 'FireFox':
+        self.passwds = []
+        if self.br == 'Firefox':
+            askpass = self.le_askpass.text().strip()
             fps = FireFoxPasswd()
-            self.passwds = fps.get_firefox_passwd()
-            
-        
+            self.passwds = fps.get_firefox_passwd(askpass)
+        else:
+            bps = Bpassword()
+            # TODO: not implemented yet
+
+            self.passwds = bps.get_password(self.br)
+
         # if len(self.passwds) == 0:
         #     self.pb_export.setEnabled(False)
         #     self.pb_search.setEnabled(False)
         #     self.pb_reset.setEnabled(False)
         #     return
-
+        self.model.removeRows(0, self.model.rowCount())
         i = 0
         for passwd in self.passwds:
             passw = map(lambda x: QtGui.QStandardItem(x), passwd)
             self.model.insertRow(i, passw)
             i += 1
-
 
         if i == 0:
             self.pb_export.setEnabled(False)
@@ -195,6 +198,21 @@ class BrowerPasswd(QMainWindow, Ui_MainWindow):
                 QUrl(str(self.tv_namepasswd.currentIndex().data())))
 
         #self.statusbar.showMessage(str(self.tv_namepasswd.currentIndex().column()) + str(self.tv_namepasswd.currentIndex().data()) )
+
+    @pyqtSlot(int)
+    def on_cb_brower_currentIndexChanged(self, index):
+        """
+        Slot documentation goes here.
+
+        @param index DESCRIPTION
+        @type int
+        """
+        # TODO: not implemented yet
+        self.br = self.cb_brower.currentText().strip('-').strip()
+        if self.br == 'Firefox':
+            self.le_askpass.setVisible(True)
+        else:
+            self.le_askpass.setVisible(False)
 
 
 if __name__ == "__main__":
