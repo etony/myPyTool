@@ -181,3 +181,6 @@ if __name__ == "__main__":
 # https://blog.csdn.net/Time_D/article/details/88822258
 # https://xxmdmst.blog.csdn.net/article/details/112172580
 # python opencv把一张图片嵌入（叠加）到另一张图片上 https://blog.csdn.net/mao_hui_fei/article/details/106596807
+# https://blog.csdn.net/cungudafa/article/details/85871871
+# https://www.cnblogs.com/zhaoyingjie/p/14699837.html
+# https://cloud.tencent.com/developer/ask/sof/1156847
