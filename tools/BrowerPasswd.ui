@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>861</width>
-    <height>603</height>
+    <width>863</width>
+    <height>612</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -94,6 +94,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>填入保护密码(Master password)</string>
        </property>
       </widget>
      </item>
@@ -183,7 +186,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>861</width>
+     <width>863</width>
      <height>22</height>
     </rect>
    </property>

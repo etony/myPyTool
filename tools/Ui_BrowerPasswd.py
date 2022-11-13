@@ -123,6 +123,7 @@ class Ui_MainWindow(object):
         self.cb_brower.setItemText(0, _translate("MainWindow", "--- Chrome ---"))
         self.cb_brower.setItemText(1, _translate("MainWindow", "--- Edge ---"))
         self.cb_brower.setItemText(2, _translate("MainWindow", "--- Firefox ---"))
+        self.le_askpass.setToolTip(_translate("MainWindow", "填入保护密码(Master password)"))
         self.pb_getit.setToolTip(_translate("MainWindow", "查询"))
         self.pb_getit.setText(_translate("MainWindow", "Go!"))
         self.pb_export.setToolTip(_translate("MainWindow", "导出查询内容到文件"))
