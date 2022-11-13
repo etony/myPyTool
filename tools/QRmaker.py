@@ -6,7 +6,7 @@ Module implementing QRmaker.
 
 from PyQt6.QtCore import pyqtSlot
 from PyQt6.QtWidgets import QMainWindow, QApplication,QFileDialog, QMessageBox
-from PyQt6.QtGui import QImage,QPixmap
+from PyQt6.QtGui import QImage,QPixmap,QPainter
 
 from Ui_QRmaker import Ui_MainWindow
 
@@ -59,6 +59,7 @@ class QRmaker(QMainWindow, Ui_MainWindow):
 
             self.lab_image.setPixmap(image)
             #img = cv2.imread(fpath)
+            image = ImageQt.fromqimage(image.toImage())
             img= cv2.cvtColor(np.asarray(image), cv2.COLOR_RGB2BGR)
 
             det = cv2.QRCodeDetector()
@@ -109,7 +110,24 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        raise NotImplementedError
+        image = self.lab_image.pixmap()
+        self.LOG.info(f'pixmap   {type(image)}')
+        w = image.width()
+        h = image.height()
+        self.LOG.info(f'pixmap   {w}:{h}')
+        image2 = QPixmap("logo.png")
+        logo_w = image2.width()
+        logo_h = image2.height()
+        self.LOG.info(f'logopixmap   {logo_w}:{logo_h}')
+        
+        painter = QPainter()
+        painter.begin(self)
+        painter.drawImage(0, 0, image.toImage())
+        painter.drawImage(0, 0, image2.toImage())    
+        painter.end()
+        painter.save()
+        self.lab_image.setPixmap(image)
+        
 
     @pyqtSlot()
     def on_pb_logo_clicked(self):
@@ -162,3 +180,4 @@ if __name__ == "__main__":
 
 # https://blog.csdn.net/Time_D/article/details/88822258
 # https://xxmdmst.blog.csdn.net/article/details/112172580
+# python opencv把一张图片嵌入（叠加）到另一张图片上 https://blog.csdn.net/mao_hui_fei/article/details/106596807
