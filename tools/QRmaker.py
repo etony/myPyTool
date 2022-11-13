@@ -4,24 +4,20 @@
 Module implementing QRmaker.
 """
 
-from PyQt6.QtCore import pyqtSlot
-from PyQt6.QtWidgets import QMainWindow, QApplication,QFileDialog, QMessageBox
-from PyQt6.QtGui import QImage,QPixmap,QPainter
+from PyQt6.QtCore import pyqtSlot, QSize, Qt
+from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMessageBox
+from PyQt6.QtGui import QImage, QPixmap, QPainter
 
 from Ui_QRmaker import Ui_MainWindow
 
 from MyQR import myqr
 import qrcode
-from PIL import ImageQt,Image
+from PIL import ImageQt, Image
 import os
 import cv2
 import numpy as np
 
 import logging
-
-
-
-
 
 
 class QRmaker(QMainWindow, Ui_MainWindow):
@@ -38,10 +34,9 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         """
         super().__init__(parent)
         self.setupUi(self)
-        
+
         filename = os.path.basename(sys.argv[0])
-        self.LOG = logging.getLogger(filename) 
-        
+        self.LOG = logging.getLogger(filename)
         logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
                             level=logging.INFO)
 
@@ -53,20 +48,19 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         # TODO: not implemented yet
         fpath, ftype = QFileDialog.getOpenFileName(
             self, "打开", os.getcwd(), "Image Files (*.png *.jpg *.bmp)")
-        
+
         if os.path.exists(fpath):
             image = QPixmap(fpath)
 
             self.lab_image.setPixmap(image)
             #img = cv2.imread(fpath)
             image = ImageQt.fromqimage(image.toImage())
-            img= cv2.cvtColor(np.asarray(image), cv2.COLOR_RGB2BGR)
+            img = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGB2BGR)
 
             det = cv2.QRCodeDetector()
             val, pts, st_code = det.detectAndDecode(img)
             self.te_out.setPlainText(val)
             self.LOG.info("二维码加载完毕！")
-
 
     @pyqtSlot()
     def on_pb_read_clicked(self):
@@ -75,7 +69,7 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         """
         # TODO: not implemented yet
         image = self.lab_image.pixmap().toImage()
-        
+
         image = ImageQt.fromqimage(image)
         img = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGB2BGR)
         det = cv2.QRCodeDetector()
@@ -83,26 +77,27 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         self.te_out.setPlainText(val)
         self.LOG.info("二维码读取完毕！")
 
-        
-            
-        
-        
     @pyqtSlot()
     def on_pb_create_clicked(self):
         """
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        qr = qrcode.QRCode(version=1,error_correction=qrcode.constants.ERROR_CORRECT_L,box_size=10,
-                           border=4)
-        qrtxt = self.te_info.toPlainText().strip()
-        qr.add_data(qrtxt)
-        qr.make(fit=True)
-        img = qr.make_image(fill_color="black",back_color="white")
 
-        self.lab_image.setPixmap(img.toqpixmap())
-        self.LOG.info("二维码生成完毕！")
-        
+        qrtxt = self.te_info.toPlainText().strip()
+        if len(qrtxt) == 0:
+            QMessageBox(QMessageBox.Icon.Warning, '警告', '请输入二维码信息！',
+                        QMessageBox.StandardButton.Ok).exec()
+            self.LOG.warn("未输入二维码信息！")
+        else:
+            qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10,
+                               border=4)
+            qr.add_data(qrtxt)
+            qr.make(fit=True)
+            img = qr.make_image(fill_color="black", back_color="white")
+
+            self.lab_image.setPixmap(img.toqpixmap())
+            self.LOG.info("二维码生成完毕！")
 
     @pyqtSlot()
     def on_pb_background_clicked(self):
@@ -111,7 +106,7 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         """
         # TODO: not implemented yet
         image = self.lab_image.pixmap()
-        self.LOG.info(f'pixmap   {type(image)}')
+        self.LOG.info(f'pixmap type  {type(image)}')
         w = image.width()
         h = image.height()
         self.LOG.info(f'pixmap   {w}:{h}')
@@ -119,15 +114,27 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         logo_w = image2.width()
         logo_h = image2.height()
         self.LOG.info(f'logopixmap   {logo_w}:{logo_h}')
-        
+        if logo_w > 48 or logo_h > 48:
+            if logo_h > logo_w:
+                logo_w = int(logo_w*48/logo_h)
+                logo_h = 48
+            else:
+                logo_h = int(logo_h*48/logo_w)
+                logo_w = 48
+            image2 = image2.scaled(QSize(
+                logo_w, logo_h), Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+
+        self.LOG.info(
+            f'logopixmap scaled   {image2.width()}:{image2.height()}')
+
         painter = QPainter(image)
         painter.begin(self)
         painter.drawImage(0, 0, image.toImage())
-        painter.drawImage(int((w - logo_w) / 2), int((h - logo_h) / 2), image2.toImage())    
+        painter.drawImage(int((w - logo_w) / 2),
+                          int((h - logo_h) / 2), image2.toImage())
         painter.end()
         painter.save()
         self.lab_image.setPixmap(image)
-        
 
     @pyqtSlot()
     def on_pb_logo_clicked(self):
@@ -136,16 +143,27 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         """
         # TODO: not implemented yet
         image = ImageQt.fromqimage(self.lab_image.pixmap().toImage())
-        w,h = image.size
-        logo = Image.open("logo.png") 
+        w, h = image.size
+        logo = Image.open("logo.png")
+
         logo_w, logo_h = logo.size
-        
+        if logo_w > 48 or logo_h > 48:
+            if logo_h > logo_w:
+                logo_w = int(logo_w*48/logo_h)
+                logo_h = 48
+            else:
+                logo_h = int(logo_h*48/logo_w)
+                logo_w = 48
+
+        self.LOG.info(f"logo resize: {logo_w}   {logo_h}")
+        logo = logo.resize((logo_w, logo_h), Image.ANTIALIAS)
+
         self.LOG.info(f'{w}:{h}  {logo_w}:{logo_h}')
         l_w = int((w - logo_w) / 2)
         l_h = int((h - logo_h) / 2)
         logo = logo.convert("RGBA")
         image.paste(logo, (l_w, l_h), logo)
-        
+
         self.lab_image.setScaledContents(True)
         image.save("rrrrrrrrrrrr.jpg")
         images = QPixmap("rrrrrrrrrrrr.jpg")
@@ -153,11 +171,6 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         self.lab_image.setPixmap(images)
         self.lab_image.setScaledContents(True)
         self.LOG.info("再次加载完毕！")
-        
-        
-        
-        
-        
 
     @pyqtSlot()
     def on_pb_save_clicked(self):
@@ -167,6 +180,7 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         # TODO: not implemented yet
         raise NotImplementedError
 
+
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
@@ -174,8 +188,6 @@ if __name__ == "__main__":
     qRmaker = QRmaker()
     qRmaker.show()
     sys.exit(app.exec())
-
-
 
 
 # https://blog.csdn.net/Time_D/article/details/88822258

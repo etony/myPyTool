@@ -33,16 +33,6 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QTextEdit" name="te_info">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>160</y>
-      <width>251</width>
-      <height>131</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
@@ -122,13 +112,23 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QTextEdit" name="te_out">
+   <widget class="QPlainTextEdit" name="te_out">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>310</y>
-      <width>251</width>
-      <height>131</height>
+      <width>231</width>
+      <height>121</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="te_info">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>160</y>
+      <width>231</width>
+      <height>121</height>
      </rect>
     </property>
    </widget>
