@@ -120,10 +120,10 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         logo_h = image2.height()
         self.LOG.info(f'logopixmap   {logo_w}:{logo_h}')
         
-        painter = QPainter()
+        painter = QPainter(image)
         painter.begin(self)
         painter.drawImage(0, 0, image.toImage())
-        painter.drawImage(0, 0, image2.toImage())    
+        painter.drawImage(int((w - logo_w) / 2), int((h - logo_h) / 2), image2.toImage())    
         painter.end()
         painter.save()
         self.lab_image.setPixmap(image)
