@@ -6,7 +6,7 @@ Module implementing QRmaker.
 
 from PyQt6.QtCore import pyqtSlot, QSize, Qt
 from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMessageBox
-from PyQt6.QtGui import QImage, QPixmap, QPainter
+from PyQt6.QtGui import QImage, QPixmap, QPainter,QMovie
 
 from Ui_QRmaker import Ui_MainWindow
 
@@ -18,6 +18,9 @@ import cv2
 import numpy as np
 
 import logging
+
+import datetime
+import time
 
 
 class QRmaker(QMainWindow, Ui_MainWindow):
@@ -90,7 +93,7 @@ class QRmaker(QMainWindow, Ui_MainWindow):
                         QMessageBox.StandardButton.Ok).exec()
             self.LOG.warn("未输入二维码信息！")
         else:
-            qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10,
+            qr = qrcode.QRCode(version=5, error_correction=qrcode.constants.ERROR_CORRECT_H, box_size=8,
                                border=4)
             qr.add_data(qrtxt)
             qr.make(fit=True)
@@ -165,8 +168,10 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         image.paste(logo, (l_w, l_h), logo)
 
         self.lab_image.setScaledContents(True)
-        image.save("rrrrrrrrrrrr.jpg")
-        images = QPixmap("rrrrrrrrrrrr.jpg")
+        self.LOG.info(f"合成image type: {type(image)}")
+
+        image.save("combine_QR_tmp.jpg")
+        images = QPixmap("combine_QR_tmp.jpg")
 
         self.lab_image.setPixmap(images)
         self.lab_image.setScaledContents(True)
@@ -174,6 +179,74 @@ class QRmaker(QMainWindow, Ui_MainWindow):
 
     @pyqtSlot()
     def on_pb_save_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        img = self.lab_image.pixmap().toImage()
+        nowtime = datetime.datetime.now().strftime("_%y-%m-%d")
+        fpath, ftype = QFileDialog.getSaveFileName(
+            self, "保存", os.path.join(os.getcwd(), nowtime+"_QR.jpg"),  "*.jpg;;*.png")
+
+        if ftype:        
+            img.save(fpath)
+
+    @pyqtSlot()
+    def on_pb_addback_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        back = cv2.imread("background.jpg")
+        front = self.lab_image.pixmap().toImage()
+
+        temp_shape = (front.height(), front.bytesPerLine()*8//front.depth())
+        temp_shape += (4,)
+        ptr = front.bits()
+        ptr.setsize(front.bytesPerLine()*front.height())
+        result = np.array(ptr, dtype=np.uint8).reshape(temp_shape)
+        result = result[..., :3]
+
+        self.LOG.info(f"front image: {type(result)}")
+        self.LOG.info(f"back image: {type(back)}")
+        combine = cv2.addWeighted(cv2.resize(
+            result, (800, 800)), 0.5, cv2.resize(back, (800, 800)), 0.5, 0)
+
+        img_rgb = cv2.cvtColor(combine, cv2.COLOR_RGB2BGR)
+        QtImg = QImage(
+            img_rgb.data, img_rgb.shape[1], img_rgb.shape[0], QImage.Format.Format_RGB888)
+        self.lab_image.setPixmap(QPixmap.fromImage(QtImg))
+
+    @pyqtSlot()
+    def on_pb_anim_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        fpath, ftype = QFileDialog.getOpenFileName(
+            self, "选择动图", os.getcwd(), "Image Files (*.gif)")
+
+        if os.path.exists(fpath):
+            self.gif = fpath
+
+    @pyqtSlot()
+    def on_pb_create_anim_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        if not os.path.exists(self.gif):
+            self.gif = "back.gif"
+        
+        myqr.run(self.te_info.toPlainText().strip(), version=3,picture=(self.gif),save_name=("123456.gif"),colorized=True)
+        time.sleep(10)
+        self.gif = QMovie("123456.gif")
+        self.lab_image.setMovie(self.gif)
+        self.gif.start()
+
+
+    @pyqtSlot()
+    def on_pb_save_anim_clicked(self):
         """
         Slot documentation goes here.
         """

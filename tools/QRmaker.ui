@@ -38,87 +38,112 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>231</width>
+      <width>131</width>
       <height>141</height>
      </rect>
     </property>
     <property name="title">
-     <string>GroupBox</string>
+     <string>常规</string>
     </property>
     <widget class="QPushButton" name="pb_load">
      <property name="geometry">
       <rect>
-       <x>110</x>
+       <x>70</x>
        <y>20</y>
-       <width>75</width>
+       <width>51</width>
        <height>24</height>
       </rect>
      </property>
      <property name="text">
-      <string>加载</string>
+      <string>加  载</string>
      </property>
     </widget>
     <widget class="QPushButton" name="pb_read">
      <property name="geometry">
       <rect>
-       <x>110</x>
+       <x>70</x>
        <y>50</y>
-       <width>75</width>
+       <width>51</width>
        <height>24</height>
       </rect>
      </property>
      <property name="text">
-      <string>读取</string>
+      <string>读  取</string>
      </property>
     </widget>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QPushButton" name="pb_addback">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>77</width>
-       <height>116</height>
+       <x>70</x>
+       <y>80</y>
+       <width>51</width>
+       <height>24</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QPushButton" name="pb_create">
-        <property name="text">
-         <string>生成</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pb_background">
-        <property name="text">
-         <string>底纹</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pb_logo">
-        <property name="text">
-         <string>Logo</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pb_save">
-        <property name="text">
-         <string>保存</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <property name="text">
+      <string>叠  加</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_create">
+     <property name="geometry">
+      <rect>
+       <x>11</x>
+       <y>21</y>
+       <width>51</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>生  成</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_save">
+     <property name="geometry">
+      <rect>
+       <x>11</x>
+       <y>111</y>
+       <width>51</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>保  存</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_logo">
+     <property name="geometry">
+      <rect>
+       <x>11</x>
+       <y>81</y>
+       <width>51</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Logo</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_background">
+     <property name="geometry">
+      <rect>
+       <x>11</x>
+       <y>51</y>
+       <width>51</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>底  纹</string>
+     </property>
     </widget>
    </widget>
    <widget class="QPlainTextEdit" name="te_out">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>310</y>
+      <y>300</y>
       <width>231</width>
-      <height>121</height>
+      <height>141</height>
      </rect>
     </property>
    </widget>
@@ -128,9 +153,61 @@
       <x>10</x>
       <y>160</y>
       <width>231</width>
-      <height>121</height>
+      <height>131</height>
      </rect>
     </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>10</y>
+      <width>91</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>动态</string>
+    </property>
+    <widget class="QPushButton" name="pb_anim">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>51</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>动  图</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_create_anim">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>51</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>生  成</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pb_save_anim">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>51</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>保  存</string>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
