@@ -275,9 +275,11 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         if not os.path.exists(self.gif):
             self.gif = "back.gif"
 
-        myqr.run(self.te_info.toPlainText().strip(), version=3, picture=(
+        x, y, z = myqr.run(self.te_info.toPlainText().strip(), version=3, picture=(
             self.gif), save_name=("123456.gif"), colorized=True)
-        time.sleep(10)
+        
+        self.LOG.info(f'myQR GIF 返回值：{x} {y} {z}')
+
         self.gif = QMovie("123456.gif")
         self.lab_image.setMovie(self.gif)
         self.gif.start()
@@ -288,7 +290,13 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        raise NotImplementedError
+        img = self.lab_image.movie()
+        nowtime = datetime.datetime.now().strftime("_%y-%m-%d")
+        fpath, ftype = QFileDialog.getSaveFileName(
+            self, "保存", os.path.join(os.getcwd(), nowtime+"_QR.gif"),  "*.gif;;*.png")
+
+        if ftype:
+            img.save(fpath)
 
 
 if __name__ == "__main__":
