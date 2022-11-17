@@ -4,9 +4,9 @@
 Module implementing QRmaker.
 """
 
-from PyQt6.QtCore import pyqtSlot, QSize, Qt
+from PyQt6.QtCore import pyqtSlot, QSize, Qt, QRectF, QSizeF
 from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMessageBox
-from PyQt6.QtGui import QImage, QPixmap, QPainter,QMovie
+from PyQt6.QtGui import QImage, QPixmap, QPainter,QMovie,QPainterPath
 
 from Ui_QRmaker import Ui_MainWindow
 
@@ -132,7 +132,25 @@ class QRmaker(QMainWindow, Ui_MainWindow):
 
         painter = QPainter(image)
         painter.begin(self)
-        painter.drawImage(0, 0, image.toImage())
+        #painter.drawImage(0, 0, image.toImage())
+        ####
+        
+        # radius = 30
+
+        # r = QRectF()
+        # r.setSize(radius * QSizeF(1, 1))
+        # r.moveCenter(QPixmap("logo.png").rect().center())
+        # path = QPainterPath()
+        # path.addEllipse(r)
+
+        # painter.setRenderHints(
+        #     QPainter.Antialiasing | QPainter.SmoothPixmapTransform
+        # )
+        # painter.setClipPath(path, Qt.IntersectClip)
+        
+        
+        
+        ####
         painter.drawImage(int((w - logo_w) / 2),
                           int((h - logo_h) / 2), image2.toImage())
         painter.end()
