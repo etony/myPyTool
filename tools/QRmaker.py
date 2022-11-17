@@ -18,9 +18,7 @@ import cv2
 import numpy as np
 
 import logging
-
 import datetime
-import time
 
 
 class QRmaker(QMainWindow, Ui_MainWindow):
@@ -206,7 +204,7 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         fpath, ftype = QFileDialog.getSaveFileName(
             self, "保存", os.path.join(os.getcwd(), nowtime+"_QR.jpg"),  "*.jpg;;*.png")
 
-        if ftype:        
+        if ftype:
             img.save(fpath)
 
     @pyqtSlot()
@@ -216,6 +214,42 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         """
         # TODO: not implemented yet
         back = cv2.imread("background.jpg")
+
+        ##################
+        R = self.lab_image.pixmap().height()
+
+        x, y = back.shape[:2]
+
+        mask = np.zeros(back.shape[:2], dtype=np.uint8)
+
+        mask = cv2.circle(mask, (int(y/2), int(x/2)),
+                          int(R/2), (255, 255, 255), -1)
+        back = cv2.add(back, np.zeros(
+            np.shape(back), dtype=np.uint8), mask=mask)
+
+        back = cv2.bitwise_and(back, back, mask=mask)
+        x, y = back.shape[:2]
+
+        # 白色
+        white_px = np.asarray([255, 255, 255])
+        # 黑色
+        black_px = np.asarray([0, 0, 0])
+
+        for h in range(x):
+            for w in range(y):
+                if all(back[h][w] == black_px):
+                    back[h][w] = white_px
+
+        ##################
+
+        self.LOG.info(
+            f"background image shape: {back.shape}, size: {back.size}")
+        self.LOG.info(f"background image info: {back[500,500]}")
+
+        # 设置边界框
+        back = cv2.copyMakeBorder(
+            back, 120, 120, 220, 220, cv2.BORDER_CONSTANT, value=(255, 255, 255))
+
         front = self.lab_image.pixmap().toImage()
 
         temp_shape = (front.height(), front.bytesPerLine()*8//front.depth())
@@ -227,8 +261,9 @@ class QRmaker(QMainWindow, Ui_MainWindow):
 
         self.LOG.info(f"front image: {type(result)}")
         self.LOG.info(f"back image: {type(back)}")
+
         combine = cv2.addWeighted(cv2.resize(
-            result, (800, 800)), 0.5, cv2.resize(back, (800, 800)), 0.5, 0)
+            result, (800, 800)), 0.7, cv2.resize(back, (800, 800)), 0.5, 5)
 
         img_rgb = cv2.cvtColor(combine, cv2.COLOR_RGB2BGR)
         QtImg = QImage(
@@ -255,13 +290,15 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         # TODO: not implemented yet
         if not os.path.exists(self.gif):
             self.gif = "back.gif"
+
+        x, y, z = myqr.run(self.te_info.toPlainText().strip(), version=3, picture=(
+            self.gif), save_name=("123456.gif"), colorized=True)
         
-        myqr.run(self.te_info.toPlainText().strip(), version=3,picture=(self.gif),save_name=("123456.gif"),colorized=True)
-        time.sleep(10)
+        self.LOG.info(f'myQR GIF 返回值：{x} {y} {z}')
+
         self.gif = QMovie("123456.gif")
         self.lab_image.setMovie(self.gif)
         self.gif.start()
-
 
     @pyqtSlot()
     def on_pb_save_anim_clicked(self):
@@ -269,7 +306,13 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        raise NotImplementedError
+        img = self.lab_image.movie()
+        nowtime = datetime.datetime.now().strftime("_%y-%m-%d")
+        fpath, ftype = QFileDialog.getSaveFileName(
+            self, "保存", os.path.join(os.getcwd(), nowtime+"_QR.gif"),  "*.gif;;*.png")
+
+        if ftype:
+            img.save(fpath)
 
 
 if __name__ == "__main__":
