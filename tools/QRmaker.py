@@ -14,6 +14,7 @@ from MyQR import myqr
 import qrcode
 from PIL import ImageQt, Image
 import os
+from shutil import copyfile
 import cv2
 import numpy as np
 
@@ -290,15 +291,18 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         # TODO: not implemented yet
         if not os.path.exists(self.gif):
             self.gif = "back.gif"
-
+        self.statusBar().showMessage("QR动图生成中，请稍后.....")
+        
         x, y, z = myqr.run(self.te_info.toPlainText().strip(), version=3, picture=(
-            self.gif), save_name=("123456.gif"), colorized=True)
+            self.gif), save_name=("myQRgif.gif"), colorized=True)
         
         self.LOG.info(f'myQR GIF 返回值：{x} {y} {z}')
 
-        self.gif = QMovie("123456.gif")
+        self.gif = QMovie("myQRgif.gif")
         self.lab_image.setMovie(self.gif)
         self.gif.start()
+        self.LOG.info(f"gif movie is: {self.gif.fileName()}")
+        self.statusBar().showMessage("QR动图生成完毕~~~")
 
     @pyqtSlot()
     def on_pb_save_anim_clicked(self):
@@ -312,8 +316,7 @@ class QRmaker(QMainWindow, Ui_MainWindow):
             self, "保存", os.path.join(os.getcwd(), nowtime+"_QR.gif"),  "*.gif;;*.png")
 
         if ftype:
-            img.save(fpath)
-
+            copyfile(img.fileName(), fpath)
 
 if __name__ == "__main__":
     import sys
