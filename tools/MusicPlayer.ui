@@ -51,11 +51,6 @@
       <widget class="QComboBox" name="cb_list">
        <item>
         <property name="text">
-         <string>酷狗</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
          <string>网易云</string>
         </property>
        </item>
@@ -76,12 +71,17 @@
        </item>
        <item>
         <property name="text">
-         <string>虾米</string>
+         <string>一听</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>一听</string>
+         <string>咪咕</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>千千</string>
         </property>
        </item>
       </widget>
@@ -142,7 +142,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>480</y>
+      <y>470</y>
       <width>251</width>
       <height>24</height>
      </rect>
@@ -170,38 +170,57 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QLabel" name="lab_songname">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>530</y>
-      <width>151</width>
-      <height>18</height>
+      <x>50</x>
+      <y>510</y>
+      <width>201</width>
+      <height>16</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>歌曲:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="lab_song2">
-       <property name="text">
-        <string>00:00:00</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="lab_song">
-       <property name="text">
-        <string>00:00:00</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lab_song2">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>540</y>
+      <width>48</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>00:00:00</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="lab_song">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>540</y>
+      <width>48</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>00:00:00</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>11</x>
+      <y>510</y>
+      <width>27</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>歌曲:</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
