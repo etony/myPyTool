@@ -48,7 +48,7 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QComboBox" name="comboBox">
+      <widget class="QComboBox" name="cb_list">
        <item>
         <property name="text">
          <string>酷狗</string>
@@ -76,7 +76,7 @@
        </item>
        <item>
         <property name="text">
-         <string>'虾米</string>
+         <string>虾米</string>
         </property>
        </item>
        <item>
@@ -173,7 +173,7 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>10</x>
       <y>530</y>
       <width>151</width>
       <height>18</height>
@@ -188,9 +188,16 @@
       </widget>
      </item>
      <item>
+      <widget class="QLabel" name="lab_song2">
+       <property name="text">
+        <string>00:00:00</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QLabel" name="lab_song">
        <property name="text">
-        <string>TextLabel</string>
+        <string>00:00:00</string>
        </property>
       </widget>
      </item>

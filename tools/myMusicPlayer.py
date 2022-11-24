@@ -3,7 +3,7 @@
 """
 Module implementing myMusicPlayer.
 """
-from PyQt6.QtCore import pyqtSlot, QSize, Qt, QRectF, QSizeF, QModelIndex
+from PyQt6.QtCore import pyqtSlot, QSize, Qt, QRectF, QSizeF, QModelIndex, QTimer
 from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMessageBox
 from PyQt6.QtGui import QImage, QPixmap, QPainter, QMovie, QPainterPath, QCloseEvent
 
@@ -16,6 +16,9 @@ import os
 import sys
 from PIL import Image, ImageDraw, ImageFilter
 from pygame import mixer
+from eyed3 import load
+
+
 
 global musicepath
 global background
@@ -24,7 +27,9 @@ global ready
 global pause
 global curindex
 global page
+global songname
 
+global sourcelist
 
 class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
     """
@@ -57,6 +62,24 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                                     "QListWidget::item:selected{background:lightgray; color:blue; }"
                                     "QListWidget::item:selected:!active{border-width:0px; background:skyblue; }"
                                     )
+        
+        
+        
+        self.timer = QTimer()
+        self.timer.setInterval(1000)
+        self.timer.start()
+        self.timer.timeout.connect(self.timer_music)
+        self.sourcelist= {'网易云':'netease', '酷狗':'kugou', 'QQ':'qq', '酷我':'kuwo', '虾米':'xiami', '百度':'baidu', '一听':'yiting'}
+  
+    def timer_music(self):
+        x = mixer.music.get_pos()
+        seconds = int(x / 1000)
+        m, s = divmod(seconds, 60)
+        h, m = divmod(m, 60)
+        time = "%d:%02d:%02d" % (h, m, s)
+
+        self.lab_song2.setText(time)
+        
 
     def loadbackground(self, url):
 
@@ -95,22 +118,41 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         result.save(imgfile)
 
     def download_music(self, url, filename):
-        self.statusbar.showMessage("开始下载 ... " + filename)
+        self.statusbar.showMessage("开始下载 ... " + self.songname)
         filename = os.path.join(self.musicepath, filename) + '.mp3'
         if not os.path.exists(filename):
             with requests.get(url) as r:
                 with open(filename, 'wb') as f:
                     f.write(r.content)
 
-        self.statusbar.showMessage("下载完毕 ... " + filename)
-        self.ready = True
+            self.statusbar.showMessage("下载完毕 ... " + filename)
+            self.ready = True
 
         if mixer.get_busy():
             mixer.stop()
-        self.sound = mixer.Sound(filename)
-        self.sound.play()
-
-        self.statusbar.showMessage('播放中 ... ' + filename)
+            
+        try:
+            
+            mixer.music.load(filename)
+            mixer.music.play(-1) #loops 是一个可选的整数参数，默认情况下为 0 ，它告诉您重复播放音乐多少次。如果将此参数设置为 -1 ,则音乐会无限重复播放。
+            musicinfo = load(filename)
+        except:
+            self.statusbar.showMessage("下载失败  ... " + self.songname)
+            mixer.music.unload()
+            os.remove(filename)
+            return
+        try:
+            timenum = musicinfo.info.time_secs
+            m, s = divmod(timenum, 60)
+            h, m = divmod(m, 60)
+            time = "%d:%02d:%02d" % (h, m, s)
+            self.lab_song.setText(time)
+        except:
+            pass
+        
+        
+        
+        self.statusbar.showMessage('播放中 ... ' + self.songname)
 
     @pyqtSlot(QModelIndex)
     def on_lw_songs_clicked(self, index):
@@ -129,9 +171,16 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         self.loadbackground(pic)
         filename = self.myjson[self.curindex]['title'] + \
             '-' + self.myjson[self.curindex]['author']
+        self.songname = filename
         self.download_music(url, filename)
         self.pb_pause.setText("||")
         self.pause = False
+        
+        
+        
+        
+        
+        
 
     @pyqtSlot()
     def on_pb_search_clicked(self):
@@ -139,28 +188,42 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         Slot documentation goes here.
         """
         # TODO: not implemented yet
+        source = self.cb_list.currentText().strip('-').strip()
+        source = self.sourcelist[source]
+        print(source)
+        
         self.lw_songs.addItem('搜索中')
         urlss = ['http://www.xmsj.org/', 'http://y.yin2s.com/']
         url = urlss[0]
         header = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.110.430.128 Safari/537.36',
             'X-Requested-With': 'XMLHttpRequest'
-
         }
         self.lw_songs.clear()
         self.myjson = []
+        
+        search = self.le_search.text().strip()
+        if len(search) <= 0:
+            return
+    
+        
         for i in range(self.page):
-            params = {'input': "童话镇", 'filter': 'name',
-                      'type': 'netease', 'page': i+1}
+            params = {'input': search, 'filter': 'name',
+                      'type': source, 'page': i+1}
             res = requests.post(url, params, headers=header)
             html = res.json()
-            self.myjson = self.myjson + html['data']
-
-            for it in range(10):
-                title = '('+html['data'][it]['type']+')' + \
-                    html['data'][it]['title'] + '-' + \
-                        html['data'][it]['author']
-                self.lw_songs.addItem(title)
+            print("*"*30)
+            print(html)
+            if html['code'] == 200:                
+                self.myjson = self.myjson + html['data']
+    
+                for it in range(10):
+                    title = '('+html['data'][it]['type']+')' + \
+                        html['data'][it]['title'] + '-' + \
+                            html['data'][it]['author']
+                    self.lw_songs.addItem(title)
+            else:
+                self.statusbar.showMessage('资源查询失败！！！')
 
     @pyqtSlot()
     def on_pb_back_clicked(self):
@@ -170,7 +233,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         # TODO: not implemented yet
         self.curindex -= 1
         if self.curindex < 0:
-            self.curindex = 9
+            self.curindex = 19
 
         pic = self.myjson[self.curindex]['pic']
         url = self.myjson[self.curindex]['url']
@@ -190,13 +253,17 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         """
         # TODO: not implemented yet
         if self.pause:
-            mixer.unpause()
+            mixer.music.unpause()
             self.pb_pause.setText("||")
             self.pause = False
         else:
-            mixer.pause()
+            mixer.music.pause()
             self.pb_pause.setText("▶")
             self.pause = True
+            
+
+            
+            
 
     @pyqtSlot()
     def on_pb_forwad_clicked(self):
@@ -206,7 +273,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         # TODO: not implemented yet
 
         self.curindex += 1
-        if self.curindex >= 10:
+        if self.curindex >= 20:
             self.curindex = 0
 
         pic = self.myjson[self.curindex]['pic']
@@ -239,7 +306,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         """
         # TODO: not implemented yet
 
-        self.sound.set_volume(round(self.hs_value.value()/100, 1))
+        mixer.music.set_volume(round(self.hs_value.value()/100, 1))
 
 
 if __name__ == "__main__":
