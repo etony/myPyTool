@@ -83,18 +83,13 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         time = "%d:%02d:%02d" % (h, m, s)
          
         self.lab_song2.setText(time)
-        
-        print("timer is running...." + str(self.atimer))
-        self.atimer += 1
-        if mixer.music.get_busy() :
-            print("忙")
-        else:
-            print("闲")
 
-        self.next_song()
-
+        if not mixer.music.get_busy() :
+            self.next_song()
+        #print("timer running " + str(self.atimer))
+        #self.atimer += 1
     def next_song(self):
-        print("多线程开启")
+        
         try:
             import time
             time.sleep(1)
@@ -118,6 +113,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                 self.pb_pause.setText("||")
                 self.pause = False
                 self.lw_songs.setCurrentRow(self.curindex)
+                self.lab_songname.setText(filename)
                 
         except:
             pass
@@ -179,7 +175,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
 
             mixer.music.load(filename)
             # loops 是一个可选的整数参数，默认情况下为 0 ，它告诉您重复播放音乐多少次。如果将此参数设置为 -1 ,则音乐会无限重复播放。
-            mixer.music.play()
+            mixer.music.play(0)
             musicinfo = load(filename)
             self.timer.start()
         except:
@@ -249,8 +245,6 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                       'type': sourcecode, 'page': i+1}
             res = requests.post(url, params, headers=header)
             html = res.json()
-            print("*"*30)
-            print(html)
             if html['code'] == 200:
                 self.myjson = self.myjson + html['data']
 
