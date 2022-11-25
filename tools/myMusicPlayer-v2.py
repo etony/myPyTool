@@ -23,7 +23,7 @@ import logging
 
 global musicepath
 global background
-global source 
+global source
 global search
 global myjson
 global ready
@@ -35,7 +35,7 @@ global seq
 
 page = 2
 sourcelist = {'网易云': 'netease', 'QQ': 'qq', '酷我': 'kuwo',
-                   '百度': 'baidu', '一听': 'yiting', '千千': 'tianhe', '咪咕': 'migu'}
+              '百度': 'baidu', '一听': 'yiting', '千千': 'tianhe', '咪咕': 'migu'}
 
 global atimer
 global working
@@ -54,17 +54,16 @@ class GetListThread(QThread):
         super(GetListThread, self).__init__()
         self.working = True
 
-
     def __del__(self):
-        #线程状态改变与线程终止
+        # 线程状态改变与线程终止
         self.working = False
         self.wait()
-        
+
     def run(self):
-        #重写线程执行的run函数
-        #触发自定义信号
-        global source 
-        global search 
+        # 重写线程执行的run函数
+        # 触发自定义信号
+        global source
+        global search
         global page
         global myjson
 
@@ -94,8 +93,8 @@ class GetListThread(QThread):
                     title = '(' + source + ')' + html['data'][it]['title'] + '-' + \
                             html['data'][it]['author']
 
-                self.trigger.emit("ok")    
-            else:                
+                self.trigger.emit("ok")
+            else:
                 self.trigger.emit("err")
 
 
@@ -108,12 +107,11 @@ class DownloadThread(QThread):
         super(DownloadThread, self).__init__()
         self.working = True
 
-
     def __del__(self):
-        #线程状态改变与线程终止
+        # 线程状态改变与线程终止
         self.working = False
         self.wait()
-        
+
     def run(self):
         # 重写线程执行的run函数
         # 触发自定义信号
@@ -121,7 +119,6 @@ class DownloadThread(QThread):
             time.sleep(1)
             # 通过自定义信号把待显示的字符串传递给槽函数
             self.trigger.emit(str(i))
-
 
 
 class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
@@ -164,12 +161,10 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         self.seq = True
         self.atimer = 0
         self.statusbar.showMessage("就绪")
-        
-        
+
         self.getlistwork = GetListThread()
         self.downloadwork = DownloadThread()
         global myjson
-        
 
     def timer_music(self):
         x = mixer.music.get_pos()
@@ -325,18 +320,16 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         self.statusbar.showMessage('搜索中...')
         self.getlistwork.trigger.connect(self.displaylist)
         self.getlistwork.start()
-        
-        
+
         # sourcecode = self.sourcelist[source]
 
-        
         # urlss = ['http://www.xmsj.org/', 'http://y.yin2s.com/']
         # url = urlss[0]
         # header = {
         #     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.110.430.128 Safari/537.36',
         #     'X-Requested-With': 'XMLHttpRequest'
         # }
-        
+
         # self.myjson = []
 
         # search = self.le_search.text().strip()
@@ -360,7 +353,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         #     else:
         #         self.statusbar.showMessage('资源搜索失败，通道试试！！！   (┬＿┬) ')
 
-    def displaylist(self,status):
+    def displaylist(self, status):
         global source
         global myjson
         self.lw_songs.clear()
@@ -368,13 +361,12 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             ll = len(myjson)
             if ll > 1:
                 for it in range(ll):
-                    title = '(' + source + ')' + myjson[it]['title'] + '-' +  myjson[it]['author']
+                    title = '(' + source + ')' + \
+                        myjson[it]['title'] + '-' + myjson[it]['author']
                     self.lw_songs.addItem(title)
                     self.statusbar.showMessage('资源搜索完毕 ...')
             else:
                 self.statusbar.showMessage('资源搜索失败，通道试试！！！   (┬＿┬) ')
-        
-
 
     @pyqtSlot()
     def on_pb_back_clicked(self):
@@ -471,11 +463,6 @@ if __name__ == "__main__":
     sys.exit(app.exec())
 
 
-
-
-
-
-
 # class qthreadtest(QDialog, Ui_Dialog):
 #     """
 #     Class documentation goes here.
@@ -502,8 +489,8 @@ if __name__ == "__main__":
 #         self.work.start()
 #         # 线程自定义信号连接的槽函数
 #         #self.pushButton.setEnabled(False)
-        
-        
+
+
 #     def display(self,str):
 #         # 由于自定义信号时自动传递一个字符串参数，所以在这个槽函数中要接受一个参数
 #         self.listWidget.addItem(str)
@@ -522,7 +509,7 @@ if __name__ == "__main__":
 #         #线程状态改变与线程终止
 #         self.working = False
 #         self.wait()
-        
+
 #     def run(self):
 #         #重写线程执行的run函数
 #         #触发自定义信号
