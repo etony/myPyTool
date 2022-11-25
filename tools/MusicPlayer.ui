@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>音乐播放器</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>music-2.png</normaloff>music-2.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QListWidget" name="lw_songs">
     <property name="geometry">

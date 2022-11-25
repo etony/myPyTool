@@ -73,7 +73,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                            '百度': 'baidu', '一听': 'yiting', '千千': 'tianhe', '咪咕': 'migu'}
         self.seq = True
         self.atimer = 0
-
+        self.statusbar.showMessage("就绪")
 
     def timer_music(self):
         x = mixer.music.get_pos()
@@ -81,27 +81,27 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         m, s = divmod(seconds, 60)
         h, m = divmod(m, 60)
         time = "%d:%02d:%02d" % (h, m, s)
-         
+
         self.lab_song2.setText(time)
 
-        if not mixer.music.get_busy() :
+        if not mixer.music.get_busy():
             self.next_song()
         #print("timer running " + str(self.atimer))
         #self.atimer += 1
+
     def next_song(self):
-        
+
         try:
             import time
             time.sleep(1)
-            if not mixer.music.get_busy() and not self.pause :
-                if self.seq:                    
+            if not mixer.music.get_busy() and not self.pause:
+                if self.seq:
                     self.curindex += 1
                     if self.curindex >= 20:
                         self.curindex = 0
                 else:
                     import random
-                    self.curindex = random.randint(0,20)
-
+                    self.curindex = random.randint(0, 20)
 
                 pic = self.myjson[self.curindex]['pic']
                 url = self.myjson[self.curindex]['url']
@@ -114,12 +114,11 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                 self.pause = False
                 self.lw_songs.setCurrentRow(self.curindex)
                 self.lab_songname.setText(filename)
-                
+
         except:
             pass
-                    
-        self.timer.start()        
-        
+
+        self.timer.start()
 
     def loadbackground(self, url):
 
@@ -191,7 +190,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             self.lab_song.setText(time)
         except:
             pass
-        
+
         self.lab_songname.setText(self.songname)
         self.statusbar.showMessage('播放中 ... ')
 
@@ -323,7 +322,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        if self.seq :
+        if self.seq:
             self.pb_seq.setText("x")
             self.seq = False
         else:
