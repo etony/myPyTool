@@ -3,11 +3,11 @@
 """
 Module implementing myMusicPlayer.
 """
-from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex, QTimer, QThread, pyqtSignal, QMutex
-from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMessageBox
-from PyQt6.QtGui import QPixmap,QCloseEvent
+from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex, QTimer, QThread, pyqtSignal, QMutex, QPoint
+from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMessageBox, QMenu
+from PyQt6.QtGui import QPixmap,QCloseEvent,QIcon
 
-from Ui_MusicPlayer import Ui_MusicPlayer
+from Ui_MusicPlayer_v3 import Ui_MusicPlayer
 import requests, os, sys, time, logging
 from PIL import Image, ImageDraw, ImageFilter
 from pygame import mixer
@@ -24,6 +24,8 @@ background = os.path.join(musicepath, "background.png")
 global source  # 搜索源 '网易云'
 global search  # 搜索文字
 global myjson  # 资源列表
+global myjson_love
+global myjson_local
 global pause
 global curindex  # 当前mp3 编号
 curindex = 0
@@ -215,7 +217,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                                     "QListWidget::item:selected{background:lightgray; color:blue; }"
                                     "QListWidget::item:selected:!active{border-width:0px; background:skyblue; }"
                                     )
-
+        self.tabWidget.setStyleSheet("QTabBar::tab::selected{background:rgb(0, 144, 255)}")
         self.timer = QTimer()
         self.timer.setInterval(1000)
         self.timer.stop()
@@ -230,7 +232,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
 
         # self.getlistwork = GetListThread()
         # self.downloadwork = DownloadThread()
-       
+        
         
         global myjson
         myjson = []
@@ -238,6 +240,22 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         songname =''
         global filename
         filename =''
+        self.lw_localsongs.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu) #对象的上下文菜单的策略
+        self.lw_songs.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu) #对象的上下文菜单的策略
+    #     self.lw_localsongs.customContextMenuRequested.connect(self.on_context_menu) # 设置唤起右键菜单的slots
+
+    # def on_context_menu(self,pos):
+
+    #     menu = QMenu()
+    #     item1 = menu.addAction(u"清除")
+    #     item2 = menu.addAction(u"拷贝")
+    #     item3 = menu.addAction(u"粘贴")
+    #     self.action = menu.exec(self.lw_localsongs.mapToGlobal(pos))  
+        
+    #     if self.action == item1:
+    #         LOG.info('清除')
+
+
 
     def timer_music(self):
         x = mixer.music.get_pos()
@@ -608,8 +626,56 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         # TODO: not implemented yet
 
         mixer.music.set_volume(round(self.hs_value.value()/100, 1))
+        
+    @pyqtSlot(QPoint)
+    def on_lw_localsongs_customContextMenuRequested(self, pos):
+        self.generateMenu(pos)
+        if self.action == self.load:
+                LOG.info('加载')
+        elif self.action == self.clear:
+                LOG.info('清空')
+                
+    def generateMenu(self,pos):
+        menu = QMenu()
+        ico_load = QIcon('local.png')
+        ico_clear = QIcon('clear.png')
+        global myjson_local
+        myjson_local=[]
+        ll = len(myjson_local)
+        self.load = menu.addAction(ico_load,u"加载")
+        if ll==0 :
+            self.dele = menu.addAction(ico_clear,u"删除")
+        self.clear = menu.addAction(ico_clear,u"清空")    
+        self.action = menu.exec(self.lw_localsongs.mapToGlobal(pos))
+        
+    @pyqtSlot(QPoint)
+    def on_lw_songs_customContextMenuRequested(self, pos):
+        self.genLoveMenu(pos)
+        
+        items = self.lw_songs.selectedIndexes()
+        global myjson_love
+        for it in items:
+            #myjson_love.append(myjson[it.row()])
+            
+            LOG.info(it.row())
+            title = myjson[it.row()]['title'] + '-' + myjson[it.row()]['author']
+            self.lw_lovesongs.addItem(title)
+        if self.action == self.love:
+            pass 
+            #LOG.info(str(self.lw_songs.)))
+        else:
+            pass
+                
+    def genLoveMenu(self,pos):
+        menu = QMenu()
+        ico_love = QIcon('heart.png')
 
-
+        ll = len(myjson)
+        if ll > 0:
+            self.love = menu.addAction(ico_love,u"我喜欢")    
+        self.action = menu.exec(self.lw_songs.mapToGlobal(pos))
+        
+        
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
