@@ -29,7 +29,7 @@ global background  # 图片地址
 background = os.path.join(musicepath, "background.png")
 
 global site
-site = "web" # love, local
+site = "web"  # love, local
 
 global source  # 搜索源 '网易云'
 global search  # 搜索文字
@@ -131,6 +131,7 @@ class DownloadThread(QThread):
         LOG.info("进入DownloadThread线程 →→→→→→→→")
         global myjson
         global curindex
+        global myjson_love
 
         global songname
         global musicepath
@@ -140,12 +141,19 @@ class DownloadThread(QThread):
         pic = myjson[curindex]['pic']
         url = myjson[curindex]['url']
 
-        self.download_background(pic)
-
         songname = myjson[curindex]['title'] + \
             '-' + myjson[curindex]['author']
+
+        if site == 'love':
+            pic = myjson_love[curindex]['pic']
+            url = myjson_love[curindex]['url']
+
+            songname = myjson_love[curindex]['title'] + \
+                '-' + myjson_love[curindex]['author']
+
         filename = os.path.join(musicepath, songname) + '.mp3'
 
+        self.download_background(pic)
         self.download_music(url, filename)
         self.trigger.emit('ok')
         qmut.unlock()
@@ -253,6 +261,13 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                                     "QListWidget::item:selected{background:lightgray; color:blue; }"
                                     "QListWidget::item:selected:!active{border-width:0px; background:skyblue; }"
                                     )
+        self.lw_lovesongs.setStyleSheet("QListWidget{border:1px solid gray; color:black; }"
+                                        "QListWidget::Item{padding-top:5px; padding-bottom:1px; }"
+                                        "QListWidget::Item:hover{background:skyblue; }"
+                                        "QListWidget::item:selected{background:lightgray; color:blue; }"
+                                        "QListWidget::item:selected:!active{border-width:0px; background:skyblue; }"
+                                        )
+
         self.tabWidget.setStyleSheet(
             "QTabBar::tab::selected{background:rgb(0, 144, 255)}")
         self.timer = QTimer()
@@ -271,6 +286,8 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         myjson = []
         global myjson_local
         myjson_local = []
+        global myjson_love
+        myjson_love = []
         global songname
         songname = ''
         global filename
@@ -279,6 +296,9 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             Qt.ContextMenuPolicy.CustomContextMenu)  # 对象的上下文菜单的策略
         self.lw_songs.setContextMenuPolicy(
             Qt.ContextMenuPolicy.CustomContextMenu)  # 对象的上下文菜单的策略
+        self.lw_lovesongs.setContextMenuPolicy(
+            Qt.ContextMenuPolicy.CustomContextMenu)  # 对象的上下文菜单的策略
+
     #     self.lw_localsongs.customContextMenuRequested.connect(self.on_context_menu) # 设置唤起右键菜单的slots
 
     # def on_context_menu(self,pos):
@@ -312,7 +332,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         elif site == 'local':
             ll = len(myjson_local)
             LOG.info("here")
-        
+
         try:
             time.sleep(1)
             if not mixer.music.get_busy() and not self.pause:
@@ -322,12 +342,11 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                         curindex = 0
                 else:
                     import random
-                    curindex = random.randint(0, ll)
+                    curindex = random.randint(0, ll-1)
         except:
             pass
-        LOG.info(f"next song: {str(ll)}  {curindex}" ) 
+        LOG.info(f"next song: {str(ll)}  {curindex}")
         if site == 'web':
-
             try:
                 self.downloadwork = DownloadThread()
                 self.downloadwork.start()
@@ -336,7 +355,14 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             except:
                 pass
         elif site == 'love':
-            pass 
+            try:
+                self.downloadwork = DownloadThread()
+                self.downloadwork.start()
+                self.downloadwork.trigger.connect(self.beginplay)
+                self.lw_lovesongs.setCurrentRow(curindex)
+            except:
+                pass
+
         elif site == 'local':
             asong = myjson_local[curindex]['url']
             name = os.path.splitext(myjson_local[curindex]['title'])[0]
@@ -344,11 +370,8 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             self.lab_songname.setText(name)
             self.lw_localsongs.setCurrentRow(curindex)
 
-            
-
         self.pb_pause.setText("||")
         self.pause = False
-        
 
         self.timer.start()
 
@@ -458,6 +481,28 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         # self.download_music(url, filename)
         # self.pb_pause.setText("||")
         # self.pause = False
+
+    # @pyqtSlot(QModelIndex)
+    # def on_lw_lovesongs_clicked(self, index):
+    #     """
+    #     Slot documentation goes here.
+
+    #     @param index DESCRIPTION
+    #     @type QModelIndex
+    #     """
+
+    #     global curindex
+    #     curindex = self.lw_lovesongs.currentRow()
+    #     global site
+    #     site = "love"
+
+    #     LOG.info("开始调用线程进行mp3下载")
+    #     self.downloadwork = DownloadThread()
+    #     try:
+    #         self.downloadwork.start()
+    #         self.downloadwork.trigger.connect(self.beginplay)
+    #     except:
+    #         pass
 
     def beginplay(self, str):
         LOG.info("线程返回值： " + str)
@@ -606,17 +651,23 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             self.pause = False
             self.lw_songs.setCurrentRow(curindex)
         elif site == 'love':
-            pass 
+            self.downloadwork = DownloadThread()
+
+            try:
+                self.downloadwork.start()
+                self.downloadwork.trigger.connect(self.beginplay)
+            except:
+                pass
+
+            self.pb_pause.setText("||")
+            self.pause = False
+            self.lw_lovesongs.setCurrentRow(curindex)
         elif site == 'local':
             asong = myjson_local[curindex]['url']
             name = os.path.splitext(myjson_local[curindex]['title'])[0]
             self.playmusic(asong)
             self.lab_songname.setText(name)
             self.lw_localsongs.setCurrentRow(curindex)
-            
-            
-            
-            
 
     @pyqtSlot()
     def on_pb_pause_clicked(self):
@@ -693,20 +744,23 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             self.pause = False
             self.lw_songs.setCurrentRow(curindex)
         elif site == 'love':
-            pass 
+            self.downloadwork = DownloadThread()
+
+            try:
+                self.downloadwork.start()
+                self.downloadwork.trigger.connect(self.beginplay)
+            except:
+                pass
+
+            self.pb_pause.setText("||")
+            self.pause = False
+            self.lw_lovesongs.setCurrentRow(curindex)
         elif site == 'local':
             asong = myjson_local[curindex]['url']
             name = os.path.splitext(myjson_local[curindex]['title'])[0]
             self.playmusic(asong)
             self.lab_songname.setText(name)
             self.lw_localsongs.setCurrentRow(curindex)
-
-            
-            
-            
-            
-            
-            
 
     @pyqtSlot()
     def on_pb_seq_clicked(self):
@@ -781,13 +835,13 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                     title = '(' + myjson_local[it]['type'] + \
                         ')' + myjson_local[it]['title']
                     self.lw_localsongs.addItem(title)
-            LOG.info(f"local song: {str(ll)}" ) 
+            LOG.info(f"local song: {str(ll)}")
 
     @pyqtSlot(QModelIndex)
     def on_lw_localsongs_clicked(self, index):
         global site
         site = "local"
-        global curindex        
+        global curindex
 
         curindex = self.lw_localsongs.currentRow()
         asong = myjson_local[curindex]['url']
@@ -799,26 +853,37 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         menu = QMenu()
         ico_load = QIcon('local.png')
         ico_clear = QIcon('clear.png')
+        ico_del = QIcon('delete.png')
         ll = len(myjson_local)
         self.load = menu.addAction(ico_load, u"加载")
         if ll > 0:
-            self.dele = menu.addAction(ico_clear, u"删除")
+            self.dele = menu.addAction(ico_del, u"删除")
             self.clear = menu.addAction(ico_clear, u"清空")
         self.action = menu.exec(self.lw_localsongs.mapToGlobal(pos))
 
     @pyqtSlot(QModelIndex)
     def on_lw_lovesongs_clicked(self, index):
+        global curindex
+        curindex = self.lw_lovesongs.currentRow()
         global site
         site = "love"
-        
+
+        LOG.info("开始调用线程进行mp3下载")
+        self.downloadwork = DownloadThread()
+        try:
+            self.downloadwork.start()
+            self.downloadwork.trigger.connect(self.beginplay)
+        except:
+            pass
+
     @pyqtSlot(QPoint)
     def on_lw_songs_customContextMenuRequested(self, pos):
-        self.genLoveMenu(pos)
+        self.genALoveMenu(pos)
 
         items = self.lw_songs.selectedIndexes()
         global myjson_love
         for it in items:
-            # myjson_love.append(myjson[it.row()])
+            myjson_love.append(myjson[it.row()])
 
             LOG.info(it.row())
             title = myjson[it.row()]['title'] + '-' + \
@@ -830,7 +895,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         else:
             pass
 
-    def genLoveMenu(self, pos):
+    def genALoveMenu(self, pos):
         menu = QMenu()
         ico_love = QIcon('heart.png')
 
@@ -839,10 +904,41 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             self.love = menu.addAction(ico_love, u"我喜欢")
         self.action = menu.exec(self.lw_songs.mapToGlobal(pos))
 
+    @pyqtSlot(QPoint)
+    def on_lw_lovesongs_customContextMenuRequested(self, pos):
+        self.genLoveMenu(pos)
+
+        items = self.lw_lovesongs.selectedIndexes()
+        global myjson_love
+        if self.action == None:
+            return
+        if self.action == self.clear:
+            myjson_love.clear()
+            self.lw_lovesongs.clear()
+        elif self.action == self.dele:
+            items = self.lw_lovesongs.selectedIndexes()
+            for it in items:
+                r = it.row()
+                LOG.info(f'remove love item {r}')
+                self.lw_lovesongs.takeItem(r)
+                del myjson_love[r]
+
+    def genLoveMenu(self, pos):
+        menu = QMenu()
+        ico_clear = QIcon('clear.png')
+        ico_del = QIcon('delete.png')
+
+        ll = len(myjson_love)
+        if ll > 0:
+            self.dele = menu.addAction(ico_del, u"删除")
+            self.clear = menu.addAction(ico_clear, u"清空")
+        self.action = menu.exec(self.lw_songs.mapToGlobal(pos))
+
     @pyqtSlot(int)
     def on_tabWidget_currentChanged(self, index):
         tab = self.tabWidget.currentWidget().objectName()
         LOG.info(f'当前tab {tab}')
+
 
 if __name__ == "__main__":
     import sys
