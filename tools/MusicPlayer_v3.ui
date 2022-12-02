@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>C:/Users/tony/.designer/backup/music-2.png</normaloff>C:/Users/tony/.designer/backup/music-2.png</iconset>
+    <normaloff>music-2.png</normaloff>music-2.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="lab_background">
@@ -231,7 +231,7 @@
     <property name="currentIndex">
      <number>0</number>
     </property>
-    <widget class="QWidget" name="tab">
+    <widget class="QWidget" name="web">
      <attribute name="title">
       <string>搜索列表</string>
      </attribute>
@@ -246,7 +246,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_2">
+    <widget class="QWidget" name="love">
      <attribute name="title">
       <string>我喜欢</string>
      </attribute>
@@ -261,7 +261,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_3">
+    <widget class="QWidget" name="local">
      <attribute name="title">
       <string>本地音乐</string>
      </attribute>
