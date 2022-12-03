@@ -109,6 +109,7 @@ class GetListThread(QThread):
                 self.trigger.emit("ok")
             else:
                 self.trigger.emit("err")
+        LOG.info("列表搜索结束。")       
         return
 
 
@@ -127,16 +128,15 @@ class DownloadThread(QThread):
         self.wait()
 
     def run(self):
-        qmut.lock()
-        LOG.info("进入DownloadThread线程 →→→→→→→→")
+        qmut.lock()        
         global myjson
         global curindex
         global myjson_love
-
         global songname
         global musicepath
         global filename
-
+        
+        LOG.info(f"进入DownloadThread线程:  id-{curindex}")
         # 下载图片
         pic = myjson[curindex]['pic']
         url = myjson[curindex]['url']
@@ -220,7 +220,7 @@ class AddLoalThread(QThread):
         for root, dirs, files in os.walk(localpath):
             for file in files:
                 if file.endswith('mp3'):
-                    musicdict = {'type': 'locale', 'link': os.path.join(root, file), 'songid': 0, 'title': file,
+                    musicdict = {'type': '本地', 'link': os.path.join(root, file), 'songid': 0, 'title': file,
                                  'author': file, 'lrc': ' ', 'url': os.path.join(root, file), 'pic': background}
                     myjson_local.append(musicdict)
 
@@ -331,7 +331,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             ll = len(myjson_love)
         elif site == 'local':
             ll = len(myjson_local)
-            LOG.info("here")
+            LOG.info(f"自动 next_song： tab-{site} id-{curindex}")
 
         try:
             time.sleep(1)
@@ -345,7 +345,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                     curindex = random.randint(0, ll-1)
         except:
             pass
-        LOG.info(f"next song: {str(ll)}  {curindex}")
+        LOG.info(f"next song: 共 {str(ll)}  第 id-{curindex}")
         if site == 'web':
             try:
                 self.downloadwork = DownloadThread()
@@ -463,7 +463,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         global site
         site = "web"
 
-        LOG.info("开始调用线程进行mp3下载")
+        LOG.info(f"开始调用线程进行mp3下载: tab-{site}  id-{curindex}")
         self.downloadwork = DownloadThread()
         try:
             self.downloadwork.start()
@@ -539,10 +539,20 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             self.timer.start()
 
         except:
-            self.statusbar.showMessage("播放失败  (┬＿┬) ... " + songname)
-            mixer.music.unload()
-            LOG.info("删除问题文件")
+            self.statusbar.showMessage(f"播放失败  (┬＿┬) ... {songname}")
+            mixer.music.unload()            
+            
+            LOG.info(f"删除问题地址: tab-{site} id-{curindex} : {asong}")
             os.remove(asong)
+            if site == 'web':
+                self.lw_songs.takeItem(curindex)
+                global myjson
+                del myjson[curindex]
+            elif site == 'love':
+                self.lw_lovesongs.takeItem(curindex)
+                global myjson_love
+                del myjson_love[curindex]                
+            
             return
         try:
             timenum = musicinfo.info.time_secs
@@ -569,6 +579,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         if len(search) <= 0:
             self.statusbar.showMessage('搜索中 ...  寂寞啊~~~')
         else:
+            self.statusbar.showMessage('搜索中 ...')
             self.getlistwork = GetListThread()
             self.getlistwork.trigger.connect(self.displaylist)
             self.getlistwork.start()
@@ -613,7 +624,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             ll = len(myjson)
             if ll > 1:
                 for it in range(ll):
-                    title = '(' + source + ')' + \
+                    title = '(' + source + ')    ' + \
                         myjson[it]['title'] + '-' + myjson[it]['author']
                     self.lw_songs.addItem(title)
                     self.statusbar.showMessage('资源搜索完毕 ...')
@@ -636,7 +647,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             curindex -= 1
             if curindex < 0:
                 curindex = ll-1
-            LOG.info("上一首")
+            LOG.info("上一首: tab-{site} id-{curindex}")
 
         if site == 'web':
             self.downloadwork = DownloadThread()
@@ -729,7 +740,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             curindex += 1
             if curindex >= ll:
                 curindex = 0
-            LOG.info("下一首")
+            LOG.info("下一首: tab-{site} id-{curindex}")
 
         if site == 'web':
             self.downloadwork = DownloadThread()
@@ -822,7 +833,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             items = self.lw_localsongs.selectedIndexes()
             for it in items:
                 r = it.row()
-                LOG.info(r)
+                LOG.info(f'删除:  tab-{site} id-{curindex}')
                 self.lw_localsongs.takeItem(r)
                 del myjson_local[r]
 
@@ -833,9 +844,9 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                 self.lw_localsongs.clear()
                 for it in range(ll):
                     title = '(' + myjson_local[it]['type'] + \
-                        ')' + myjson_local[it]['title']
+                        ')    ' + myjson_local[it]['title']
                     self.lw_localsongs.addItem(title)
-            LOG.info(f"local song: {str(ll)}")
+            LOG.info(f"local song: 共 {str(ll)}")
 
     @pyqtSlot(QModelIndex)
     def on_lw_localsongs_clicked(self, index):
@@ -868,7 +879,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         global site
         site = "love"
 
-        LOG.info("开始调用线程进行mp3下载")
+        LOG.info(f"开始调用线程进行mp3下载: tab-{site} id-{curindex}")
         self.downloadwork = DownloadThread()
         try:
             self.downloadwork.start()
@@ -885,7 +896,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         for it in items:
             myjson_love.append(myjson[it.row()])
 
-            LOG.info(it.row())
+            LOG.info(f'选中操作:  id-{it.row()}')
             title = myjson[it.row()]['title'] + '-' + \
                 myjson[it.row()]['author']
             self.lw_lovesongs.addItem(title)
@@ -919,7 +930,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             items = self.lw_lovesongs.selectedIndexes()
             for it in items:
                 r = it.row()
-                LOG.info(f'remove love item {r}')
+                LOG.info(f'remove love item:  id-{r}')
                 self.lw_lovesongs.takeItem(r)
                 del myjson_love[r]
 
@@ -1002,3 +1013,9 @@ if __name__ == "__main__":
 #             time.sleep(1)
 #             # 通过自定义信号把待显示的字符串传递给槽函数
 #             self.trigger.emit(str(i))
+
+
+
+# 歌词 https://blog.csdn.net/qq_37043310/article/details/97615740
+
+
