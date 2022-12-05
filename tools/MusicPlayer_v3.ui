@@ -22,7 +22,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>60</y>
+      <y>50</y>
       <width>221</width>
       <height>231</height>
      </rect>
@@ -97,7 +97,7 @@
      <rect>
       <x>10</x>
       <y>430</y>
-      <width>241</width>
+      <width>231</width>
       <height>26</height>
      </rect>
     </property>
@@ -180,7 +180,7 @@
    <widget class="QLabel" name="lab_song2">
     <property name="geometry">
      <rect>
-      <x>50</x>
+      <x>40</x>
       <y>540</y>
       <width>48</width>
       <height>16</height>
@@ -193,7 +193,7 @@
    <widget class="QLabel" name="lab_song">
     <property name="geometry">
      <rect>
-      <x>140</x>
+      <x>110</x>
       <y>540</y>
       <width>48</width>
       <height>16</height>
@@ -276,6 +276,29 @@
       </property>
      </widget>
     </widget>
+   </widget>
+   <widget class="QListWidget" name="lw_lrc">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>290</y>
+      <width>221</width>
+      <height>131</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pb_lrc">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>530</y>
+      <width>21</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>三</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

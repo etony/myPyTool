@@ -19,6 +19,7 @@ from eyed3 import load
 
 
 qmut = QMutex()
+qmut_lrc = QMutex()
 global musicepath  # mp3 存储路径 /musicdata
 musicepath = os.path.join(os.getcwd(), 'musicdata')
 
@@ -29,7 +30,7 @@ global background  # 图片地址
 background = os.path.join(musicepath, "background.png")
 
 global site
-site = "web" # love, local
+site = "web"  # love, local
 
 global source  # 搜索源 '网易云'
 global search  # 搜索文字
@@ -52,6 +53,9 @@ sourcelist = {'网易云': 'netease', '酷我': 'kuwo', 'QQ': 'qq',
 
 global atimer
 global working
+global lrc_status
+
+lrc_status = True
 
 LOG = logging.getLogger(os.path.basename(sys.argv[0]))
 logging.basicConfig(datefmt='%Y-%m-%d %H:%M:%S', format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -219,6 +223,52 @@ class AddLoalThread(QThread):
         self.trigger.emit('ok')
 
 
+class DisplayLrc(QThread):
+    # 自定义信号对象。参数str就代表这个信号可以传一个字符串
+    trigger = pyqtSignal(str)
+
+    def __init__(self):
+        # 初始化函数
+        super(DisplayLrc, self).__init__()
+        self.working = True
+
+    def __del__(self):
+        # 线程状态改变与线程终止
+        self.working = False
+        self.wait()
+
+    def run(self):
+        qmut_lrc.lock()
+        lrc = myjson[curindex]['lrc']
+        lrclist = lrc.strip().splitlines()
+        # for l in lrclist:
+        #     self.lw_lrc.addItem(l)
+        #     LOG.info(lrclist)
+        musicDict = {}  # 用字典来保存该时刻对应的歌词
+        musicL = []
+        for i in lrclist:
+            musicTime = i.split("]")
+            for j in musicTime[:-1]:
+                musicTime1 = j[1:].split(":")
+                musicTL = float(musicTime1[0])*60+float(musicTime1[1])
+                musicDict[musicTL] = musicTime[-1]
+        for i in musicDict:
+            musicL.append(i)  # 将时间存到列表中
+        LOG.info(f'线程内  {lrc_status}')
+        for j in range(len(musicL)):
+            # if lrc_status:
+            str = musicDict.get(musicL[j])
+            self.trigger.emit(str)
+            time.sleep(musicL[j+1]-musicL[j])
+            LOG.info(str)
+
+            # else:
+            #     LOG.info("收到终止信号~")
+            #     qmut_lrc.unlock()
+            #     return
+        qmut_lrc.unlock()
+
+
 class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
     """
     Class documentation goes here.
@@ -253,8 +303,16 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                                     "QListWidget::item:selected{background:lightgray; color:blue; }"
                                     "QListWidget::item:selected:!active{border-width:0px; background:skyblue; }"
                                     )
+        self.lw_lrc.setStyleSheet("QListWidget{border:1px solid gray; color:black; }"
+                                  "QListWidget::Item{padding-top:3px; padding-bottom:1px; }"
+                                  "QListWidget::Item:hover{background:skyblue; }"
+                                  "QListWidget::item:selected{background:lightgray; color:blue; }"
+                                  "QListWidget::item:selected:!active{border-width:0px; background:skyblue; }"
+                                  )
         self.tabWidget.setStyleSheet(
             "QTabBar::tab::selected{background:rgb(0, 144, 255)}")
+        self.lw_lrc.setVisible(False)
+
         self.timer = QTimer()
         self.timer.setInterval(1000)
         self.timer.stop()
@@ -279,6 +337,11 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             Qt.ContextMenuPolicy.CustomContextMenu)  # 对象的上下文菜单的策略
         self.lw_songs.setContextMenuPolicy(
             Qt.ContextMenuPolicy.CustomContextMenu)  # 对象的上下文菜单的策略
+        
+        
+        self.displaylrc = DisplayLrc()
+        self.displaylrc.trigger.connect(self.dislrc)
+        
     #     self.lw_localsongs.customContextMenuRequested.connect(self.on_context_menu) # 设置唤起右键菜单的slots
 
     # def on_context_menu(self,pos):
@@ -291,6 +354,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
 
     #     if self.action == item1:
     #         LOG.info('清除')
+    
 
     def timer_music(self):
         x = mixer.music.get_pos()
@@ -299,7 +363,9 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         h, m = divmod(m, 60)
         time = "%d:%02d:%02d" % (h, m, s)
 
-        self.lab_song2.setText(time)
+        self.lab_song2.setText(time)  # str(x)
+        # x = round(float(x/1000),2)
+        # self.lw_lrc.addItem(self.musicDict[self.musicL.index(x)])
 
         if not mixer.music.get_busy():
             self.next_song()
@@ -312,7 +378,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         elif site == 'local':
             ll = len(myjson_local)
             LOG.info("here")
-        
+
         try:
             time.sleep(1)
             if not mixer.music.get_busy() and not self.pause:
@@ -325,7 +391,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                     curindex = random.randint(0, ll)
         except:
             pass
-        LOG.info(f"next song: {str(ll)}  {curindex}" ) 
+        LOG.info(f"next song: {str(ll)}  {curindex}")
         if site == 'web':
 
             try:
@@ -336,7 +402,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             except:
                 pass
         elif site == 'love':
-            pass 
+            pass
         elif site == 'local':
             asong = myjson_local[curindex]['url']
             name = os.path.splitext(myjson_local[curindex]['title'])[0]
@@ -344,11 +410,8 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             self.lab_songname.setText(name)
             self.lw_localsongs.setCurrentRow(curindex)
 
-            
-
         self.pb_pause.setText("||")
         self.pause = False
-        
 
         self.timer.start()
 
@@ -438,13 +501,29 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         global curindex
         curindex = self.lw_songs.currentRow()
         global site
+        global lrc_status
         site = "web"
 
         LOG.info("开始调用线程进行mp3下载")
         self.downloadwork = DownloadThread()
+        lrc_status = False
+
         try:
+
+            self.lw_lrc.clear()
+            self.displaylrc.terminate(self)
+
+        except:
+            pass
+        time.sleep(2)
+        
+        try:
+            lrc_status = True
             self.downloadwork.start()
             self.downloadwork.trigger.connect(self.beginplay)
+            self.displaylrc.start()
+            
+
         except:
             pass
 
@@ -458,6 +537,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         # self.download_music(url, filename)
         # self.pb_pause.setText("||")
         # self.pause = False
+        self.lw_lrc.setVisible(True)
 
     def beginplay(self, str):
         LOG.info("线程返回值： " + str)
@@ -507,7 +587,16 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             self.lab_song.setText(time)
         except:
             pass
+
         #self.downloadwork = None
+
+    def dislrc(self, lrc):
+        self.lw_lrc.addItem(lrc)
+        size = self.lw_lrc.count()
+        if size >= 1:
+            self.lw_lrc.setCurrentRow(size-1)
+        if size > 6:
+            self.lw_lrc.takeItem(0)
 
     @pyqtSlot()
     def on_pb_search_clicked(self):
@@ -606,17 +695,13 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             self.pause = False
             self.lw_songs.setCurrentRow(curindex)
         elif site == 'love':
-            pass 
+            pass
         elif site == 'local':
             asong = myjson_local[curindex]['url']
             name = os.path.splitext(myjson_local[curindex]['title'])[0]
             self.playmusic(asong)
             self.lab_songname.setText(name)
             self.lw_localsongs.setCurrentRow(curindex)
-            
-            
-            
-            
 
     @pyqtSlot()
     def on_pb_pause_clicked(self):
@@ -693,20 +778,13 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             self.pause = False
             self.lw_songs.setCurrentRow(curindex)
         elif site == 'love':
-            pass 
+            pass
         elif site == 'local':
             asong = myjson_local[curindex]['url']
             name = os.path.splitext(myjson_local[curindex]['title'])[0]
             self.playmusic(asong)
             self.lab_songname.setText(name)
             self.lw_localsongs.setCurrentRow(curindex)
-
-            
-            
-            
-            
-            
-            
 
     @pyqtSlot()
     def on_pb_seq_clicked(self):
@@ -730,6 +808,8 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
 
     @pyqtSlot(QCloseEvent)
     def closeEvent(self, QCloseEvent):
+        global lrc_status
+        lrc_status = False
         mixer.quit()
 
     @pyqtSlot()
@@ -781,19 +861,20 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                     title = '(' + myjson_local[it]['type'] + \
                         ')' + myjson_local[it]['title']
                     self.lw_localsongs.addItem(title)
-            LOG.info(f"local song: {str(ll)}" ) 
+            LOG.info(f"local song: {str(ll)}")
 
     @pyqtSlot(QModelIndex)
     def on_lw_localsongs_clicked(self, index):
         global site
         site = "local"
-        global curindex        
+        global curindex
 
         curindex = self.lw_localsongs.currentRow()
         asong = myjson_local[curindex]['url']
         name = os.path.splitext(myjson_local[curindex]['title'])[0]
         self.playmusic(asong)
         self.lab_songname.setText(name)
+        self.lw_lrc.setVisible(False)
 
     def generateMenu(self, pos):
         menu = QMenu()
@@ -810,7 +891,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
     def on_lw_lovesongs_clicked(self, index):
         global site
         site = "love"
-        
+
     @pyqtSlot(QPoint)
     def on_lw_songs_customContextMenuRequested(self, pos):
         self.genLoveMenu(pos)
@@ -843,6 +924,16 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
     def on_tabWidget_currentChanged(self, index):
         tab = self.tabWidget.currentWidget().objectName()
         LOG.info(f'当前tab {tab}')
+
+    @pyqtSlot()
+    def on_pb_lrc_clicked(self):
+        if self.lw_lrc.isVisible():
+            self.lw_lrc.setVisible(False)
+        else:
+            self.lw_lrc.setVisible(True)
+
+        pass
+
 
 if __name__ == "__main__":
     import sys
