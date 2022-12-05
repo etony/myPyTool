@@ -511,6 +511,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         try:
 
             self.lw_lrc.clear()
+            self.wait()
             self.displaylrc.terminate(self)
 
         except:
