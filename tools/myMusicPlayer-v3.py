@@ -18,6 +18,11 @@ from pygame import mixer
 from eyed3 import load
 
 
+import win32con
+from win32process import SuspendThread, ResumeThread
+import ctypes
+
+
 qmut = QMutex()
 qmut_lrc = QMutex()
 global musicepath  # mp3 存储路径 /musicdata
@@ -231,6 +236,7 @@ class DisplayLrc(QThread):
         # 初始化函数
         super(DisplayLrc, self).__init__()
         self.working = True
+        handle =-1
 
     def __del__(self):
         # 线程状态改变与线程终止
@@ -238,6 +244,11 @@ class DisplayLrc(QThread):
         self.wait()
 
     def run(self):
+        LOG.info('歌词显示~~~~')
+        try:
+            self.handle = ctypes.windll.kernel32.OpenThread(win32con.PROCESS_ALL_ACCESS, False, int(QThread.currentThreadId()))
+        except Exception as e:
+            LOG.info(f'thread id  {int(QThread.currentThreadId())}')
         qmut_lrc.lock()
         lrc = myjson[curindex]['lrc']
         lrclist = lrc.strip().splitlines()
@@ -255,7 +266,7 @@ class DisplayLrc(QThread):
         for i in musicDict:
             musicL.append(i)  # 将时间存到列表中
         LOG.info(f'线程内  {lrc_status}')
-        for j in range(len(musicL)):
+        for j in range(len(musicL)-1):
             # if lrc_status:
             str = musicDict.get(musicL[j])
             self.trigger.emit(str)
@@ -304,7 +315,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                                     "QListWidget::item:selected:!active{border-width:0px; background:skyblue; }"
                                     )
         self.lw_lrc.setStyleSheet("QListWidget{border:1px solid gray; color:black; }"
-                                  "QListWidget::Item{padding-top:3px; padding-bottom:1px; }"
+                                  "QListWidget::Item{padding-top:1px; padding-bottom:1px; }"
                                   "QListWidget::Item:hover{background:skyblue; }"
                                   "QListWidget::item:selected{background:lightgray; color:blue; }"
                                   "QListWidget::item:selected:!active{border-width:0px; background:skyblue; }"
@@ -340,6 +351,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         
         
         self.displaylrc = DisplayLrc()
+        self.displaylrc.finished.connect(self.displaylrc.deleteLater)
         self.displaylrc.trigger.connect(self.dislrc)
         
     #     self.lw_localsongs.customContextMenuRequested.connect(self.on_context_menu) # 设置唤起右键菜单的slots
@@ -509,10 +521,10 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         lrc_status = False
 
         try:
-
             self.lw_lrc.clear()
-            self.wait()
-            self.displaylrc.terminate(self)
+            ret = ctypes.windll.kernel32.TerminateThread(self.displaylrc.handle, 0)
+            LOG.info(f'终止线程   {self.displaylrc.handle}   {ret}')
+            #self.displaylrc.terminate(self)
 
         except:
             pass
@@ -522,12 +534,13 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             lrc_status = True
             self.downloadwork.start()
             self.downloadwork.trigger.connect(self.beginplay)
-            self.displaylrc.start()
+            
             
 
-        except:
+        except  Exception as e:
+            LOG.info(f'error {e}')
             pass
-
+        self.displaylrc.start()
         # pic = myjson[self.curindex]['pic']
         # url = myjson[self.curindex]['url']
 
