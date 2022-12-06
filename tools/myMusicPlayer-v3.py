@@ -303,12 +303,20 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                                     "QListWidget::item:selected{background:lightgray; color:blue; }"
                                     "QListWidget::item:selected:!active{border-width:0px; background:skyblue; }"
                                     )
+        self.lw_lovesongs.setStyleSheet("QListWidget{border:1px solid gray; color:black; }"
+                                  "QListWidget::Item{padding-top:5px; padding-bottom:1px; }"
+                                  "QListWidget::Item:hover{background:skyblue; }"
+                                  "QListWidget::item:selected{background:lightgray; color:blue; }"
+                                  "QListWidget::item:selected:!active{border-width:0px; background:skyblue; }"
+                                  )
         self.lw_lrc.setStyleSheet("QListWidget{border:1px solid gray; color:black; }"
                                   "QListWidget::Item{padding-top:3px; padding-bottom:1px; }"
                                   "QListWidget::Item:hover{background:skyblue; }"
                                   "QListWidget::item:selected{background:lightgray; color:blue; }"
                                   "QListWidget::item:selected:!active{border-width:0px; background:skyblue; }"
-                                  )
+                                  )      
+        
+        
         self.tabWidget.setStyleSheet(
             "QTabBar::tab::selected{background:rgb(0, 144, 255)}")
         self.lw_lrc.setVisible(False)
