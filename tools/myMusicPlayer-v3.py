@@ -117,6 +117,7 @@ class GetListThread(QThread):
                 self.trigger.emit("ok")
             else:
                 self.trigger.emit("err")
+                LOG.warning("列表搜索失败！")
         LOG.info(f"列表搜索结束。 {len(myjson)}")
         return
 
@@ -559,7 +560,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             self.displaylrc()
 
         except Exception as e:
-            LOG.info(f'start download mp3 error:  {e}')
+            LOG.warning(f'start download mp3 error:  {e}')
             pass
         
 
@@ -592,7 +593,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             self.lw_lrc.clear()
             self.lrcwork.terminate()
         except Exception as e:
-            LOG.info(f'stop displaly lrc error:  {e}')
+            LOG.warning(f'stop displaly lrc error:  {e}')
        
         time.sleep(2)
         self.lrcwork.start()
@@ -807,13 +808,14 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                 self.pb_pause.setText("||")
                 self.pause = False
                 self.timer.start()
+                time.sleep(4) #时间同步补偿 4 秒
                 self.lrcwork.start()
         else:
             mixer.music.pause()
             self.pb_pause.setText("▶")
             self.pause = True
             self.timer.stop()
-            self.lrcwork.sleep()
+            self.lrcwork.exec()
 
     @pyqtSlot()
     def on_pb_forwad_clicked(self):
