@@ -36,6 +36,8 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         """
         super().__init__(parent)
         self.setupUi(self)
+        
+        self.setFixedSize(self.width(), self.height())
 
         filename = os.path.basename(sys.argv[0])
         self.LOG = logging.getLogger(filename)

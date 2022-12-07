@@ -358,6 +358,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         self.statusbar.showMessage("就绪")
         self.lab_songname.setText('')
         self.setWindowTitle("音乐播放器  -  在线版")
+        self.setFixedSize(self.width(), self.height())
 
         global myjson
         myjson = []
@@ -721,6 +722,21 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         #             self.statusbar.showMessage('资源搜索完毕 ...')
         #     else:
         #         self.statusbar.showMessage('资源搜索失败，通道试试！！！   (┬＿┬) ')
+
+    @pyqtSlot()
+    def on_le_search_returnPressed(self):    
+        global source
+        global search
+
+        source = self.cb_list.currentText().strip('-').strip()
+        search = self.le_search.text().strip()
+        if len(search) <= 0:
+            self.statusbar.showMessage('搜索中 ...  寂寞啊~~~')
+        else:
+            self.statusbar.showMessage('搜索中 ...')
+            self.getlistwork = GetListThread()
+            self.getlistwork.trigger.connect(self.displaylist)
+            self.getlistwork.start()
 
     def displaylist(self, status):
         global source
