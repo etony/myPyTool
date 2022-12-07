@@ -4,7 +4,7 @@
 Module implementing myMusicPlayer.
 """
 from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex, QTimer, QThread, pyqtSignal, QMutex, QPoint
-from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMessageBox, QMenu
+from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMenu
 from PyQt6.QtGui import QPixmap, QCloseEvent, QIcon
 
 from Ui_MusicPlayer_v3 import Ui_MusicPlayer
