@@ -563,7 +563,6 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         except Exception as e:
             LOG.warning(f'start download mp3 error:  {e}')
             pass
-        
 
         # try:
         #     self.lw_lrc.clear()
@@ -595,14 +594,12 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             self.lrcwork.terminate()
         except Exception as e:
             LOG.warning(f'stop displaly lrc error:  {e}')
-       
+
         time.sleep(2)
         self.lrcwork.start()
         self.lw_lrc.setVisible(True)
-        
-        return
 
-        
+        return
 
     def beginplay(self, str):
         LOG.info(f"线程返回值： {str}")
@@ -676,7 +673,6 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
 
         global source
         global search
@@ -724,7 +720,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         #         self.statusbar.showMessage('资源搜索失败，通道试试！！！   (┬＿┬) ')
 
     @pyqtSlot()
-    def on_le_search_returnPressed(self):    
+    def on_le_search_returnPressed(self):
         global source
         global search
 
@@ -758,7 +754,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
+
         global curindex
         ll = len(myjson)
         if site == 'love':
@@ -824,7 +820,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                 self.pb_pause.setText("||")
                 self.pause = False
                 self.timer.start()
-                time.sleep(4) #时间同步补偿 4 秒
+                time.sleep(4)  # 时间同步补偿 4 秒
                 self.lrcwork.start()
         else:
             mixer.music.pause()
@@ -838,7 +834,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
+
         # global curindex
 
         # ll = len(myjson)
@@ -937,7 +933,6 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
 
         mixer.music.set_volume(round(self.hs_value.value()/100, 1))
 
@@ -1037,7 +1032,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                 LOG.info(f'选中操作-我喜欢:  id-{it.row()}')
                 title = myjson[it.row()]['title'] + '-' + \
                     myjson[it.row()]['author']
-                self.lw_lovesongs.addItem(title) 
+                self.lw_lovesongs.addItem(title)
             pass
             # LOG.info(str(self.lw_songs.)))
         else:
@@ -1127,7 +1122,6 @@ if __name__ == "__main__":
 #         """
 #         Slot documentation goes here.
 #         """
-#         # TODO: not implemented yet
 #         self.work.start()
 #         # 线程自定义信号连接的槽函数
 #         #self.pushButton.setEnabled(False)
