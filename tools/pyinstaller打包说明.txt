@@ -1,0 +1,10 @@
+
+pyinstaller --noconfirm --onefile --windowed --clean  --paths "."  -i "bp.ico"   "BrowerPasswd.py"
+
+
+import sys 
+sys.setrecursionlimit(sys.getrecursionlimit() * 5)
+
+
+
+pyinstaller  BrowerPasswd.spec
