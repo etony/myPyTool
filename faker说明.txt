@@ -5,11 +5,11 @@ Created on Sat Apr  2 14:54:23 2022
 @author: admin
 """
 
-##安装
+## 安装
 
 pip install Faker
 
-##简单使用
+## 简单使用
 
 >>> from faker import Faker
 >>> fake = Faker(locale='zh_CN')
