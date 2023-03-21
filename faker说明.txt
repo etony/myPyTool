@@ -20,9 +20,7 @@ pip install Faker
 
 参数 locale：为生成数据的文化选项（语种），默认为 en_US，只有使用了相关文化，才能生成相对应的随机信息
 
-
 ## 常见的文化选项：
-
 
 zh_CN - Chinese (China Mainland)
 
@@ -30,9 +28,7 @@ zh_TW - Chinese (China Taiwan)
 
 en_US - English (United States)
 
-
 ## 其他方法
-
 
 ### 地理信息类
 
