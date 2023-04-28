@@ -977,7 +977,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
                     title = '(' + myjson_local[it]['type'] + \
                         ')   ' + myjson_local[it]['title']
                     self.lw_localsongs.addItem(title)
-            LOG.info(f"local song: 共 {str(ll)}")
+            LOG.info(f"加载本地音乐: 共 {str(ll)} 首")
 
     @pyqtSlot(QModelIndex)
     def on_lw_localsongs_clicked(self, index):
