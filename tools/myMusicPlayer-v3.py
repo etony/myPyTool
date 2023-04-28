@@ -686,6 +686,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             self.getlistwork = GetListThread()
             self.getlistwork.trigger.connect(self.displaylist)
             self.getlistwork.start()
+            self.tabWidget.setCurrentIndex(0)
 
         # sourcecode = self.sourcelist[source]
 
@@ -1080,7 +1081,11 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
     @pyqtSlot(int)
     def on_tabWidget_currentChanged(self, index):
         tab = self.tabWidget.currentWidget().objectName()
-        LOG.info(f'当前tab {tab}')
+        LOG.info(f'当前标签页:  {tab}')
+        if tab !="local":
+            self.pb_lrc.setVisible(True)
+        else:
+            self.pb_lrc.setVisible(False)
 
     @pyqtSlot()
     def on_pb_lrc_clicked(self):
