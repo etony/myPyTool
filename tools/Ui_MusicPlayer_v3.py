@@ -14,7 +14,7 @@ class Ui_MusicPlayer(object):
         MusicPlayer.setObjectName("MusicPlayer")
         MusicPlayer.resize(800, 597)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("D:\\work\\GIT\\Python-Study\\tools\\music-2.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon.addPixmap(QtGui.QPixmap(".\\music.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         MusicPlayer.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(MusicPlayer)
         self.centralwidget.setObjectName("centralwidget")
