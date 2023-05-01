@@ -286,8 +286,9 @@ class LrcThread(QThread):
                 # if lrc_status:
                 str = musicDict.get(musicL[j])
                 self.trigger.emit(str)
+                LOG.info(str) # 输出歌词
                 time.sleep(musicL[j+1]-musicL[j])
-                LOG.info(str)
+
 
             # else:
             #     LOG.info("收到终止信号~")
