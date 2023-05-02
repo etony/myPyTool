@@ -3,7 +3,7 @@
 """
 Module implementing myMusicPlayer.
 """
-from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex, QTimer, QThread, pyqtSignal, QMutex, QPoint, QCoreApplication
+from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex, QTimer, QThread, pyqtSignal, QMutex, QPoint, QCoreApplication, QEvent
 from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMenu, QSystemTrayIcon, QMessageBox
 from PyQt6.QtGui import QPixmap, QCloseEvent, QIcon, QAction
 
@@ -395,10 +395,13 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
     #     if self.action == item1:
     #         LOG.info('清除')
     # 托盘图标
+        self.showAction = QAction("显示", self, triggered=self.showNormal)
         self.quitAction = QAction("退出", self, triggered=app.quit) #self.quitApp
-        self.trayIconMenu = QMenu(self)
-        self.trayIconMenu.addAction(self.quitAction)
+        self.showAction.setIcon(QIcon("show.jpg"))
         self.quitAction.setIcon(QIcon("quit.jpg"))
+        self.trayIconMenu = QMenu(self)
+        self.trayIconMenu.addAction(self.showAction)
+        self.trayIconMenu.addAction(self.quitAction)
 
         self.trayIcon = QSystemTrayIcon(self)
         self.trayIcon.setIcon(QIcon("music-tray.png"))
@@ -407,6 +410,12 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
 
     def quitApp(self):
         QCoreApplication.quit()
+
+    def changeEvent(self,event):
+        if event.type() == 105:
+            if self.isMinimized():
+                self.hide()
+                print("窗口最小化")
 
 
     def timer_music(self):
@@ -782,6 +791,8 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             if curindex < 0:
                 curindex = ll-1
             LOG.info(f"上一首 : tab-{site} id-{curindex}")
+        else:
+            return
 
         if site == 'web':
             self.downloadwork = DownloadThread()
@@ -882,6 +893,8 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             if curindex >= ll:
                 curindex = 0
             LOG.info(f"下一首: tab-{site} id-{curindex}")
+        else:
+            return
 
         if site == 'web':
             self.downloadwork = DownloadThread()
