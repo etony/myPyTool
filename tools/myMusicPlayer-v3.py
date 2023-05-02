@@ -3,9 +3,9 @@
 """
 Module implementing myMusicPlayer.
 """
-from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex, QTimer, QThread, pyqtSignal, QMutex, QPoint
-from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMenu
-from PyQt6.QtGui import QPixmap, QCloseEvent, QIcon
+from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex, QTimer, QThread, pyqtSignal, QMutex, QPoint, QCoreApplication
+from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMenu, QSystemTrayIcon, QMessageBox
+from PyQt6.QtGui import QPixmap, QCloseEvent, QIcon, QAction
 
 from Ui_MusicPlayer_v3 import Ui_MusicPlayer
 import requests
@@ -394,6 +394,20 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
 
     #     if self.action == item1:
     #         LOG.info('清除')
+    # 托盘图标
+        self.quitAction = QAction("退出", self, triggered=app.quit) #self.quitApp
+        self.trayIconMenu = QMenu(self)
+        self.trayIconMenu.addAction(self.quitAction)
+        self.quitAction.setIcon(QIcon("quit.jpg"))
+
+        self.trayIcon = QSystemTrayIcon(self)
+        self.trayIcon.setIcon(QIcon("music-tray.png"))
+        self.trayIcon.setContextMenu(self.trayIconMenu)
+        self.trayIcon.show()
+
+    def quitApp(self):
+        QCoreApplication.quit()
+
 
     def timer_music(self):
         x = mixer.music.get_pos()
