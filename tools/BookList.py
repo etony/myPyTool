@@ -13,6 +13,17 @@ from PyQt6 import QtGui,  QtCore
 import pandas as pd
 
 
+
+from PIL import Image
+
+import numpy as np
+
+import cv2 as cv
+
+import pyzbar.pyzbar as pyzbar
+
+
+
 class TableModel(QtCore.QAbstractTableModel):
 
     def __init__(self, data):
@@ -24,10 +35,16 @@ class TableModel(QtCore.QAbstractTableModel):
             value = self._data.iloc[index.row(), index.column()]
             return str(value)
 
-    def rowCount(self, index):
+    def rowCount(self, parent=None):#index):
         return self._data.shape[0]
-
-    def columnCount(self, index):
+    
+    def appendRow(self, x):
+        print(self._data.shape[0])
+        self._data.loc[self._data.shape[0]]=x
+        print(self._data.shape[0])
+        return self._data
+        
+    def columnCount(self, parent=None):#index):
         return self._data.shape[1]
 
     def headerData(self, section, orientation, role):
@@ -71,7 +88,9 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
         if csvNamepath != "":
             df = pd.read_csv(csvNamepath)
+ 
             self.model = TableModel(df)
+  
 
             self.tv_booklist.setModel(self.model)
             #self.table.setModel(self.model)
@@ -92,7 +111,34 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        raise NotImplementedError
+        picNamepath, picType = QFileDialog.getOpenFileName(
+            self, "选择条形码图片", "E:\\minipan\\Seafile\\资料", "*.png;;*.jpg;;All Files(*)")
+
+        if picNamepath != "":
+            #image = cv.imread(img_path)
+            image = cv.imdecode(np.fromfile(picNamepath,dtype=np.uint8), cv.IMREAD_COLOR)
+            
+            gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
+           
+            binary, _ = cv.threshold(gray, 0, 255, cv.THRESH_OTSU)
+            binary, mat = cv.threshold(gray, binary, 255, cv.THRESH_BINARY)
+            
+            
+            
+            barcode = pyzbar.decode(mat)
+            for bar in barcode:
+                self.le_isbn_pic.setText(bar.data.decode("utf-8"))
+            
+            data =['xxxxxx', '西线无战事', '作者: [德] 雷马克 翻译:朱雯', '上海人民出版社', '45.00', '计划', '未设置']
+
+            dd = map(lambda x: QtGui.QStandardItem(x), data)
+            
+            self.model.appendRow(data)
+            self.tv_booklist.setModel(self.model)
+            #self.model.insertRow(self.model.rowCount(),data)
+
+            #self.tv_booklist.setModel(self.model)
+
 
 
 if __name__ == "__main__":
