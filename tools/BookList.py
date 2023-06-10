@@ -163,7 +163,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         bookinfo = []
         url = "https://api.douban.com/v2/book/isbn/" + isbn
 
-        # apikey=0df993c66c0c636e29ecbb5344252a4a'} #apikey=0ac44ae016490db2204ce0a042db2916
+        # apikey=0df993c66c0c636e29ecbb5344252a4a
+        # apikey=0ac44ae016490db2204ce0a042db2916
         payload = {'apikey': '0ab215a8b1977939201640fa14c66bab'}
         headers = {"Referer": "https://m.douban.com/tv/american",
                    "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"}
