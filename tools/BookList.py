@@ -189,6 +189,22 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
         return bookinfo
 
+    @pyqtSlot()
+    def on_pb_insert_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        raise NotImplementedError
+
+    @pyqtSlot()
+    def on_pb_getbookinfo_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        raise NotImplementedError
+
 
 if __name__ == "__main__":
     import sys
