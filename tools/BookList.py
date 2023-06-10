@@ -174,7 +174,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
         book_dict = json.loads(response.text)
 
-        author = '作者: ' + '/'.join(book_dict['author'])
+        author = '/'.join(book_dict['author'])
         if len(book_dict['translator']) > 0:
             author += ' 译者: '
             author += '/'.join(book_dict['translator'])
@@ -188,6 +188,26 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         bookinfo.append('未设置')
 
         return bookinfo
+
+    @pyqtSlot()
+    def on_pb_insert_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        isbn = self.le_isbn_pic.text()
+        bookinfo = self.get_douban_isbn(isbn)
+        self.model.appendRow(bookinfo)
+
+    @pyqtSlot()
+    def on_pb_getbookinfo_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        isbn = self.le_isbn_pic.text()
+        bookinfo = self.get_douban_isbn(isbn)
+        self.model.appendRow(bookinfo)
 
 
 if __name__ == "__main__":
