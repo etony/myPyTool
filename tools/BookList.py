@@ -107,6 +107,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             self.model = TableModel(df)
 
             self.tv_booklist.setModel(self.model)
+            self.le_booklist.setText(csvNamepath)
             # self.table.setModel(self.model)
 
     @pyqtSlot()
