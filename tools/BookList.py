@@ -4,7 +4,7 @@
 Module implementing BLmainWindow.
 """
 
-from PyQt6.QtCore import pyqtSlot, Qt
+from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex
 from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog
 
 from Ui_BookList import Ui_mainWindow
@@ -45,6 +45,12 @@ class TableModel(QtCore.QAbstractTableModel):
         self._data = data
         self.endResetModel()
 
+    def updateItem(self, row):
+
+        self.beginResetModel()
+        self._data[self._data.iloc[:, 0] == row[0]] = row
+        self.endResetModel()
+
     def columnCount(self, parent=None):  # index):
         return self._data.shape[1]
 
@@ -62,6 +68,10 @@ class TableModel(QtCore.QAbstractTableModel):
 
     def dataexport(self):
         return self._data
+
+    def getItem(self, index):
+        df = self._data.iloc[index]
+        return df.values.tolist()
 
 
 class BLmainWindow(QMainWindow, Ui_mainWindow):
@@ -103,7 +113,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             self, "选择存储文件", "E:\\minipan\\Seafile\\资料", "*.csv;;All Files(*)")
 
         if csvNamepath != "":
-            df = pd.read_csv(csvNamepath)
+            df = pd.read_csv(csvNamepath, dtype='object')
 
             self.model = TableModel(df)
 
@@ -117,11 +127,17 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        isbn = self.le_isbn_pic.text()
-        bookinfo = self.get_douban_isbn(isbn)
-        self.model.appendRow(bookinfo)
+        # isbn = self.le_isbn_pic.text()
+        # bookinfo = self.get_douban_isbn(isbn)
+        # self.model.appendRow(bookinfo)
 
-        print(bookinfo)
+        # print(bookinfo)
+
+        csvNamepath, csvType = QFileDialog.getSaveFileName(
+            self, "保存存储文件", "E:\\minipan\\Seafile\\资料", "*.csv;;All Files(*)")
+        if csvNamepath != "":
+            df = self.model._data
+            df.to_csv(csvNamepath, index=False)
 
     @pyqtSlot()
     def on_pb_scan_clicked(self):
@@ -199,8 +215,17 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         """
         # TODO: not implemented yet
         isbn = self.le_isbn_pic.text()
-        bookinfo = self.get_douban_isbn(isbn)
-        self.model.appendRow(bookinfo)
+        title = self.le_bookname.text()
+        author = self.le_bookauthor.text()
+        publisher = self.le_publisher.text()
+        price = self.le_price.text()
+        bookclass = self.le_bookclass.text()
+        bookshelf = self.le_bookshelf.text()
+
+        bookinfo = [isbn, title, author,
+                    publisher, price, bookclass, bookshelf]
+        print(bookinfo)
+        self.model.updateItem(bookinfo)
 
     @pyqtSlot()
     def on_pb_getbookinfo_clicked(self):
@@ -210,13 +235,41 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # TODO: not implemented yet
         isbn = self.le_isbn_pic.text()
         bookinfo = self.get_douban_isbn(isbn)
+        self.le_bookname.setText(bookinfo[1])
+        self.le_bookauthor.setText(bookinfo[2])
+        self.le_publisher.setText(bookinfo[3])
+        self.le_price.setText(bookinfo[4])
+        self.le_bookclass.setText(bookinfo[5])
+        self.le_bookshelf.setText(bookinfo[6])
+
         self.model.appendRow(bookinfo)
+
+    @pyqtSlot(QModelIndex)
+    def on_tv_booklist_clicked(self, index):
+        """
+        Slot documentation goes here.
+
+        @param index DESCRIPTION
+        @type QModelIndex
+        """
+        # TODO: not implemented yet
+        print(index.row())
+
+        model = self.tv_booklist.model()
+        bookinfo = model.getItem(index.row())
+
+        self.le_isbn_pic.setText(str(bookinfo[0]))
+        self.le_bookname.setText(bookinfo[1])
+        self.le_bookauthor.setText(bookinfo[2])
+        self.le_publisher.setText(bookinfo[3])
+        self.le_price.setText(bookinfo[4])
+        self.le_bookclass.setText(bookinfo[5])
+        self.le_bookshelf.setText(bookinfo[6])
 
 
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
-
     blmain = BLmainWindow()
     blmain.show()
     sys.exit(app.exec())
