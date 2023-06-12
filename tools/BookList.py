@@ -107,6 +107,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             self.model = TableModel(df)
 
             self.tv_booklist.setModel(self.model)
+            self.le_booklist.setText(csvNamepath)
             # self.table.setModel(self.model)
 
     @pyqtSlot()
@@ -163,7 +164,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         bookinfo = []
         url = "https://api.douban.com/v2/book/isbn/" + isbn
 
-        # apikey=0df993c66c0c636e29ecbb5344252a4a'} #apikey=0ac44ae016490db2204ce0a042db2916
+        # apikey=0df993c66c0c636e29ecbb5344252a4a
+        # apikey=0ac44ae016490db2204ce0a042db2916
         payload = {'apikey': '0ab215a8b1977939201640fa14c66bab'}
         headers = {"Referer": "https://m.douban.com/tv/american",
                    "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"}
@@ -174,7 +176,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
         book_dict = json.loads(response.text)
 
-        author = '作者: ' + '/'.join(book_dict['author'])
+        author = '/'.join(book_dict['author'])
         if len(book_dict['translator']) > 0:
             author += ' 译者: '
             author += '/'.join(book_dict['translator'])
@@ -195,7 +197,9 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        raise NotImplementedError
+        isbn = self.le_isbn_pic.text()
+        bookinfo = self.get_douban_isbn(isbn)
+        self.model.appendRow(bookinfo)
 
     @pyqtSlot()
     def on_pb_getbookinfo_clicked(self):
@@ -203,7 +207,9 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        raise NotImplementedError
+        isbn = self.le_isbn_pic.text()
+        bookinfo = self.get_douban_isbn(isbn)
+        self.model.appendRow(bookinfo)
 
 
 if __name__ == "__main__":
