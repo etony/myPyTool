@@ -27,7 +27,12 @@ LOG = logging.getLogger(os.path.basename(sys.argv[0]))
 logging.basicConfig(datefmt='%Y-%m-%d %H:%M:%S', format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
                     level=logging.INFO)
 
-
+# 978(EAN图书代码)-7(地区代码:7-中国)-(出版社代码)-(书序码)-(校验码)
+# 978-7-208-12815-6
+# 校验码 = 每个数交替乘以1和3，然后把它们的乘积加起来。从左至右奇数位置乘以1；偶数位置乘以3。 把和数除以10，然后求余数，最后求10与余数的差。
+# ISBN：978-7-5442-6527-0
+# 计算差值：10-(（9*1+7*3+8*1+7*3+5*1+4*3+4*1+2*3+6*1+5*3+2*1+7*3) %10)= 10
+# 检验码：0
 class TableModel(QtCore.QAbstractTableModel):
 
     def __init__(self, data):
@@ -189,7 +194,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
     def get_douban_isbn(self, isbn):
         bookinfo = []
-        if len(isbn) != 13:
+        if len(isbn) != 13 and len(isbn) != 17:
             return bookinfo
         url = "https://api.douban.com/v2/book/isbn/" + isbn
 
