@@ -82,6 +82,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
                 '出版社': [], '价格': [], '分类': [], '书柜': []}
 
         df = pd.DataFrame(data=data)
+        df.index = df.index + 1
 
         self.model = TableModel(df)
         self.tv_booklist.setModel(self.model)
@@ -90,7 +91,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         #     ['ISBN', '书名', '作者', '出版社', '价格', '分类', '书柜'])
 
         # self.tv_booklist.setModel(self.model)
-        self.tv_booklist.setSortingEnabled(True)
+        # self.tv_booklist.setSortingEnabled(True)
 
     @pyqtSlot()
     def on_pb_load_clicked(self):
