@@ -48,10 +48,9 @@ class TableModel(QtCore.QAbstractTableModel):
     def updateItem(self, row):
 
         self.beginResetModel()
-        self._data[self._data.iloc[:,0]==row[0]]= row
+        self._data[self._data.iloc[:, 0] == row[0]] = row
         self.endResetModel()
-        
-        
+
     def columnCount(self, parent=None):  # index):
         return self._data.shape[1]
 
@@ -69,11 +68,10 @@ class TableModel(QtCore.QAbstractTableModel):
 
     def dataexport(self):
         return self._data
-    
+
     def getItem(self, index):
         df = self._data.iloc[index]
         return df.values.tolist()
-        
 
 
 class BLmainWindow(QMainWindow, Ui_mainWindow):
@@ -114,7 +112,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             self, "选择存储文件", "E:\\minipan\\Seafile\\资料", "*.csv;;All Files(*)")
 
         if csvNamepath != "":
-            df = pd.read_csv(csvNamepath,dtype='object')
+            df = pd.read_csv(csvNamepath, dtype='object')
 
             self.model = TableModel(df)
 
@@ -133,13 +131,12 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # self.model.appendRow(bookinfo)
 
         # print(bookinfo)
-        
+
         csvNamepath, csvType = QFileDialog.getSaveFileName(
             self, "保存存储文件", "E:\\minipan\\Seafile\\资料", "*.csv;;All Files(*)")
         if csvNamepath != "":
             df = self.model._data
-            df.to_csv(csvNamepath,index=False)
-        
+            df.to_csv(csvNamepath, index=False)
 
     @pyqtSlot()
     def on_pb_scan_clicked(self):
@@ -223,11 +220,12 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         price = self.le_price.text()
         bookclass = self.le_bookclass.text()
         bookshelf = self.le_bookshelf.text()
-        
-        bookinfo = [isbn,title,author,publisher,price,bookclass,bookshelf]
+
+        bookinfo = [isbn, title, author,
+                    publisher, price, bookclass, bookshelf]
         print(bookinfo)
         self.model.updateItem(bookinfo)
-        
+
     @pyqtSlot()
     def on_pb_getbookinfo_clicked(self):
         """
@@ -242,9 +240,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.le_price.setText(bookinfo[4])
         self.le_bookclass.setText(bookinfo[5])
         self.le_bookshelf.setText(bookinfo[6])
-        
-        
-        
+
         self.model.appendRow(bookinfo)
 
     @pyqtSlot(QModelIndex)
@@ -257,7 +253,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         """
         # TODO: not implemented yet
         print(index.row())
-        
+
         model = self.tv_booklist.model()
         bookinfo = model.getItem(index.row())
 
@@ -268,13 +264,11 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.le_price.setText(bookinfo[4])
         self.le_bookclass.setText(bookinfo[5])
         self.le_bookshelf.setText(bookinfo[6])
-        
 
 
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
-
     blmain = BLmainWindow()
     blmain.show()
     sys.exit(app.exec())

@@ -116,7 +116,7 @@ class Ui_mainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         mainWindow.setWindowTitle(_translate("mainWindow", "图书管理"))
         self.label.setText(_translate("mainWindow", "目   录"))
-        self.pb_load.setText(_translate("mainWindow", "加  载"))
+        self.pb_load.setText(_translate("mainWindow", "加    载"))
         self.pb_save.setText(_translate("mainWindow", "导    出"))
         self.label_3.setText(_translate("mainWindow", "书   名:"))
         self.label_4.setText(_translate("mainWindow", "作者:"))
@@ -125,9 +125,9 @@ class Ui_mainWindow(object):
         self.label_7.setText(_translate("mainWindow", "分类:"))
         self.label_8.setText(_translate("mainWindow", "书柜:"))
         self.label_2.setText(_translate("mainWindow", "条形码"))
-        self.pb_scan.setText(_translate("mainWindow", "识  别"))
-        self.pb_getbookinfo.setText(_translate("mainWindow", "获  取"))
-        self.pb_insert.setText(_translate("mainWindow", "保    存"))
+        self.pb_scan.setText(_translate("mainWindow", "识    别"))
+        self.pb_getbookinfo.setText(_translate("mainWindow", "获    取"))
+        self.pb_insert.setText(_translate("mainWindow", "插    入"))
 
 
 if __name__ == "__main__":

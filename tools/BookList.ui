@@ -53,7 +53,7 @@
      <item>
       <widget class="QPushButton" name="pb_load">
        <property name="text">
-        <string>加  载</string>
+        <string>加    载</string>
        </property>
       </widget>
      </item>
@@ -173,21 +173,21 @@
      <item>
       <widget class="QPushButton" name="pb_scan">
        <property name="text">
-        <string>识  别</string>
+        <string>识    别</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pb_getbookinfo">
        <property name="text">
-        <string>获  取</string>
+        <string>获    取</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pb_insert">
        <property name="text">
-        <string>保    存</string>
+        <string>插    入</string>
        </property>
       </widget>
      </item>
