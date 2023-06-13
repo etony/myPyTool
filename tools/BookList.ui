@@ -23,6 +23,9 @@
       <height>421</height>
      </rect>
     </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;加载 CSV 文件&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
     <property name="dragEnabled">
      <bool>true</bool>
     </property>
@@ -52,6 +55,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pb_load">
+       <property name="toolTip">
+        <string>加载CSV文件</string>
+       </property>
+       <property name="statusTip">
+        <string>加载CSV文件</string>
+       </property>
        <property name="text">
         <string>加    载</string>
        </property>
@@ -59,6 +68,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pb_refresh">
+       <property name="statusTip">
+        <string>根据ISBN列表，重新获取图书信息。</string>
+       </property>
        <property name="text">
         <string>刷    新</string>
        </property>
@@ -66,6 +78,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pb_save">
+       <property name="statusTip">
+        <string>导出图书信息列表</string>
+       </property>
        <property name="text">
         <string>导    出</string>
        </property>
@@ -79,7 +94,7 @@
       <x>90</x>
       <y>90</y>
       <width>621</width>
-      <height>23</height>
+      <height>25</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -102,6 +117,13 @@
      </item>
      <item>
       <widget class="QLineEdit" name="le_bookauthor"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pb_clear">
+       <property name="text">
+        <string>清    空</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -179,6 +201,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pb_scan">
+       <property name="statusTip">
+        <string>识别ISBN图片，获取ISBN编码</string>
+       </property>
        <property name="text">
         <string>识    别</string>
        </property>
@@ -186,6 +211,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pb_getbookinfo">
+       <property name="statusTip">
+        <string>根据ISBN编码获取图书信息</string>
+       </property>
        <property name="text">
         <string>获    取</string>
        </property>
@@ -193,8 +221,11 @@
      </item>
      <item>
       <widget class="QPushButton" name="pb_insert">
+       <property name="statusTip">
+        <string>更新或插入一条图书信息</string>
+       </property>
        <property name="text">
-        <string>插    入</string>
+        <string>更    新</string>
        </property>
       </widget>
      </item>
