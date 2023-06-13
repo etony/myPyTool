@@ -17,9 +17,22 @@ import cv2 as cv
 import pyzbar.pyzbar as pyzbar
 
 import requests
+import logging
+import sys
+import os
 import json
 
 
+LOG = logging.getLogger(os.path.basename(sys.argv[0]))
+logging.basicConfig(datefmt='%Y-%m-%d %H:%M:%S', format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+                    level=logging.INFO)
+
+# 978(EAN图书代码)-7(地区代码:7-中国)-(出版社代码)-(书序码)-(校验码)
+# 978-7-208-12815-6
+# 校验码 = 每个数交替乘以1和3，然后把它们的乘积加起来。从左至右奇数位置乘以1；偶数位置乘以3。 把和数除以10，然后求余数，最后求10与余数的差。
+# ISBN：978-7-5442-6527-0
+# 计算差值：10-(（9*1+7*3+8*1+7*3+5*1+4*3+4*1+2*3+6*1+5*3+2*1+7*3) %10)= 10
+# 检验码：0
 class TableModel(QtCore.QAbstractTableModel):
 
     def __init__(self, data):
@@ -46,10 +59,15 @@ class TableModel(QtCore.QAbstractTableModel):
         self.endResetModel()
 
     def updateItem(self, row):
-
-        self.beginResetModel()
-        self._data[self._data.iloc[:, 0] == row[0]] = row
-        self.endResetModel()
+        isbnlist = self._data.iloc[:, 0].unique()
+        if row[0] in isbnlist:
+            self.beginResetModel()
+            self._data[self._data.iloc[:, 0] == row[0]] = row
+            self.endResetModel()
+        else:
+            self.beginResetModel()
+            self._data.loc[self._data.shape[0]] = row
+            self.endResetModel()
 
     def columnCount(self, parent=None):  # index):
         return self._data.shape[1]
@@ -92,15 +110,15 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
                 '出版社': [], '价格': [], '分类': [], '书柜': []}
 
         df = pd.DataFrame(data=data)
+        df.index = df.index + 1
 
         self.model = TableModel(df)
         self.tv_booklist.setModel(self.model)
         # self.model = QtGui.QStandardItemModel()
         # self.model.setHorizontalHeaderLabels(
         #     ['ISBN', '书名', '作者', '出版社', '价格', '分类', '书柜'])
-
         # self.tv_booklist.setModel(self.model)
-        self.tv_booklist.setSortingEnabled(True)
+        # self.tv_booklist.setSortingEnabled(True)
 
     @pyqtSlot()
     def on_pb_load_clicked(self):
@@ -129,8 +147,6 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # isbn = self.le_isbn_pic.text()
         # bookinfo = self.get_douban_isbn(isbn)
         # self.model.appendRow(bookinfo)
-
-        # print(bookinfo)
 
         csvNamepath, csvType = QFileDialog.getSaveFileName(
             self, "保存存储文件", "E:\\minipan\\Seafile\\资料", "*.csv;;All Files(*)")
@@ -178,6 +194,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
     def get_douban_isbn(self, isbn):
         bookinfo = []
+        if len(isbn) != 13 and len(isbn) != 17:
+            return bookinfo
         url = "https://api.douban.com/v2/book/isbn/" + isbn
 
         # apikey=0df993c66c0c636e29ecbb5344252a4a
@@ -191,19 +209,19 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         response = requests.post(url, data=payload, headers=headers)
 
         book_dict = json.loads(response.text)
+        if len(book_dict) > 5:
+            author = '/'.join(book_dict['author'])
+            if len(book_dict['translator']) > 0:
+                author += ' 译者: '
+                author += '/'.join(book_dict['translator'])
 
-        author = '/'.join(book_dict['author'])
-        if len(book_dict['translator']) > 0:
-            author += ' 译者: '
-            author += '/'.join(book_dict['translator'])
-
-        bookinfo.append(isbn)
-        bookinfo.append(book_dict['title'])
-        bookinfo.append(author)
-        bookinfo.append(book_dict['publisher'])
-        bookinfo.append(book_dict['price'])
-        bookinfo.append('计划')
-        bookinfo.append('未设置')
+            bookinfo.append(isbn)
+            bookinfo.append(book_dict['title'])
+            bookinfo.append(author)
+            bookinfo.append(book_dict['publisher'])
+            bookinfo.append(book_dict['price'])
+            bookinfo.append('计划')
+            bookinfo.append('未设置')
 
         return bookinfo
 
@@ -223,7 +241,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
         bookinfo = [isbn, title, author,
                     publisher, price, bookclass, bookshelf]
-        print(bookinfo)
+        LOG.info(bookinfo)
         self.model.updateItem(bookinfo)
 
     @pyqtSlot()
@@ -234,14 +252,19 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # TODO: not implemented yet
         isbn = self.le_isbn_pic.text()
         bookinfo = self.get_douban_isbn(isbn)
-        self.le_bookname.setText(bookinfo[1])
-        self.le_bookauthor.setText(bookinfo[2])
-        self.le_publisher.setText(bookinfo[3])
-        self.le_price.setText(bookinfo[4])
-        self.le_bookclass.setText(bookinfo[5])
-        self.le_bookshelf.setText(bookinfo[6])
+        if len(bookinfo) > 0:
+            self.le_bookname.setText(bookinfo[1])
+            self.le_bookauthor.setText(bookinfo[2])
+            self.le_publisher.setText(bookinfo[3])
+            self.le_price.setText(bookinfo[4])
+            self.le_bookclass.setText(bookinfo[5])
+            self.le_bookshelf.setText(bookinfo[6])
 
-        self.model.appendRow(bookinfo)
+            self.model.appendRow(bookinfo)
+        else:
+            LOG.warn("ISBN书号有误:  " + isbn)
+            QtWidgets.QMessageBox.warning(
+                self, "错误", "ISBN书号有误！", QtWidgets.QMessageBox.StandardButton.Yes)
 
     @pyqtSlot(QModelIndex)
     def on_tv_booklist_clicked(self, index):
@@ -252,7 +275,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         @type QModelIndex
         """
         # TODO: not implemented yet
-        print(index.row())
+        LOG.info('选定行号: ' + str(index.row()))
 
         model = self.tv_booklist.model()
         bookinfo = model.getItem(index.row())

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>609</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -54,6 +54,13 @@
       <widget class="QPushButton" name="pb_load">
        <property name="text">
         <string>加    载</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pb_refresh">
+       <property name="text">
+        <string>刷    新</string>
        </property>
       </widget>
      </item>
@@ -194,6 +201,7 @@
     </layout>
    </widget>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <resources/>
  <connections/>
