@@ -8,7 +8,7 @@ from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex
 from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog
 
 from Ui_BookList import Ui_mainWindow
-from PyQt6 import QtGui,  QtCore, QtWidgets
+from PyQt6 import  QtCore #, QtGui, QtWidgets
 
 import pandas as pd
 
