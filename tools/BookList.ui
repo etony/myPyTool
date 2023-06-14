@@ -32,6 +32,9 @@
     <property name="selectionBehavior">
      <enum>QAbstractItemView::SelectRows</enum>
     </property>
+    <attribute name="verticalHeaderVisible">
+     <bool>false</bool>
+    </attribute>
    </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
@@ -51,7 +54,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="le_booklist"/>
+      <widget class="QLineEdit" name="le_booklist">
+       <property name="toolTip">
+        <string>CSV文件路径</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pb_load">
@@ -68,6 +75,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pb_refresh">
+       <property name="toolTip">
+        <string>根据ISBN列表，重新获取图书信息</string>
+       </property>
        <property name="statusTip">
         <string>根据ISBN列表，重新获取图书信息。</string>
        </property>
@@ -78,6 +88,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pb_save">
+       <property name="toolTip">
+        <string>导出图书信息列表</string>
+       </property>
        <property name="statusTip">
         <string>导出图书信息列表</string>
        </property>
@@ -120,6 +133,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pb_clear">
+       <property name="toolTip">
+        <string>清空图书信息</string>
+       </property>
+       <property name="statusTip">
+        <string>清空图书信息</string>
+       </property>
        <property name="text">
         <string>清    空</string>
        </property>
@@ -197,10 +216,17 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="le_isbn_pic"/>
+      <widget class="QLineEdit" name="le_isbn_pic">
+       <property name="toolTip">
+        <string>图书ISBN编码</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pb_scan">
+       <property name="toolTip">
+        <string>识别ISBN图片，获取ISBN编码</string>
+       </property>
        <property name="statusTip">
         <string>识别ISBN图片，获取ISBN编码</string>
        </property>
@@ -211,6 +237,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pb_getbookinfo">
+       <property name="toolTip">
+        <string>根据ISBN编码获取图书信息</string>
+       </property>
        <property name="statusTip">
         <string>根据ISBN编码获取图书信息</string>
        </property>
@@ -221,6 +250,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pb_insert">
+       <property name="toolTip">
+        <string>根据ISBN编码获取图书信息</string>
+       </property>
        <property name="statusTip">
         <string>更新或插入一条图书信息</string>
        </property>

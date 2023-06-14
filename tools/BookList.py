@@ -72,7 +72,7 @@ class TableModel(QtCore.QAbstractTableModel):
             self.endResetModel()
         else:
             self.beginResetModel()
-            self._data.loc[self._data.shape[0]] = row
+            self._data.loc[self._data.shape[0]+1] = row
             self.endResetModel()
 
     def columnCount(self, parent=None):  # index):
@@ -128,6 +128,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
         self.model = TableModel(df)
         self.tv_booklist.setModel(self.model)  # 填充 Qtableview 表头
+        self.tv_booklist.verticalHeader().setVisible(True)
         # self.model = QtGui.QStandardItemModel()
         # self.model.setHorizontalHeaderLabels(
         #     ['ISBN', '书名', '作者', '出版社', '价格', '分类', '书柜'])
@@ -157,6 +158,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
         if csvNamepath != "":
             df = pd.read_csv(csvNamepath, dtype='object')  # 数据全部转换为字符串型
+            df.index = df.index + 1
 
             self.model = TableModel(df)
 
@@ -338,7 +340,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # TODO: not implemented yet
         self.le_bookauthor.clear()
         self.le_bookclass.clear()
-        self.le_booklist.clear()
+        # self.le_booklist.clear()
         self.le_bookname.clear()
         self.le_bookshelf.clear()
         # self.le_isbn_pic.clear()
