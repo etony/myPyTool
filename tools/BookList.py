@@ -120,6 +120,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         """
         super().__init__(parent)
         self.setupUi(self)
+        self.setFixedSize(self.width(), self.height())
+
         data = {'ISBN': [], '书名': [], '作者': [],
                 '出版社': [], '价格': [], '分类': [], '书柜': []}
 
@@ -142,10 +144,15 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # self.tv_booklist.setColumnWidth(5, 80)
         # self.tv_booklist.setColumnWidth(6, 60)
         # self.tv_booklist.horizontalHeader().setSectionResizeMode(1,QtWidgets.QHeaderView.ResizeMode.Stretch)
-        # self.tv_booklist.horizontalHeader().setSectionResizeMode(1,QtWidgets.QHeaderView.ResizeMode.Interactive)
-        # # self.tv_booklist.horizontalHeader().setSectionResizeMode(2,QtWidgets.QHeaderView.ResizeMode.Interactive)
-        # # self.tv_booklist.horizontalHeader().setSectionResizeMode(3,QtWidgets.QHeaderView.ResizeMode.Interactive)
 
+        self.tv_booklist.horizontalHeader().setSectionResizeMode(
+            QtWidgets.QHeaderView.ResizeMode.Stretch)
+        self.tv_booklist.horizontalHeader().setSectionResizeMode(
+            1, QtWidgets.QHeaderView.ResizeMode.Interactive)
+        self.tv_booklist.horizontalHeader().setSectionResizeMode(
+            2, QtWidgets.QHeaderView.ResizeMode.Interactive)
+        self.tv_booklist.horizontalHeader().setSectionResizeMode(
+            3, QtWidgets.QHeaderView.ResizeMode.Interactive)
 
     @pyqtSlot()
     def on_pb_load_clicked(self):
