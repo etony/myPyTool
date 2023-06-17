@@ -116,14 +116,7 @@ class RefreshBookinfoList(QObject):  # https://mathpretty.com/13641.html
     def __init__(self,isbn):
         # 初始化函数
         super(RefreshBookinfoList, self).__init__()
-        self.working = True
         self.isbn = isbn
-
-
-    def __del__(self):
-        # 线程状态改变与线程终止
-        self.working = False
-
 
     def run(self):
         # 重写线程执行的run函数
