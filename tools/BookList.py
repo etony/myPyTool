@@ -4,8 +4,9 @@
 Module implementing BLmainWindow.
 """
 
-from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex, QThread, pyqtSignal,QObject
-from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog
+from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex, QThread, pyqtSignal,QObject, QPoint
+from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMenu
+from PyQt6.QtGui import QIcon, QAction
 
 from Ui_BookList import Ui_mainWindow
 from PyQt6 import QtCore, QtWidgets  # , QtGui
@@ -106,6 +107,11 @@ class TableModel(QtCore.QAbstractTableModel):
     def getlist(self, index):
         collist = self._data.iloc[:, index].unique()
         return collist
+    
+    def deleteItem(self, isbn):
+        self.beginResetModel()
+        self._data.drop(self._data[self._data.iloc[:,0]==isbn].index,inplace=True)
+        self.endResetModel()
 
 
 class RefreshBookinfoList(QObject):  # https://mathpretty.com/13641.html
@@ -184,7 +190,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             2, QtWidgets.QHeaderView.ResizeMode.Interactive)
         self.tv_booklist.horizontalHeader().setSectionResizeMode(
             3, QtWidgets.QHeaderView.ResizeMode.Interactive)
-        
+        self.tv_booklist.setContextMenuPolicy(
+            Qt.ContextMenuPolicy.CustomContextMenu)# 对象的上下文菜单的策略
         self.number = 0
         self.barstr = ''
 
@@ -432,7 +439,27 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # self.le_isbn_pic.clear()
         self.le_price.clear()
         self.le_publisher.clear()
-
+        
+    def genLoveMenu(self, pos):
+        menu = QMenu(self)
+        ico_del = QIcon('delete.png') 
+        self.dele = menu.addAction(ico_del,u"删除")
+        self.action = menu.exec(self.tv_booklist.mapToGlobal(pos))
+        
+    @pyqtSlot(QPoint)
+    def on_tv_booklist_customContextMenuRequested(self, pos):
+        
+        if self.model.rowCount()>0:
+            indexs = self.tv_booklist.selectedIndexes()
+            if len(indexs) > 0:
+                index = indexs[0].row()          
+                self.genLoveMenu(pos)
+                if self.action == self.dele:
+                    # self.model.deleteItem(self.tv_booklist.currentIndex().row())
+                    
+                    bookinfo = self.model.getItem(index)
+                    self.model.deleteItem(bookinfo[0])
+                
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
