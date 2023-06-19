@@ -4,8 +4,9 @@
 Module implementing BLmainWindow.
 """
 
-from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex
-from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog
+from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex, QThread, pyqtSignal,QObject, QPoint
+from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMenu
+from PyQt6.QtGui import QIcon, QAction
 
 from Ui_BookList import Ui_mainWindow
 from PyQt6 import QtCore, QtWidgets  # , QtGui
@@ -21,6 +22,7 @@ import logging
 import sys
 import os
 import json
+import time
 
 
 LOG = logging.getLogger(os.path.basename(sys.argv[0]))
@@ -68,7 +70,8 @@ class TableModel(QtCore.QAbstractTableModel):
         isbnlist = self._data.iloc[:, 0].unique()
         if row[0] in isbnlist:
             self.beginResetModel()
-            self._data[self._data.iloc[:, 0] == row[0]] = row
+            # self._data[self._data.iloc[:, 0] == row[0]] = row
+            self._data.loc[self._data.iloc[:, 0] == row[0],['书名','作者','出版社','价格']] = [row[1],row[2],row[3],row[4]]
             self.endResetModel()
         else:
             self.beginResetModel()
@@ -104,7 +107,41 @@ class TableModel(QtCore.QAbstractTableModel):
     def getlist(self, index):
         collist = self._data.iloc[:, index].unique()
         return collist
+    
+    def deleteItem(self, isbn):
+        self.beginResetModel()
+        self._data.drop(self._data[self._data.iloc[:,0]==isbn].index,inplace=True)
+        self.endResetModel()
 
+
+class RefreshBookinfoList(QObject):  # https://mathpretty.com/13641.html
+    # 自定义信号对象。参数str就代表这个信号可以传一个字符串
+    finished = pyqtSignal()  # 结束的信号
+    progress = pyqtSignal(str)
+
+    def __init__(self,isbn):
+        # 初始化函数
+        super(RefreshBookinfoList, self).__init__()
+        self.isbn = isbn
+
+    def run(self):
+        # 重写线程执行的run函数
+        # 触发自定义信号
+        # LOG.info("thread : isbn " + self.isbn)
+        for i in self.isbn:
+            self.progress.emit(i)
+            time.sleep(1)
+        self.finished.emit() # 发出结束的信号
+
+class Worker(QObject): # https://mathpretty.com/13641.html
+    finished = pyqtSignal() # 结束的信号
+    progress = pyqtSignal(int)
+    def run(self):
+        """Long-running task."""
+        for i in range(50):
+            
+            print(str(i))
+            time.sleep(3)
 
 class BLmainWindow(QMainWindow, Ui_mainWindow):
     """
@@ -153,6 +190,10 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             2, QtWidgets.QHeaderView.ResizeMode.Interactive)
         self.tv_booklist.horizontalHeader().setSectionResizeMode(
             3, QtWidgets.QHeaderView.ResizeMode.Interactive)
+        self.tv_booklist.setContextMenuPolicy(
+            Qt.ContextMenuPolicy.CustomContextMenu)# 对象的上下文菜单的策略
+        self.number = 0
+        self.barstr = ''
 
     @pyqtSlot()
     def on_pb_load_clicked(self):
@@ -326,6 +367,19 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.le_bookclass.setText(bookinfo[5])
         self.le_bookshelf.setText(bookinfo[6])
 
+
+    
+    def  refreshonebookinfo(self, arow):
+
+        bookinfo = self.get_douban_isbn(arow)
+        if len(bookinfo) == 7:
+            LOG.info('-'.join(bookinfo[:5]))
+            self.model.updateItem(bookinfo)
+        self.number += 1 
+        
+        self.statusBar.showMessage(self.barstr + str(self.number))
+         
+        
     @pyqtSlot()
     def on_pb_refresh_clicked(self):
         """
@@ -334,9 +388,41 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # TODO: not implemented yet
         # 调用 douban API 接口，根据 isbn编码 更新所有记录
         isbnlist = self.model.getlist(0)
-        for isbn in isbnlist:
-            bookinfo = self.get_douban_isbn(isbn)
-            self.model.updateItem(bookinfo)
+        self.barstr = '信息更新:' + str(len(isbnlist)) + '/'
+        
+        
+        # 多线程刷新图书信息   开始        
+        
+        self.thread = QThread()
+        # Step 3: Create a worker object
+        self.worker = RefreshBookinfoList(isbnlist)
+        # Step 4: Move worker to the thread
+        self.worker.moveToThread(self.thread)
+        # Step 5: Connect signals and slots
+        self.thread.started.connect(self.worker.run) # 通知开始
+        self.worker.finished.connect(self.thread.quit) # 结束后通知结束
+        self.worker.finished.connect(self.worker.deleteLater) # 完成后删除对象
+        self.thread.finished.connect(self.thread.deleteLater) # 完成后删除对象
+        self.worker.progress.connect(self.refreshonebookinfo) # 绑定 progress 的信号
+        self.thread.start()
+        self.pb_refresh.setEnabled(False)
+        
+        self.thread.finished.connect(lambda: self.pb_refresh.setEnabled(True))
+        self.thread.finished.connect(lambda: self.statusBar.showMessage("共 " + str(self.model.rowCount()) + " 条记录"))
+
+        # 多线程刷新图书信息    结束  
+        
+        
+         
+        # 单线程刷新图书信息
+        # for isbn in isbnlist:                    
+        #     bookinfo = self.get_douban_isbn(isbn)
+        #     if len(bookinfo) == 7:
+        #         LOG.info(str(i) + ': ' + '-'.join(bookinfo[:5]))
+        #         self.model.updateItem(bookinfo)
+        #     i += 1
+        #     time.sleep(0.5)
+
 
     @pyqtSlot()
     def on_pb_clear_clicked(self):
@@ -352,7 +438,27 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # self.le_isbn_pic.clear()
         self.le_price.clear()
         self.le_publisher.clear()
-
+        
+    def genLoveMenu(self, pos):
+        menu = QMenu(self)
+        ico_del = QIcon('delete.png') 
+        self.dele = menu.addAction(ico_del,u"删除")
+        self.action = menu.exec(self.tv_booklist.mapToGlobal(pos))
+        
+    @pyqtSlot(QPoint)
+    def on_tv_booklist_customContextMenuRequested(self, pos):
+        
+        if self.model.rowCount()>0:
+            indexs = self.tv_booklist.selectedIndexes()
+            if len(indexs) > 0:
+                index = indexs[0].row()          
+                self.genLoveMenu(pos)
+                if self.action == self.dele:
+                    # self.model.deleteItem(self.tv_booklist.currentIndex().row())
+                    
+                    bookinfo = self.model.getItem(index)
+                    self.model.deleteItem(bookinfo[0])
+                
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
