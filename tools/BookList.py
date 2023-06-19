@@ -168,7 +168,6 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             df.index = df.index + 1
 
             self.model = TableModel(df)
-
             self.tv_booklist.setModel(self.model)  # 填充csv数据
             self.le_booklist.setText(csvNamepath)
             # self.table.setModel(self.model)
