@@ -479,6 +479,14 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
                         self.model.deleteItem(isbn)
                         LOG.info(f"删除信息： {isbn}")
 
+    @pyqtSlot()
+    def on_pb_search_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        raise NotImplementedError
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
