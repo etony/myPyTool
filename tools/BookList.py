@@ -325,6 +325,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             bookinfo.append('未设置')
             bookinfo.append(book_dict['image'])
             bookinfo.append(book_dict['pubdate'])
+            bookinfo.append(book_dict['rating'])
             # bookinfo.append('')
             # bookinfo.append('')
 
@@ -405,7 +406,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
     def refreshonebookinfo(self, arow):
 
         bookinfo = self.get_douban_isbn(arow)
-        if len(bookinfo) == 7:
+        
+        if len(bookinfo) >= 7:
             LOG.info('-'.join(bookinfo[:5]))
             self.model.updateItem(bookinfo)
         self.number += 1
@@ -420,6 +422,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # TODO: not implemented yet
         # 调用 douban API 接口，根据 isbn编码 更新所有记录
         isbnlist = self.model.getlist(0)
+        self.number = 0
         self.barstr = '信息更新:' + str(len(isbnlist)) + '/'
 
         # 多线程刷新图书信息   开始
@@ -541,7 +544,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         img = QImage.fromData(res.content)
         self.CW_bookinfo.lb_bookcover.setPixmap(QPixmap.fromImage(img))
         
-        self.CW_bookinfo.tb_bookinfo.setText('<b><font size="5">'+ douban_bookinfo[1] + '</font></b>' ) 
+        self.CW_bookinfo.tb_bookinfo.setText('<b><font color="black" size="5">'+ douban_bookinfo[1] + '</font></b>' ) 
         
         self.CW_bookinfo.tb_bookinfo.append('<br><b>作者: </b>'+ douban_bookinfo[2]) 
         self.CW_bookinfo.tb_bookinfo.append('<br><b>出版社: </b>'+ douban_bookinfo[3]) 
@@ -549,7 +552,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.CW_bookinfo.tb_bookinfo.append('<br><b>日期: </b>'+ douban_bookinfo[8]) 
         self.CW_bookinfo.tb_bookinfo.append('<br><b>ISBN: </b>'+ douban_bookinfo[0]) 
         
-        
+        self.CW_bookinfo.tb_bookinfo.append('<br><b>评分: </b>'+ str(douban_bookinfo[9]['average']) +'分/ ' + str(douban_bookinfo[9]['numRaters']) + '人') 
         # r = requests.get(book_dict['image'])
         # im = cv.imdecode(np.frombuffer(r.content, np.uint8), cv.IMREAD_COLOR) # 直接解码网络数据
         # cv.imshow('im', im)
