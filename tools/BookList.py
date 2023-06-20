@@ -550,7 +550,12 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.CW_bookinfo.tb_bookinfo.append('<br><b>ISBN: </b>'+ douban_bookinfo[0]) 
         
         
-        print(douban_bookinfo)
+        # r = requests.get(book_dict['image'])
+        # im = cv.imdecode(np.frombuffer(r.content, np.uint8), cv.IMREAD_COLOR) # 直接解码网络数据
+        # cv.imshow('im', im)
+        # cv.waitKey(0)
+        
+        LOG.info(douban_bookinfo)
         self.Dialog.show()
         
 
