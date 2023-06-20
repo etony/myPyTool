@@ -16,7 +16,7 @@ class Ui_Dialog(object):
         self.lb_bookcover = QtWidgets.QLabel(parent=Dialog)
         self.lb_bookcover.setGeometry(QtCore.QRect(10, 10, 311, 431))
         self.lb_bookcover.setText("")
-        self.lb_bookcover.setPixmap(QtGui.QPixmap("D:\\work\\GIT\\Python-Study\\tools\\bookcover.jpg"))
+        self.lb_bookcover.setPixmap(QtGui.QPixmap("bookcover.jpg"))
         self.lb_bookcover.setScaledContents(True)
         self.lb_bookcover.setObjectName("lb_bookcover")
         self.tb_bookinfo = QtWidgets.QTextBrowser(parent=Dialog)
