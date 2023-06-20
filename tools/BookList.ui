@@ -122,7 +122,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="le_bookname"/>
+      <widget class="QLineEdit" name="le_bookname">
+       <property name="styleSheet">
+        <string notr="true">background-color:rgb(234, 234, 234)</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_4">
@@ -135,7 +139,7 @@
       <widget class="QLineEdit" name="le_bookauthor"/>
      </item>
      <item>
-      <widget class="QPushButton" name="pb_clear">
+      <widget class="QPushButton" name="pb_reset">
        <property name="toolTip">
         <string>清空图书信息</string>
        </property>
@@ -143,7 +147,7 @@
         <string/>
        </property>
        <property name="text">
-        <string>清    空</string>
+        <string>重    置</string>
        </property>
       </widget>
      </item>
@@ -194,7 +198,29 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="le_bookclass"/>
+      <widget class="QComboBox" name="cb_bookclass">
+       <property name="editable">
+        <bool>true</bool>
+       </property>
+       <property name="currentIndex">
+        <number>-1</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>默认分类</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>计划</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>已读</string>
+        </property>
+       </item>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_8">

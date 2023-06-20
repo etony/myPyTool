@@ -6,9 +6,10 @@ Module implementing BLmainWindow.
 
 from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex, QThread, pyqtSignal, QObject, QPoint
 from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMenu
-from PyQt6.QtGui import QIcon, QAction
+from PyQt6.QtGui import QIcon, QAction, QImage,QPixmap
 
 from Ui_BookList import Ui_mainWindow
+from Ui_BookInfo import Ui_Dialog
 from PyQt6 import QtCore, QtWidgets  # , QtGui
 
 import pandas as pd
@@ -28,6 +29,7 @@ import time
 LOG = logging.getLogger(os.path.basename(sys.argv[0]))
 logging.basicConfig(datefmt='%Y-%m-%d %H:%M:%S', format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
                     level=logging.INFO)
+bclass = {'默认': 0, '默认分类': 0, '计划': 1, '已读': 2}
 
 # 978(EAN图书代码)-7(地区代码:7-中国)-(出版社代码)-(书序码)-(校验码)
 # 978-7-208-12815-6
@@ -43,6 +45,7 @@ class TableModel(QtCore.QAbstractTableModel):
         # 加载 pandas DataFrame 数据
         super(TableModel, self).__init__()
         self._data = data
+        self.backdata = data
 
     def data(self, index, role):
         if role == Qt.ItemDataRole.DisplayRole:
@@ -115,6 +118,24 @@ class TableModel(QtCore.QAbstractTableModel):
             self._data[self._data.iloc[:, 0] == isbn].index, inplace=True)
         self.endResetModel()
 
+    def search(self, search):
+        self.beginResetModel()
+
+        self._data = self._data[self._data['ISBN'].astype(str).str.contains(search) 
+                                | self._data['书名'].astype(str).str.contains(search) 
+                                | self._data['作者'].astype(str).str.contains(search) 
+                                | self._data['出版社'].astype(str).str.contains(search) 
+                                | self._data['分类'].astype(str).str.contains(search) ]
+
+        self.endResetModel()
+
+    def reset(self):
+        self.beginResetModel()
+
+        self._data = self.backdata
+
+        self.endResetModel()
+
 
 class RefreshBookinfoList(QObject):  # https://mathpretty.com/13641.html
     # 自定义信号对象。参数str就代表这个信号可以传一个字符串
@@ -130,6 +151,7 @@ class RefreshBookinfoList(QObject):  # https://mathpretty.com/13641.html
         # 重写线程执行的run函数
         # 触发自定义信号
         # LOG.info("thread : isbn " + self.isbn)
+
         for i in self.isbn:
             self.progress.emit(i)
             time.sleep(1)
@@ -301,6 +323,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             bookinfo.append(price)
             bookinfo.append('计划')
             bookinfo.append('未设置')
+            bookinfo.append(book_dict['image'])
+            bookinfo.append(book_dict['pubdate'])
             # bookinfo.append('')
             # bookinfo.append('')
 
@@ -317,7 +341,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         author = self.le_bookauthor.text()
         publisher = self.le_publisher.text()
         price = self.le_price.text()
-        bookclass = self.le_bookclass.text()
+        # bookclass = self.le_bookclass.text()
+        bookclass = self.cb_bookclass.currentText()
         bookshelf = self.le_bookshelf.text()
 
         bookinfo = [isbn, title, author,
@@ -339,8 +364,11 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             self.le_publisher.setText(bookinfo[3])
             self.le_price.setText(bookinfo[4])
 
-            if len(self.le_bookclass.text().strip()) == 0:
-                self.le_bookclass.setText("未设")
+            # if len(self.le_bookclass.text().strip()) == 0:
+            #     self.le_bookclass.setText("未设")
+            #     self.le_bookshelf.setText("未知")
+            if len(self.cb_bookclass.currentText().strip()) == 0:
+                self.cb_bookclass.setCurrentIndex(0)
                 self.le_bookshelf.setText("未知")
 
             # self.model.appendRow(bookinfo)
@@ -369,7 +397,9 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.le_bookauthor.setText(bookinfo[2])
         self.le_publisher.setText(bookinfo[3])
         self.le_price.setText(bookinfo[4])
-        self.le_bookclass.setText(bookinfo[5])
+        # self.le_bookclass.setText(bookinfo[5])
+        self.cb_bookclass.setCurrentIndex(bclass[bookinfo[5]])
+
         self.le_bookshelf.setText(bookinfo[6])
 
     def refreshonebookinfo(self, arow):
@@ -425,19 +455,21 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         #     time.sleep(0.5)
 
     @pyqtSlot()
-    def on_pb_clear_clicked(self):
+    def on_pb_reset_clicked(self):
         """
         Slot documentation goes here.
         """
         # TODO: not implemented yet
         self.le_bookauthor.clear()
-        self.le_bookclass.clear()
+        # self.le_bookclass.clear()
+        self.cb_bookclass.setCurrentIndex(-1)
         # self.le_booklist.clear()
         self.le_bookname.clear()
         self.le_bookshelf.clear()
         # self.le_isbn_pic.clear()
         self.le_price.clear()
         self.le_publisher.clear()
+        self.model.reset()
 
     def genLoveMenu(self, pos):
         menu = QMenu(self)
@@ -485,7 +517,42 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        raise NotImplementedError
+        search = self.le_bookname.text().strip()
+        self.model.search(search)
+
+    @pyqtSlot(QModelIndex)
+    def on_tv_booklist_doubleClicked(self, index):
+        """
+        Slot documentation goes here.
+
+        @param index DESCRIPTION
+        @type QModelIndex
+        """
+        # TODO: not implemented yet
+        self.Dialog = QtWidgets.QDialog()
+        self.CW_bookinfo = Ui_Dialog()
+        self.CW_bookinfo.setupUi(self.Dialog)
+        self.Dialog.setModal(True)
+        # self.Dialog.setWindowModality(Qt.windApplicationModal)
+        bookinfo = self.model.getItem(index.row())
+        
+        douban_bookinfo = self.get_douban_isbn(str(bookinfo[0]))
+        res = requests.get(douban_bookinfo[7])
+        img = QImage.fromData(res.content)
+        self.CW_bookinfo.lb_bookcover.setPixmap(QPixmap.fromImage(img))
+        
+        self.CW_bookinfo.tb_bookinfo.setText('<b><font size="5">'+ douban_bookinfo[1] + '</font></b>' ) 
+        
+        self.CW_bookinfo.tb_bookinfo.append('<br><b>作者: </b>'+ douban_bookinfo[2]) 
+        self.CW_bookinfo.tb_bookinfo.append('<br><b>出版社: </b>'+ douban_bookinfo[3]) 
+        self.CW_bookinfo.tb_bookinfo.append('<br><b>价格: </b>'+ douban_bookinfo[4])         
+        self.CW_bookinfo.tb_bookinfo.append('<br><b>日期: </b>'+ douban_bookinfo[8]) 
+        self.CW_bookinfo.tb_bookinfo.append('<br><b>ISBN: </b>'+ douban_bookinfo[0]) 
+        
+        
+        print(douban_bookinfo)
+        self.Dialog.show()
+        
 
 
 if __name__ == "__main__":
