@@ -71,6 +71,7 @@ class TableModel(QtCore.QAbstractTableModel):
     def updateItem(self, row):
         # 根据第一列的值，更新记录，如不存在则在尾部增加一条记录
         isbnlist = self._data.iloc[:, 0].unique()
+
         if row[0] in isbnlist:
             self.beginResetModel()
             # self._data[self._data.iloc[:, 0] == row[0]] = row
@@ -79,8 +80,9 @@ class TableModel(QtCore.QAbstractTableModel):
             self.endResetModel()
         else:
             self.beginResetModel()
-            self._data.loc[self._data.shape[0]+1] = row
+            self._data.loc[self._data.shape[0]+1] = row[0:7]
             self.endResetModel()
+            LOG.info(row)
 
     def columnCount(self, parent=None):  # index):
         # 返回数据列数
@@ -350,6 +352,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
                     publisher, price, bookclass, bookshelf]
         LOG.info(bookinfo)
         self.model.updateItem(bookinfo)
+        
+        self.statusBar.showMessage("共 " + str(self.model.rowCount()) + " 条记录")        
 
     @pyqtSlot()
     def on_pb_getbookinfo_clicked(self):
@@ -374,6 +378,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
             # self.model.appendRow(bookinfo)
             self.model.updateItem(bookinfo)
+            self.statusBar.showMessage("共 " + str(self.model.rowCount()) + " 条记录") 
         else:
             LOG.warn("ISBN书号有误:  " + isbn)
             QtWidgets.QMessageBox.warning(
@@ -473,6 +478,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.le_price.clear()
         self.le_publisher.clear()
         self.model.reset()
+        self.statusBar.showMessage("共 " + str(self.model.rowCount()) + " 条记录") 
 
     def genLoveMenu(self, pos):
         menu = QMenu(self)
@@ -513,6 +519,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
                     for isbn in isbnlist:
                         self.model.deleteItem(isbn)
                         LOG.info(f"删除信息： {isbn}")
+                    self.statusBar.showMessage("共 " + str(self.model.rowCount()) + " 条记录") 
 
     @pyqtSlot()
     def on_pb_search_clicked(self):
@@ -522,6 +529,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # TODO: not implemented yet
         search = self.le_bookname.text().strip()
         self.model.search(search)
+        self.statusBar.showMessage("共 " + str(self.model.rowCount()) + " 条记录") 
 
     @pyqtSlot(QModelIndex)
     def on_tv_booklist_doubleClicked(self, index):
@@ -536,7 +544,10 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.CW_bookinfo = Ui_Dialog()
         self.CW_bookinfo.setupUi(self.Dialog)
         self.Dialog.setModal(True)
-        # self.Dialog.setWindowModality(Qt.windApplicationModal)
+
+        # self.Dialog.setWindowModality(Qt.ApplicationModal)
+        # 在PyQt6中，QtCore.Qt.ApplicationModal属性已经被移除， 
+        # 可以使用QApplication.setModal()方法来设置模态窗口。该方法接受一个布尔值作为参数，True表示应用程序进入模态状态，False表示退出模态状态。
         bookinfo = self.model.getItem(index.row())
         
         douban_bookinfo = self.get_douban_isbn(str(bookinfo[0]))
