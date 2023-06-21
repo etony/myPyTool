@@ -4,26 +4,27 @@
 Module implementing BLmainWindow.
 """
 
-from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex, QThread, pyqtSignal, QObject, QPoint
-from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMenu
-from PyQt6.QtGui import QIcon, QAction, QImage,QPixmap
+import json
+import logging
+import os
+import sys
+import time
 
-from Ui_BookList import Ui_mainWindow
-from Ui_BookInfo import Ui_Dialog
-from PyQt6 import QtCore, QtWidgets  # , QtGui
-
-import pandas as pd
+import cv2 as cv
 
 import numpy as np
-import cv2 as cv
+
+import pandas as pd
 import pyzbar.pyzbar as pyzbar
 
 import requests
-import logging
-import sys
-import os
-import json
-import time
+from PyQt6 import QtCore, QtWidgets  # , QtGui
+from PyQt6.QtCore import pyqtSignal, pyqtSlot, QModelIndex, QObject, QPoint, Qt, QThread
+from PyQt6.QtGui import QAction, QIcon, QImage, QPixmap
+from PyQt6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMenu
+from Ui_BookInfo import Ui_Dialog
+
+from Ui_BookList import Ui_mainWindow
 
 
 LOG = logging.getLogger(os.path.basename(sys.argv[0]))
