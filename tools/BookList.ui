@@ -153,6 +153,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="pb_search">
+       <property name="toolTip">
+        <string>根据给出内容查询列表</string>
+       </property>
        <property name="text">
         <string>查    询</string>
        </property>

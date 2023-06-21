@@ -155,6 +155,7 @@ class Ui_mainWindow(object):
         self.label_4.setText(_translate("mainWindow", "作   者:"))
         self.pb_reset.setToolTip(_translate("mainWindow", "清空图书信息"))
         self.pb_reset.setText(_translate("mainWindow", "重    置"))
+        self.pb_search.setToolTip(_translate("mainWindow", "根据给出内容查询列表"))
         self.pb_search.setText(_translate("mainWindow", "查    询"))
         self.label_5.setText(_translate("mainWindow", "出版社:"))
         self.label_6.setText(_translate("mainWindow", "价   格:"))

@@ -568,7 +568,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # im = cv.imdecode(np.frombuffer(r.content, np.uint8), cv.IMREAD_COLOR) # 直接解码网络数据
         # cv.imshow('im', im)
         # cv.waitKey(0)
-        
+        self.Dialog.setWindowTitle("图书信息 - " +  douban_bookinfo[1] )
         LOG.info(douban_bookinfo)
         self.Dialog.show()
         

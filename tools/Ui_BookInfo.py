@@ -21,7 +21,7 @@ class Ui_Dialog(object):
         self.lb_bookcover.setObjectName("lb_bookcover")
         self.tb_bookinfo = QtWidgets.QTextBrowser(parent=Dialog)
         self.tb_bookinfo.setEnabled(False)
-        self.tb_bookinfo.setGeometry(QtCore.QRect(330, 170, 141, 261))
+        self.tb_bookinfo.setGeometry(QtCore.QRect(330, 180, 141, 261))
         self.tb_bookinfo.setObjectName("tb_bookinfo")
 
         self.retranslateUi(Dialog)
