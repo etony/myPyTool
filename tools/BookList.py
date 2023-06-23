@@ -31,6 +31,8 @@ LOG = logging.getLogger(os.path.basename(sys.argv[0]))
 logging.basicConfig(datefmt='%Y-%m-%d %H:%M:%S', format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
                     level=logging.INFO)
 bclass = {'默认': 0, '默认分类': 0, '计划': 1, '已读': 2}
+bcol = ['ISBN', '书名', '作者', '出版社', '价格', '评分', '人数','分类', '书柜' ]
+bdict = {'ISBN': [], '书名': [], '作者': [],'出版社': [], '价格': [], '评分': [], '人数': [],'分类': [], '书柜': []}
 
 # 978(EAN图书代码)-7(地区代码:7-中国)-(出版社代码)-(书序码)-(校验码)
 # 978-7-208-12815-6
@@ -77,11 +79,11 @@ class TableModel(QtCore.QAbstractTableModel):
             self.beginResetModel()
             # self._data[self._data.iloc[:, 0] == row[0]] = row
             self._data.loc[self._data.iloc[:, 0] == row[0], [
-                '书名', '作者', '出版社', '价格']] = [row[1], row[2], row[3], row[4]]
+                '书名', '作者', '出版社', '价格', '评分', '人数' ]] = [row[1], row[2], row[3], row[4], row[5], row[6]]
             self.endResetModel()
         else:
             self.beginResetModel()
-            self._data.loc[self._data.shape[0]+1] = row[0:7]
+            self._data.loc[self._data.shape[0]+1] = row[0:9]
             self.endResetModel()
             LOG.info(row)
 
@@ -190,7 +192,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.setFixedSize(self.width(), self.height())
 
         data = {'ISBN': [], '书名': [], '作者': [],
-                '出版社': [], '价格': [], '分类': [], '书柜': []}
+                '出版社': [], '价格': [], '评分': [], '人数': [],'分类': [], '书柜': []}
 
         df = pd.DataFrame(data=data)
         df.index = df.index + 1  # 调整 qtableview 序号
@@ -236,6 +238,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
         if csvNamepath != "":
             df = pd.read_csv(csvNamepath, dtype='object')  # 数据全部转换为字符串型
+            # df.insert(loc=5, column='评分', value=0)
+            # df.insert(loc=6, column='人数', value=0)
             df.index = df.index + 1
 
             self.model = TableModel(df)
@@ -311,12 +315,13 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         response = requests.post(url, data=payload, headers=headers)
 
         book_dict = json.loads(response.text)
+        print(book_dict)
         if len(book_dict) > 5:
             author = '/'.join(book_dict['author'])
             if len(book_dict['translator']) > 0:
                 author += ' 译者: '
                 author += '/'.join(book_dict['translator'])
-
+            rating = book_dict['rating']   
             price = book_dict['price']
             price = price.replace('CNY', '').replace('元', '').strip()
             bookinfo.append(isbn)
@@ -324,6 +329,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             bookinfo.append(author)
             bookinfo.append(book_dict['publisher'])
             bookinfo.append(price)
+            bookinfo.append(rating['average'])
+            bookinfo.append(rating['numRaters'])            
             bookinfo.append('计划')
             bookinfo.append('未设置')
             bookinfo.append(book_dict['image'])
@@ -350,7 +357,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         bookshelf = self.le_bookshelf.text()
 
         bookinfo = [isbn, title, author,
-                    publisher, price, bookclass, bookshelf]
+                    publisher, price,self.star,self.num, bookclass, bookshelf]
         LOG.info(bookinfo)
         self.model.updateItem(bookinfo)
         
@@ -369,6 +376,10 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             self.le_bookauthor.setText(bookinfo[2])
             self.le_publisher.setText(bookinfo[3])
             self.le_price.setText(bookinfo[4])
+            self.star = bookinfo[5]
+            self.num = bookinfo[6]
+            print(self.star)
+            print(self.num)
 
             # if len(self.le_bookclass.text().strip()) == 0:
             #     self.le_bookclass.setText("未设")
@@ -404,10 +415,13 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.le_bookauthor.setText(bookinfo[2])
         self.le_publisher.setText(bookinfo[3])
         self.le_price.setText(bookinfo[4])
+        self.star = bookinfo[5]
+        self.num = bookinfo[6]
+        LOG(f'star:{self.star} number:{self.num}')
         # self.le_bookclass.setText(bookinfo[5])
-        self.cb_bookclass.setCurrentIndex(bclass[bookinfo[5]])
+        self.cb_bookclass.setCurrentIndex(bclass[bookinfo[7]])
 
-        self.le_bookshelf.setText(bookinfo[6])
+        self.le_bookshelf.setText(bookinfo[8])
 
     def refreshonebookinfo(self, arow):
 
@@ -552,7 +566,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         bookinfo = self.model.getItem(index.row())
         
         douban_bookinfo = self.get_douban_isbn(str(bookinfo[0]))
-        res = requests.get(douban_bookinfo[7])
+        res = requests.get(douban_bookinfo[9])
         img = QImage.fromData(res.content)
         self.CW_bookinfo.lb_bookcover.setPixmap(QPixmap.fromImage(img))
         
@@ -561,10 +575,10 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.CW_bookinfo.tb_bookinfo.append('<br><b>作者: </b>'+ douban_bookinfo[2]) 
         self.CW_bookinfo.tb_bookinfo.append('<br><b>出版社: </b>'+ douban_bookinfo[3]) 
         self.CW_bookinfo.tb_bookinfo.append('<br><b>价格: </b>'+ douban_bookinfo[4])         
-        self.CW_bookinfo.tb_bookinfo.append('<br><b>日期: </b>'+ douban_bookinfo[8]) 
+        self.CW_bookinfo.tb_bookinfo.append('<br><b>日期: </b>'+ douban_bookinfo[10]) 
         self.CW_bookinfo.tb_bookinfo.append('<br><b>ISBN: </b>'+ douban_bookinfo[0]) 
         
-        self.CW_bookinfo.tb_bookinfo.append('<br><b>评分: </b>'+ str(douban_bookinfo[9]['average']) +'分/ ' + str(douban_bookinfo[9]['numRaters']) + '人') 
+        self.CW_bookinfo.tb_bookinfo.append('<br><b>评分: </b>'+ str(douban_bookinfo[11]['average']) +'分/ ' + str(douban_bookinfo[11]['numRaters']) + '人') 
         # r = requests.get(book_dict['image'])
         # im = cv.imdecode(np.frombuffer(r.content, np.uint8), cv.IMREAD_COLOR) # 直接解码网络数据
         # cv.imshow('im', im)
