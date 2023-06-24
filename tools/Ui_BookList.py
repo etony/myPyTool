@@ -12,11 +12,11 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
-        mainWindow.resize(800, 609)
+        mainWindow.resize(800, 688)
         self.centralWidget = QtWidgets.QWidget(parent=mainWindow)
         self.centralWidget.setObjectName("centralWidget")
         self.tv_booklist = QtWidgets.QTableView(parent=self.centralWidget)
-        self.tv_booklist.setGeometry(QtCore.QRect(30, 160, 741, 421))
+        self.tv_booklist.setGeometry(QtCore.QRect(30, 160, 741, 500))
         self.tv_booklist.setDragEnabled(True)
         self.tv_booklist.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
         self.tv_booklist.setObjectName("tv_booklist")

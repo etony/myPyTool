@@ -12,9 +12,9 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(480, 448)
+        Dialog.resize(480, 458)
         self.lb_bookcover = QtWidgets.QLabel(parent=Dialog)
-        self.lb_bookcover.setGeometry(QtCore.QRect(10, 10, 311, 431))
+        self.lb_bookcover.setGeometry(QtCore.QRect(10, 10, 310, 434))
         self.lb_bookcover.setText("")
         self.lb_bookcover.setPixmap(QtGui.QPixmap("D:\\work\\GIT\\Python-Study\\tools\\bookcover.jpg"))
         self.lb_bookcover.setScaledContents(True)
