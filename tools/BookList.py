@@ -9,6 +9,7 @@ import logging
 import os
 import sys
 import time
+import math
 
 import cv2 as cv
 
@@ -34,6 +35,8 @@ bclass = {'默认': 0, '默认分类': 0, '计划': 1, '已读': 2}
 bcol = ['ISBN', '书名', '作者', '出版社', '价格', '评分', '人数', '分类', '书柜']
 bdict = {'ISBN': [], '书名': [], '作者': [], '出版社': [],
          '价格': [], '评分': [], '人数': [], '分类': [], '书柜': []}
+
+bshow = dict(filter(lambda x: x[0] in bcol, bdict.items()))
 
 # 978(EAN图书代码)-7(地区代码:7-中国)-(出版社代码)-(书序码)-(校验码)
 # 978-7-208-12815-6
@@ -198,7 +201,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         data = {'ISBN': [], '书名': [], '作者': [],
                 '出版社': [], '价格': [], '评分': [], '人数': [], '分类': [], '书柜': []}
 
-        df = pd.DataFrame(data=data)
+        df = pd.DataFrame(data=data,dtype=object)
         df.index = df.index + 1  # 调整 qtableview 序号
 
         self.model = TableModel(df)
@@ -342,7 +345,13 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             bookinfo.append(book_dict['rating'])
             # bookinfo.append('')
             # bookinfo.append('')
-
+            LOG.info(rating)
+            #推荐度
+            recommend = round((float(rating['average']) - 2.5) * math.log(float(rating['numRaters'])+1))
+            bookinfo.append(str(recommend))
+            
+            
+            
         return bookinfo
 
     @pyqtSlot()
@@ -597,6 +606,9 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # cv.waitKey(0)
         self.Dialog.setWindowTitle("图书信息 - " + douban_bookinfo[1])
         LOG.info(f'获取封面信息 {len(douban_bookinfo)} 项: {douban_bookinfo}')
+        
+        
+        self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
         self.Dialog.show()
 
 
