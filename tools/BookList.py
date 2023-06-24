@@ -85,7 +85,7 @@ class TableModel(QtCore.QAbstractTableModel):
             self.beginResetModel()
             self._data.loc[self._data.shape[0]+1] = row[0:9]
             self.endResetModel()
-            LOG.info(row)
+            LOG.info(f'更新记录:  {row}')
 
     def columnCount(self, parent=None):  # index):
         # 返回数据列数
@@ -315,7 +315,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         response = requests.post(url, data=payload, headers=headers)
 
         book_dict = json.loads(response.text)
-        print(book_dict)
+        # print(book_dict)
         if len(book_dict) > 5:
             author = '/'.join(book_dict['author'])
             if len(book_dict['translator']) > 0:
@@ -358,7 +358,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
         bookinfo = [isbn, title, author,
                     publisher, price,self.star,self.num, bookclass, bookshelf]
-        LOG.info(bookinfo)
+        LOG.info(f'插入记录: {bookinfo}')
         self.model.updateItem(bookinfo)
         
         self.statusBar.showMessage("共 " + str(self.model.rowCount()) + " 条记录")        
@@ -378,8 +378,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             self.le_price.setText(bookinfo[4])
             self.star = bookinfo[5]
             self.num = bookinfo[6]
-            print(self.star)
-            print(self.num)
+            LOG.info(f"获取评分: star:{self.star} number:{self.num}")
 
             # if len(self.le_bookclass.text().strip()) == 0:
             #     self.le_bookclass.setText("未设")
@@ -417,7 +416,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.le_price.setText(bookinfo[4])
         self.star = bookinfo[5]
         self.num = bookinfo[6]
-        LOG(f'star:{self.star} number:{self.num}')
+        LOG.info(f"获取评分: star:{self.star} number:{self.num}")
         # self.le_bookclass.setText(bookinfo[5])
         self.cb_bookclass.setCurrentIndex(bclass[bookinfo[7]])
 
@@ -584,7 +583,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # cv.imshow('im', im)
         # cv.waitKey(0)
         self.Dialog.setWindowTitle("图书信息 - " +  douban_bookinfo[1] )
-        LOG.info(douban_bookinfo)
+        LOG.info(f'获取封面信息: {douban_bookinfo}')
         self.Dialog.show()
         
 
