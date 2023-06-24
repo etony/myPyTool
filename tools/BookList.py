@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 Module implementing BLmainWindow.
 """
@@ -27,17 +26,27 @@ from Ui_BookInfo import Ui_Dialog
 
 from Ui_BookList import Ui_mainWindow
 
-
 LOG = logging.getLogger(os.path.basename(sys.argv[0]))
-logging.basicConfig(datefmt='%Y-%m-%d %H:%M:%S', format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-                    level=logging.INFO)
+logging.basicConfig(
+    datefmt='%Y-%m-%d %H:%M:%S',
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO)
 bclass = {'默认': 0, '默认分类': 0, '计划': 1, '已读': 2}
 bcol = ['ISBN', '书名', '作者', '出版社', '价格', '评分', '人数', '分类', '书柜']
-bdict = {'ISBN': [], '书名': [], '作者': [], '出版社': [],
-         '价格': [], '评分': [], '人数': [], '分类': [], '书柜': []}
+bdict = {
+    'ISBN': [],
+    '书名': [],
+    '作者': [],
+    '出版社': [],
+    '价格': [],
+    '评分': [],
+    '人数': [],
+    '分类': [],
+    '书柜': []
+}
 
 bshow = dict(filter(lambda x: x[0] in bcol, bdict.items()))
-
+bshow = {k: v for k, v in bdict.items() if k in bcol}
 # 978(EAN图书代码)-7(地区代码:7-中国)-(出版社代码)-(书序码)-(校验码)
 # 978-7-208-12815-6
 # 校验码 = 每个数交替乘以1和3，然后把它们的乘积加起来。从左至右奇数位置乘以1；偶数位置乘以3。 把和数除以10，然后求余数，最后求10与余数的差。
@@ -83,15 +92,22 @@ class TableModel(QtCore.QAbstractTableModel):
             self.beginResetModel()
             # self._data[self._data.iloc[:, 0] == row[0]] = row
             if len(row) == 9:
-                self._data.loc[self._data.iloc[:, 0] == row[0], [
-                    '书名', '作者', '出版社', '价格', '评分', '人数', '分类', '书柜']] = [row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]]
+                self._data.loc[
+                    self._data.iloc[:, 0] == row[0],
+                    ['书名', '作者', '出版社', '价格', '评分', '人数', '分类', '书柜']] = [
+                        row[1], row[2], row[3], row[4], row[5], row[6], row[7],
+                        row[8]
+                    ]
             else:
-                self._data.loc[self._data.iloc[:, 0] == row[0], [
-                    '书名', '作者', '出版社', '价格', '评分', '人数']] = [row[1], row[2], row[3], row[4], row[5], row[6]]
+                self._data.loc[self._data.iloc[:, 0] == row[0],
+                               ['书名', '作者', '出版社', '价格', '评分', '人数']] = [
+                                   row[1], row[2], row[3], row[4], row[5],
+                                   row[6]
+                               ]
             self.endResetModel()
         else:
             self.beginResetModel()
-            self._data.loc[self._data.shape[0]+1] = row[0:9]
+            self._data.loc[self._data.shape[0] + 1] = row[0:9]
             self.endResetModel()
 
     def columnCount(self, parent=None):  # index):
@@ -126,18 +142,19 @@ class TableModel(QtCore.QAbstractTableModel):
 
     def deleteItem(self, isbn):
         self.beginResetModel()
-        self._data.drop(
-            self._data[self._data.iloc[:, 0] == isbn].index, inplace=True)
+        self._data.drop(self._data[self._data.iloc[:, 0] == isbn].index,
+                        inplace=True)
         self.endResetModel()
 
     def search(self, search):
         self.beginResetModel()
 
-        self._data = self._data[self._data['ISBN'].astype(str).str.contains(search)
-                                | self._data['书名'].astype(str).str.contains(search)
-                                | self._data['作者'].astype(str).str.contains(search)
-                                | self._data['出版社'].astype(str).str.contains(search)
-                                | self._data['分类'].astype(str).str.contains(search)]
+        self._data = self._data[
+            self._data['ISBN'].astype(str).str.contains(search)
+            | self._data['书名'].astype(str).str.contains(search)
+            | self._data['作者'].astype(str).str.contains(search)
+            | self._data['出版社'].astype(str).str.contains(search)
+            | self._data['分类'].astype(str).str.contains(search)]
 
         self.endResetModel()
 
@@ -198,10 +215,19 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.setupUi(self)
         self.setFixedSize(self.width(), self.height())
 
-        data = {'ISBN': [], '书名': [], '作者': [],
-                '出版社': [], '价格': [], '评分': [], '人数': [], '分类': [], '书柜': []}
+        data = {
+            'ISBN': [],
+            '书名': [],
+            '作者': [],
+            '出版社': [],
+            '价格': [],
+            '评分': [],
+            '人数': [],
+            '分类': [],
+            '书柜': []
+        }
 
-        df = pd.DataFrame(data=data,dtype=object)
+        df = pd.DataFrame(data=data, dtype=object)
         df.index = df.index + 1  # 调整 qtableview 序号
 
         self.model = TableModel(df)
@@ -279,12 +305,13 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         """
         # TODO: not implemented yet
         picNamepath, picType = QFileDialog.getOpenFileName(
-            self, "选择条形码图片", "E:\\minipan\\Seafile\\资料", "*.png;;*.jpg;;All Files(*)")
+            self, "选择条形码图片", "E:\\minipan\\Seafile\\资料",
+            "*.png;;*.jpg;;All Files(*)")
 
         if picNamepath != "":
             # image = cv.imread(img_path)
-            image = cv.imdecode(np.fromfile(
-                picNamepath, dtype=np.uint8), cv.IMREAD_COLOR)
+            image = cv.imdecode(np.fromfile(picNamepath, dtype=np.uint8),
+                                cv.IMREAD_COLOR)
 
             gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
@@ -314,8 +341,12 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # apikey=0df993c66c0c636e29ecbb5344252a4a
         # apikey=0ac44ae016490db2204ce0a042db2916
         payload = {'apikey': '0ab215a8b1977939201640fa14c66bab'}
-        headers = {"Referer": "https://m.douban.com/tv/american",
-                   "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"}
+        headers = {
+            "Referer":
+            "https://m.douban.com/tv/american",
+            "User-Agent":
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"
+        }
 
         # {"content-type": "multipart/form-data;","User-Agent": "MicroMessenger/","Referer": "https://servicewechat.com/wx2f9b06c1de1ccfca/91/page-frame.html"}
 
@@ -346,12 +377,11 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             # bookinfo.append('')
             # bookinfo.append('')
             LOG.info(rating)
-            #推荐度
-            recommend = round((float(rating['average']) - 2.5) * math.log(float(rating['numRaters'])+1))
+            # 推荐度
+            recommend = round((float(rating['average']) - 2.5) *
+                              math.log(float(rating['numRaters']) + 1))
             bookinfo.append(str(recommend))
-            
-            
-            
+
         return bookinfo
 
     @pyqtSlot()
@@ -369,8 +399,10 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         bookclass = self.cb_bookclass.currentText()
         bookshelf = self.le_bookshelf.text()
 
-        bookinfo = [isbn, title, author,
-                    publisher, price, self.star, self.num, bookclass, bookshelf]
+        bookinfo = [
+            isbn, title, author, publisher, price, self.star, self.num,
+            bookclass, bookshelf
+        ]
         LOG.info(f'插入记录 {len(bookinfo)} 项: {bookinfo}')
         self.model.updateItem(bookinfo)
 
@@ -402,12 +434,13 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
             # self.model.appendRow(bookinfo)
             self.model.updateItem(bookinfo)
-            self.statusBar.showMessage(
-                "共 " + str(self.model.rowCount()) + " 条记录")
+            self.statusBar.showMessage("共 " + str(self.model.rowCount()) +
+                                       " 条记录")
         else:
             LOG.warn("ISBN书号有误:  " + isbn)
             QtWidgets.QMessageBox.warning(
-                self, "错误", "ISBN书号有误！", QtWidgets.QMessageBox.StandardButton.Yes)
+                self, "错误", "ISBN书号有误！",
+                QtWidgets.QMessageBox.StandardButton.Yes)
 
     @pyqtSlot(QModelIndex)
     def on_tv_booklist_clicked(self, index):
@@ -547,8 +580,9 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
                     for isbn in isbnlist:
                         self.model.deleteItem(isbn)
                         LOG.info(f"删除信息： {isbn}")
-                    self.statusBar.showMessage(
-                        "共 " + str(self.model.rowCount()) + " 条记录")
+                    self.statusBar.showMessage("共 " +
+                                               str(self.model.rowCount()) +
+                                               " 条记录")
 
     @pyqtSlot()
     def on_pb_search_clicked(self):
@@ -585,29 +619,30 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.CW_bookinfo.lb_bookcover.setPixmap(QPixmap.fromImage(img))
 
         self.CW_bookinfo.tb_bookinfo.setText(
-            '<b><font color="black" size="5">' + douban_bookinfo[1] + '</font></b>')
+            '<b><font color="black" size="5">' + douban_bookinfo[1] +
+            '</font></b>')
+
+        self.CW_bookinfo.tb_bookinfo.append('<br><b>作者: </b>' +
+                                            douban_bookinfo[2])
+        self.CW_bookinfo.tb_bookinfo.append('<br><b>出版社: </b>' +
+                                            douban_bookinfo[3])
+        self.CW_bookinfo.tb_bookinfo.append('<br><b>价格: </b>' +
+                                            douban_bookinfo[4])
+        self.CW_bookinfo.tb_bookinfo.append('<br><b>日期: </b>' +
+                                            douban_bookinfo[10])
+        self.CW_bookinfo.tb_bookinfo.append('<br><b>ISBN: </b>' +
+                                            douban_bookinfo[0])
 
         self.CW_bookinfo.tb_bookinfo.append(
-            '<br><b>作者: </b>' + douban_bookinfo[2])
-        self.CW_bookinfo.tb_bookinfo.append(
-            '<br><b>出版社: </b>' + douban_bookinfo[3])
-        self.CW_bookinfo.tb_bookinfo.append(
-            '<br><b>价格: </b>' + douban_bookinfo[4])
-        self.CW_bookinfo.tb_bookinfo.append(
-            '<br><b>日期: </b>' + douban_bookinfo[10])
-        self.CW_bookinfo.tb_bookinfo.append(
-            '<br><b>ISBN: </b>' + douban_bookinfo[0])
-
-        self.CW_bookinfo.tb_bookinfo.append('<br><b>评分: </b>' + str(
-            douban_bookinfo[11]['average']) + '分/ ' + str(douban_bookinfo[11]['numRaters']) + '人')
+            '<br><b>评分: </b>' + str(douban_bookinfo[11]['average']) + '分/ ' +
+            str(douban_bookinfo[11]['numRaters']) + '人')
         # r = requests.get(book_dict['image'])
         # im = cv.imdecode(np.frombuffer(r.content, np.uint8), cv.IMREAD_COLOR) # 直接解码网络数据
         # cv.imshow('im', im)
         # cv.waitKey(0)
         self.Dialog.setWindowTitle("图书信息 - " + douban_bookinfo[1])
         LOG.info(f'获取封面信息 {len(douban_bookinfo)} 项: {douban_bookinfo}')
-        
-        
+
         self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
         self.Dialog.show()
 
