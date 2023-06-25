@@ -11,9 +11,7 @@ import time
 import math
 
 import cv2 as cv
-
 import numpy as np
-
 import pandas as pd
 import pyzbar.pyzbar as pyzbar
 
@@ -22,8 +20,8 @@ from PyQt6 import QtCore, QtWidgets  # , QtGui
 from PyQt6.QtCore import pyqtSignal, pyqtSlot, QModelIndex, QObject, QPoint, Qt, QThread
 from PyQt6.QtGui import QAction, QIcon, QImage, QPixmap
 from PyQt6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMenu
-from Ui_BookInfo import Ui_Dialog
 
+from Ui_BookInfo import Ui_Dialog
 from Ui_BookList import Ui_mainWindow
 
 LOG = logging.getLogger(os.path.basename(sys.argv[0]))
