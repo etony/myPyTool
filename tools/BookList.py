@@ -18,7 +18,7 @@ import pyzbar.pyzbar as pyzbar
 import requests
 from PyQt6 import QtCore, QtWidgets  # , QtGui
 from PyQt6.QtCore import pyqtSignal, pyqtSlot, QModelIndex, QObject, QPoint, Qt, QThread
-from PyQt6.QtGui import QAction, QIcon, QImage, QPixmap
+from PyQt6.QtGui import QIcon, QImage, QPixmap
 from PyQt6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMenu
 
 from Ui_BookInfo import Ui_Dialog
