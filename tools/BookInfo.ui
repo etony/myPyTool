@@ -31,6 +31,9 @@
    <property name="scaledContents">
     <bool>true</bool>
    </property>
+   <property name="openExternalLinks">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QTextBrowser" name="tb_bookinfo">
    <property name="enabled">
@@ -43,6 +46,9 @@
      <width>141</width>
      <height>261</height>
     </rect>
+   </property>
+   <property name="openExternalLinks">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>

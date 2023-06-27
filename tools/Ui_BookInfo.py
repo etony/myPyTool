@@ -18,10 +18,12 @@ class Ui_Dialog(object):
         self.lb_bookcover.setText("")
         self.lb_bookcover.setPixmap(QtGui.QPixmap("D:\\work\\GIT\\Python-Study\\tools\\bookcover.jpg"))
         self.lb_bookcover.setScaledContents(True)
+        self.lb_bookcover.setOpenExternalLinks(True)
         self.lb_bookcover.setObjectName("lb_bookcover")
         self.tb_bookinfo = QtWidgets.QTextBrowser(parent=Dialog)
         self.tb_bookinfo.setEnabled(False)
         self.tb_bookinfo.setGeometry(QtCore.QRect(330, 180, 141, 261))
+        self.tb_bookinfo.setOpenExternalLinks(True)
         self.tb_bookinfo.setObjectName("tb_bookinfo")
 
         self.retranslateUi(Dialog)

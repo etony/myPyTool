@@ -17,8 +17,8 @@ import pyzbar.pyzbar as pyzbar
 
 import requests
 from PyQt6 import QtCore, QtWidgets  # , QtGui
-from PyQt6.QtCore import pyqtSignal, pyqtSlot, QModelIndex, QObject, QPoint, Qt, QThread
-from PyQt6.QtGui import QIcon, QImage, QPixmap
+from PyQt6.QtCore import pyqtSignal, pyqtSlot, QModelIndex, QObject, QPoint, Qt, QThread, QUrl
+from PyQt6.QtGui import QIcon, QImage, QPixmap, QDesktopServices
 from PyQt6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMenu
 
 from Ui_BookInfo import Ui_Dialog
@@ -616,8 +616,11 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         douban_bookinfo = self.get_douban_isbn(str(bookinfo[0]))
         res = requests.get(douban_bookinfo[9])
         img = QImage.fromData(res.content)
+   
+        
+            
         self.CW_bookinfo.lb_bookcover.setPixmap(QPixmap.fromImage(img))
-
+        
         self.CW_bookinfo.tb_bookinfo.setText(
             '<b><font color="black" size="5">' + douban_bookinfo[1] +
             '</font></b>')
@@ -640,6 +643,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # im = cv.imdecode(np.frombuffer(r.content, np.uint8), cv.IMREAD_COLOR) # 直接解码网络数据
         # cv.imshow('im', im)
         # cv.waitKey(0)
+        #self.CW_bookinfo.tb_bookinfo.append('<a href="https://www.douban.com">douban</a>')
+        
         self.Dialog.setWindowTitle("图书信息 - " + douban_bookinfo[1])
         LOG.info(f'获取封面信息 {len(douban_bookinfo)} 项: {douban_bookinfo}')
 
