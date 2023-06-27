@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>160</y>
+      <y>140</y>
       <width>741</width>
-      <height>500</height>
+      <height>521</height>
      </rect>
     </property>
     <property name="toolTip">
@@ -39,9 +39,9 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>30</x>
       <y>10</y>
-      <width>621</width>
+      <width>731</width>
       <height>25</height>
      </rect>
     </property>
@@ -107,9 +107,9 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>90</y>
-      <width>621</width>
+      <x>30</x>
+      <y>80</y>
+      <width>731</width>
       <height>25</height>
      </rect>
     </property>
@@ -167,9 +167,9 @@ gridline-color:rgb(255, 13, 5)</string>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>120</y>
-      <width>621</width>
+      <x>30</x>
+      <y>110</y>
+      <width>741</width>
       <height>23</height>
      </rect>
     </property>
@@ -236,14 +236,28 @@ gridline-color:rgb(255, 13, 5)</string>
      <item>
       <widget class="QLineEdit" name="le_bookshelf"/>
      </item>
+     <item>
+      <widget class="QLabel" name="label_9">
+       <property name="text">
+        <string>评   分:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="le_average">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>30</x>
       <y>40</y>
-      <width>621</width>
+      <width>731</width>
       <height>25</height>
      </rect>
     </property>

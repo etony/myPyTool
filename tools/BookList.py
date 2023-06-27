@@ -421,6 +421,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             self.le_price.setText(bookinfo[4])
             self.star = bookinfo[5]
             self.num = bookinfo[6]
+            self.le_average.setText(f"{self.star} / {self.num}")
             LOG.info(f"获取评分: 评分:{self.star} 人数:{self.num}")
 
             # if len(self.le_bookclass.text().strip()) == 0:
@@ -461,6 +462,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.le_price.setText(bookinfo[4])
         self.star = bookinfo[5]
         self.num = bookinfo[6]
+        self.le_average.setText(f"{self.star} / {self.num}")
         LOG.info(f"获取评分: 评分:{self.star} 人数:{self.num}")
         # self.le_bookclass.setText(bookinfo[5])
         self.cb_bookclass.setCurrentIndex(bclass[bookinfo[7]])
