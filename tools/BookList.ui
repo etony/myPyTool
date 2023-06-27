@@ -124,7 +124,8 @@
      <item>
       <widget class="QLineEdit" name="le_bookname">
        <property name="styleSheet">
-        <string notr="true">background-color:rgb(234, 234, 234)</string>
+        <string notr="true">background-color:rgb(234, 234, 234);
+gridline-color:rgb(255, 13, 5)</string>
        </property>
       </widget>
      </item>

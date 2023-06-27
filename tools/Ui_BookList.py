@@ -56,7 +56,8 @@ class Ui_mainWindow(object):
         self.label_3.setObjectName("label_3")
         self.horizontalLayout_3.addWidget(self.label_3)
         self.le_bookname = QtWidgets.QLineEdit(parent=self.layoutWidget1)
-        self.le_bookname.setStyleSheet("background-color:rgb(234, 234, 234)")
+        self.le_bookname.setStyleSheet("background-color:rgb(234, 234, 234);\n"
+"gridline-color:rgb(255, 13, 5)")
         self.le_bookname.setObjectName("le_bookname")
         self.horizontalLayout_3.addWidget(self.le_bookname)
         self.label_4 = QtWidgets.QLabel(parent=self.layoutWidget1)
