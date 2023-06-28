@@ -13,6 +13,9 @@ class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
         mainWindow.resize(800, 688)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("D:\\work\\GIT\\Python-Study\\tools\\book2.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        mainWindow.setWindowIcon(icon)
         self.centralWidget = QtWidgets.QWidget(parent=mainWindow)
         self.centralWidget.setObjectName("centralWidget")
         self.tv_booklist = QtWidgets.QTableView(parent=self.centralWidget)

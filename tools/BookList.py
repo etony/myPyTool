@@ -29,6 +29,13 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S',
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     level=logging.INFO)
+# logging.basicConfig(
+#     filename='application.log',
+#     level=logging.WARNING,
+#     format='[%(asctime)s] {%(pathname)s:%(lineno)d} %(levelname)s - %(message)s',
+#     datefmt='%H:%M:%S'
+# )
+
 bclass = {'默认': 0, '默认分类': 0, '计划': 1, '已读': 2}
 bcol = ['ISBN', '书名', '作者', '出版社', '价格', '评分', '人数', '分类', '书柜']
 bdict = {
@@ -303,7 +310,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         """
         # TODO: not implemented yet
         picNamepath, picType = QFileDialog.getOpenFileName(
-            self, "选择条形码图片", "E:\\minipan\\Seafile\\资料",
+            self, "选择条形码图片", ".",
             "*.png;;*.jpg;;All Files(*)")
 
         if picNamepath != "":
