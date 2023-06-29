@@ -554,7 +554,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # inlist = set( ind.row() for ind in indexlist)
         # print(inlist)
 
-        ########## 删除当前行 ########################
+        # ######### 删除当前行 ########################
         # if self.model.rowCount() > 0:
         #     indexs = self.tv_booklist.selectedIndexes()
         #     if len(indexs) > 0:
@@ -566,7 +566,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         #             bookinfo = self.model.getItem(index)
         #             self.model.deleteItem(bookinfo[0])
 
-        ################### 多选删除 ##############
+        # ################## 多选删除 ##############
         if self.model.rowCount() > 0:
             indexs = self.tv_booklist.selectedIndexes()
             indexlist = set(index.row() for index in indexs)
