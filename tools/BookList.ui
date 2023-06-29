@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>图书管理</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>book2.png</normaloff>book2.png</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QTableView" name="tv_booklist">
     <property name="geometry">
