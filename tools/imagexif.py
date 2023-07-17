@@ -94,6 +94,7 @@ class ImageExifWindow(QMainWindow, Ui_MainWindow):
                 loc = self.locations(str(tags['GPS GPSLongitude']),
                                 str(tags['GPS GPSLatitude']))
                 exifinfo += '<br>坐标值:  ' + str(loc)
+                print(loc)
             except Exception as e:
                 exifinfo += "<br>GPS信息:  N/A"
                 print(e)
