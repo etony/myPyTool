@@ -376,13 +376,16 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             bookinfo.append(rating['numRaters'])
             bookinfo.append('计划')
             bookinfo.append('未设置')
-            bookinfo.append(book_dict['image'])
+            #bookinfo.append(book_dict['image'])
+            bookinfo.append(book_dict['images']['small'])
             bookinfo.append(book_dict['pubdate'])
             bookinfo.append(book_dict['rating'])
             # bookinfo.append('')
             # bookinfo.append('')
             LOG.info(rating)
             # 推荐度
+            
+            LOG.info(f'图书详细信息:   {book_dict}')
             recommend = round((float(rating['average']) - 2.5) *
                               math.log(float(rating['numRaters']) + 1))
             bookinfo.append(str(recommend))
@@ -621,7 +624,12 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         bookinfo = self.model.getItem(index.row())
 
         douban_bookinfo = self.get_douban_isbn(str(bookinfo[0]))
-        res = requests.get(douban_bookinfo[9])
+        url = douban_bookinfo[9]
+        ref = 'https://' + url.split('/')[2]
+        
+        header ={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.79'}
+        header['Referer'] = ref
+        res = requests.get(douban_bookinfo[9], headers=header)
         img = QImage.fromData(res.content)
    
         
@@ -654,6 +662,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         
         self.Dialog.setWindowTitle("图书信息 - " + douban_bookinfo[1])
         LOG.info(f'获取封面信息 {len(douban_bookinfo)} 项: {douban_bookinfo}')
+        
 
         self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
         self.Dialog.show()
