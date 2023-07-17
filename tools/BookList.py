@@ -102,13 +102,13 @@ class TableModel(QtCore.QAbstractTableModel):
                     ['书名', '作者', '出版社', '价格', '评分', '人数', '分类', '书柜']] = [
                         row[1], row[2], row[3], row[4], row[5], row[6], row[7],
                         row[8]
-                    ]
+                ]
             else:
                 self._data.loc[self._data.iloc[:, 0] == row[0],
                                ['书名', '作者', '出版社', '价格', '评分', '人数']] = [
                                    row[1], row[2], row[3], row[4], row[5],
                                    row[6]
-                               ]
+                ]
             self.endResetModel()
         else:
             self.beginResetModel()
@@ -376,13 +376,16 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             bookinfo.append(rating['numRaters'])
             bookinfo.append('计划')
             bookinfo.append('未设置')
-            bookinfo.append(book_dict['image'])
+            # bookinfo.append(book_dict['image'])
+            bookinfo.append(book_dict['images']['small'])
             bookinfo.append(book_dict['pubdate'])
             bookinfo.append(book_dict['rating'])
             # bookinfo.append('')
             # bookinfo.append('')
             LOG.info(rating)
             # 推荐度
+
+            LOG.info(f'图书详细信息:   {book_dict}')
             recommend = round((float(rating['average']) - 2.5) *
                               math.log(float(rating['numRaters']) + 1))
             bookinfo.append(str(recommend))
@@ -621,13 +624,17 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         bookinfo = self.model.getItem(index.row())
 
         douban_bookinfo = self.get_douban_isbn(str(bookinfo[0]))
-        res = requests.get(douban_bookinfo[9])
+        url = douban_bookinfo[9]
+        ref = 'https://' + url.split('/')[2]
+
+        header = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.79'}
+        header['Referer'] = ref
+        res = requests.get(douban_bookinfo[9], headers=header)
         img = QImage.fromData(res.content)
-   
-        
-            
+
         self.CW_bookinfo.lb_bookcover.setPixmap(QPixmap.fromImage(img))
-        
+
         self.CW_bookinfo.tb_bookinfo.setText(
             '<b><font color="black" size="5">' + douban_bookinfo[1] +
             '</font></b>')
@@ -650,8 +657,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # im = cv.imdecode(np.frombuffer(r.content, np.uint8), cv.IMREAD_COLOR) # 直接解码网络数据
         # cv.imshow('im', im)
         # cv.waitKey(0)
-        #self.CW_bookinfo.tb_bookinfo.append('<a href="https://www.douban.com">douban</a>')
-        
+        # self.CW_bookinfo.tb_bookinfo.append('<a href="https://www.douban.com">douban</a>')
+
         self.Dialog.setWindowTitle("图书信息 - " + douban_bookinfo[1])
         LOG.info(f'获取封面信息 {len(douban_bookinfo)} 项: {douban_bookinfo}')
 
