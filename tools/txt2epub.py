@@ -88,3 +88,5 @@ def txt2epub(save_as_path, text_file_path, cover_image_path, bookname, author):
 
 
 txt2epub('/Users/xulong/Downloads/冰与火之歌.epub', '/Users/xulong/Downloads/冰与火之歌.txt', '', bookname='书名', author='xulong')
+
+# https://github.com/aerkalov/ebooklib/tree/master/samples
