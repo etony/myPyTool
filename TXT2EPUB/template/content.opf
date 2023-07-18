@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='utf-8'?>
+<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="uuid_id" version="2.0">
+  <metadata xmlns:calibre="http://calibre.kovidgoyal.net/2009/metadata" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <dc:publisher>publisher</dc:publisher>
+    <meta name="cover" content="cover"/>
+    <dc:subject>subject</dc:subject>
+    <dc:creator opf:file-as="{{author}}" opf:role="aut">{{author}}</dc:creator>
+    <dc:description>desc</dc:description>
+    <dc:date>2022</dc:date>
+    <dc:title>{{bookname}}</dc:title>
+    <dc:language>zh</dc:language>
+    <meta content="horizontal-lr" name="primary-writing-mode"/>
+  </metadata>
+  <manifest>
+    <item href="cover.jpeg" id="cover" media-type="image/jpeg"/>
+    <item href="titlepage.xhtml" id="titlepage" media-type="application/xhtml+xml"/>
+    <!--  导航目录文件，是mobi格式产生目录的关键，同时可作为目录页面-->
+    <item href="text/nav.html" id="nav"  media-type="application/xhtml+xml"/>
+    {%- for part in parts %}
+        {% set outer_loop = loop %}
+        {%- for itm in part %}
+            <item href="text/part_{{outer_loop.index}}.html" id="id{{outer_loop.index}}_{{loop.index}}" media-type="application/xhtml+xml"/>
+        {%- endfor %}
+    {%- endfor %}
+    <item href="page_styles.css" id="page_css" media-type="text/css"/>
+    <item href="stylesheet.css" id="css" media-type="text/css"/>
+    <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
+  </manifest>
+  <spine toc="ncx">
+    <itemref idref="titlepage"/>
+    <!-- 在页面里显示目录(可选)　-->
+    <!-- <itemref idref="nav"/> -->
+
+    {%- for part in parts %}
+        {% set outer_loop = loop %}
+        {%- for itm in part %}
+            <itemref idref="id{{outer_loop.index}}_{{loop.index}}"/>
+        {%- endfor %}
+    {%- endfor %}
+  </spine>
+  <guide>
+    <reference href="text/part1.html" title="start" type="text"/>
+    <reference href="titlepage.xhtml" title="Cover" type="cover"/>
+    <reference href="text/nav.html" title="b_content" type="toc"/>
+  </guide>
+</package>

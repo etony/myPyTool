@@ -1,0 +1,235 @@
+.bt {
+    display: block;
+    font-size: 0.75em;
+    font-weight: bold;
+    line-height: 2;
+    text-align: center;
+    text-indent: 0;
+    margin: 10px 0 0
+    }
+.calibre {
+    display: block;
+    font-size: 1em;
+    line-height: 2;
+    padding-left: 0;
+    padding-right: 0;
+    text-align: justify;
+    word-wrap: break-word;
+    margin: 0 5pt
+    }
+.calibre1 {
+    color: #00C;
+    line-height: 2
+    }
+.calibre2 {
+    display: block;
+    line-height: 2
+    }
+.calibre3 {
+    font-weight: bold;
+    line-height: 2
+    }
+.calibre4 {
+    height: auto;
+    line-height: 2;
+    width: auto
+    }
+.calibre5 {
+    font-size: 0.75em;
+    line-height: 2;
+    vertical-align: sub
+    }
+.contents {
+    display: block;
+    line-height: 2;
+    margin-left: 0
+    }
+.contents-title {
+    display: block;
+    font-size: 1.41667em;
+    font-weight: bold;
+    letter-spacing: 1em;
+    line-height: 2;
+    margin-bottom: 1em;
+    text-align: center;
+    border-bottom: #000 dotted 1.5px
+    }
+.contents1 {
+    display: block;
+    line-height: 2;
+    margin-left: 2em
+    }
+.contents2 {
+    display: block;
+    line-height: 2;
+    margin-left: 4em
+    }
+.copyright-text {
+    display: block;
+    line-height: 2;
+    text-indent: 0;
+    margin: 1em 0
+    }
+.kt {
+    font-family: STKai, "MKai PRC", Kai;
+    font-size: 0.66667em;
+    line-height: 2
+    }
+.normaltext {
+    display: block;
+    line-height: 2;
+    text-indent: 2em;
+    margin: 0
+    }
+.normaltext1 {
+    display: block;
+    font-size: 1.125em;
+    line-height: 2;
+    text-align: center;
+    text-indent: 0;
+    margin: 0
+    }
+.normaltext2 {
+    display: block;
+    font-size: 1.41667em;
+    font-weight: bold;
+    line-height: 2;
+    text-align: center;
+    text-indent: 0;
+    margin: 0
+    }
+.normaltext3 {
+    display: block;
+    line-height: 2;
+    text-align: right;
+    text-indent: 2em;
+    margin: 0
+    }
+.normaltext4 {
+    display: block;
+    font-family: STKai, "MKai PRC", Kai;
+    font-size: 0.75em;
+    line-height: 2;
+    text-indent: 2em;
+    margin: 0
+    }
+.picture {
+    display: block;
+    line-height: 2;
+    text-align: center;
+    text-indent: 0;
+    margin: 8px 0
+    }
+.picture1 {
+    display: block;
+    line-height: 2;
+    text-align: center;
+    text-indent: 0;
+    margin: 0
+    }
+.subtitle {
+    display: block;
+    line-height: 2;
+    text-indent: 0;
+    margin: 0
+    }
+.subtitle1 {
+    display: block;
+    font-size: 1.41667em;
+    font-weight: bold;
+    line-height: 2;
+    text-indent: 0;
+    margin: 0.5em 0 0
+    }
+.subtitle2 {
+    display: block;
+    font-size: 1.41667em;
+    font-weight: bold;
+    line-height: 2;
+    text-align: center;
+    text-indent: 0;
+    margin: 0.5em 0
+    }
+.subtitle3 {
+    display: block;
+    font-size: 1.125em;
+    font-weight: bold;
+    line-height: 2;
+    text-align: center;
+    text-indent: 0;
+    margin: 0.5em 0
+    }
+.subtitle4 {
+    display: block;
+    font-size: 1.125em;
+    font-weight: bold;
+    line-height: 2;
+    text-indent: 0;
+    margin: 0.7em 0
+    }
+.subtitle5 {
+    display: block;
+    font-weight: bold;
+    line-height: 2;
+    text-indent: 2em;
+    margin: 0.5em 0
+    }
+.suptext {
+    font-size: 0.75em;
+    line-height: 2;
+    vertical-align: super
+    }
+.title {
+    display: block;
+    font-size: 1.41667em;
+    font-weight: bold;
+    line-height: 2;
+    text-align: center;
+    margin: 1em 0
+    }
+.title1 {
+    display: block;
+    font-size: 1.41667em;
+    font-weight: bold;
+    line-height: 2;
+    text-indent: 0;
+    margin: 1em 0
+    }
+.tpzz {
+    height: 1.2em;
+    line-height: 2;
+    vertical-align: middle;
+    width: auto
+    }
+.tpzz1 {
+    height: 2.2em;
+    line-height: 2;
+    vertical-align: middle;
+    width: auto
+    }
+.tpzz2 {
+    height: 1.5em;
+    line-height: 2;
+    vertical-align: middle;
+    width: auto
+    }
+.tpzz3 {
+    height: 1em;
+    line-height: 2;
+    vertical-align: middle;
+    width: auto
+    }
+.tpzz4 {
+    height: 2em;
+    line-height: 2;
+    vertical-align: middle;
+    width: auto
+    }
+.tz {
+    display: block;
+    font-size: 0.75em;
+    line-height: 2;
+    text-align: center;
+    text-indent: 0;
+    margin: 0 0 10px
+    }

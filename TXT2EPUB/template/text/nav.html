@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+<head>
+    <title>{{bookname}}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href="../stylesheet.css" rel="stylesheet" type="text/css"/>
+    <link href="../page_styles.css" rel="stylesheet" type="text/css"/>
+</head>
+<body class="calibre">
+<nav><!-- nav 标签很关键，mobi目录的产生需求，如果没有mobi格式显示目录不正常-->
+    <div class="contents-title">目录</div>
+    {%- for part in parts %}
+        {% set outer_loop = loop %}
+        {%- for itm in part %}
+            <div class="contents"><a class="calibre1" href="part_{{outer_loop.index}}.html#CHP_{{outer_loop.index}}_{{loop.index}}">{{itm[0]}}</a></div>
+        {%- endfor %}
+    {%- endfor %}
+
+</nav>
+</body>
+</html>
