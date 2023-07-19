@@ -38,6 +38,30 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         # TODO: not implemented yet
         raise NotImplementedError
 
+    @pyqtSlot()
+    def on_pb_epub_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        raise NotImplementedError
+
+    @pyqtSlot()
+    def on_pb_reset_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        raise NotImplementedError
+
+    @pyqtSlot()
+    def on_pb_txt_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        raise NotImplementedError
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
