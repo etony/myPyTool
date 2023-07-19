@@ -102,4 +102,4 @@ def txt2epub(save_as_path, text_file_path, cover_image_path, bookname, author, s
     pass
 
 
-txt2epub('明朝败家子.epub', '明朝败家子.txt', '', bookname='陈阳', author='xulong')
+txt2epub('吾弟大秦第一纨绔.epub', '吾弟大秦第一纨绔.txt', '', bookname='陈阳', author='xulong')
