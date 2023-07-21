@@ -39,7 +39,7 @@ def txt2epub(save_as_path, text_file_path, cover_image_path, bookname, author, s
             splits = re.split(regex, content, flags=re.M)
 
             # 按章节分组[(章节1标题,章节1内容）,(章节2标题,章节2内容),...]
-            items = [(splits[i], splits[i + 1]) for i in range(1, len(splits) - 1, 2)]
+            items = [(splits[i], splits[i + 1].replace(chr(10), '<br>').replace(chr(160), '')) for i in range(1, len(splits) - 1, 2)]
 
             # 按step章节分组，组成　[[(章节标题,章节内容）,(章节标题,章节内容)],.....]
             # 后续写入压缩文件时，按分组作为一个xhtml文件
@@ -102,4 +102,4 @@ def txt2epub(save_as_path, text_file_path, cover_image_path, bookname, author, s
     pass
 
 
-txt2epub('吾弟大秦第一纨绔.epub', '吾弟大秦第一纨绔.txt', '', bookname='陈阳', author='xulong')
+txt2epub('从前有座灵剑山.epub', '从前有座灵剑山.txt', '', bookname='陈阳', author='xulong')
