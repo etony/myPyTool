@@ -17,8 +17,8 @@ import pyzbar.pyzbar as pyzbar
 
 import requests
 from PyQt6 import QtCore, QtWidgets  # , QtGui
-from PyQt6.QtCore import pyqtSignal, pyqtSlot, QModelIndex, QObject, QPoint, Qt, QThread, QUrl
-from PyQt6.QtGui import QIcon, QImage, QPixmap, QDesktopServices
+from PyQt6.QtCore import pyqtSignal, pyqtSlot, QModelIndex, QObject, QPoint, Qt, QThread
+from PyQt6.QtGui import QIcon, QImage, QPixmap
 from PyQt6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMenu
 
 from Ui_BookInfo import Ui_Dialog
@@ -27,7 +27,7 @@ from Ui_BookList import Ui_mainWindow
 LOG = logging.getLogger(os.path.basename(sys.argv[0]))
 logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S',
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    format="%(asctime)s - %(levelname)s - 进程:%(process)d - %(filename)s - %(name)s - 行:%(lineno)d - 模块:%(module)s - %(message)s",
     level=logging.INFO)
 # logging.basicConfig(
 #     filename='application.log',
@@ -139,6 +139,7 @@ class TableModel(QtCore.QAbstractTableModel):
     def getItem(self, index):
         # 返回一条记录
         df = self._data.iloc[index]
+        LOG.info(df.values.tolist())
         return df.values.tolist()
 
     def getlist(self, index):
@@ -279,6 +280,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             # df.insert(loc=5, column='评分', value=0)
             # df.insert(loc=6, column='人数', value=0)
             df.index = df.index + 1
+            df.fillna('', inplace=True)
 
             self.model = TableModel(df)
             self.tv_booklist.setModel(self.model)  # 填充csv数据
