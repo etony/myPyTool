@@ -44,7 +44,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLineEdit" name="le_epub">
+   <widget class="QLineEdit" name="le_reg">
     <property name="geometry">
      <rect>
       <x>90</x>
@@ -57,7 +57,7 @@
      <string>^\s*([第卷][0123456789一二三四五六七八九十零〇百千两]*[章回部节集卷].*)\s*</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="le_reg">
+   <widget class="QLineEdit" name="le_epub">
     <property name="geometry">
      <rect>
       <x>90</x>
@@ -151,7 +151,7 @@
      <string>重  置</string>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>21</x>
@@ -190,6 +190,19 @@
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QPushButton" name="pb_cover">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>240</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>封   面</string>
+    </property>
    </widget>
   </widget>
  </widget>
