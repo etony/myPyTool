@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>40</y>
+      <y>20</y>
       <width>271</width>
       <height>21</height>
      </rect>
@@ -28,7 +28,7 @@
     <property name="geometry">
      <rect>
       <x>270</x>
-      <y>80</y>
+      <y>60</y>
       <width>111</width>
       <height>21</height>
      </rect>
@@ -38,7 +38,7 @@
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>80</y>
+      <y>60</y>
       <width>151</width>
       <height>21</height>
      </rect>
@@ -48,7 +48,7 @@
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>120</y>
+      <y>100</y>
       <width>311</width>
       <height>21</height>
      </rect>
@@ -61,7 +61,7 @@
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>160</y>
+      <y>140</y>
       <width>271</width>
       <height>21</height>
      </rect>
@@ -71,7 +71,7 @@
     <property name="geometry">
      <rect>
       <x>410</x>
-      <y>30</y>
+      <y>10</y>
       <width>141</width>
       <height>161</height>
      </rect>
@@ -90,7 +90,7 @@
     <property name="geometry">
      <rect>
       <x>230</x>
-      <y>80</y>
+      <y>60</y>
       <width>31</width>
       <height>16</height>
      </rect>
@@ -103,7 +103,7 @@
     <property name="geometry">
      <rect>
       <x>349</x>
-      <y>160</y>
+      <y>140</y>
       <width>31</width>
       <height>23</height>
      </rect>
@@ -116,7 +116,7 @@
     <property name="geometry">
      <rect>
       <x>349</x>
-      <y>40</y>
+      <y>20</y>
       <width>31</width>
       <height>23</height>
      </rect>
@@ -129,8 +129,8 @@
     <property name="geometry">
      <rect>
       <x>21</x>
-      <y>30</y>
-      <width>30</width>
+      <y>10</y>
+      <width>31</width>
       <height>161</height>
      </rect>
     </property>
@@ -169,7 +169,7 @@
     <property name="geometry">
      <rect>
       <x>70</x>
-      <y>200</y>
+      <y>180</y>
       <width>441</width>
       <height>25</height>
      </rect>

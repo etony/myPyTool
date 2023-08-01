@@ -11,7 +11,7 @@ from loguru import logger
 
 
 from PyQt6.QtCore import pyqtSlot
-from PyQt6.QtWidgets import QMainWindow,QDialog
+from PyQt6.QtWidgets import QMainWindow, QDialog
 from PyQt6.QtWidgets import QApplication, QFileDialog, QMessageBox
 from PyQt6.QtGui import QPixmap
 
@@ -36,7 +36,9 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         super().__init__(parent)
         self.setupUi(self)
         self.coverpath = ''
-        logger.add('日志_{time:YYYY-MM-DD}.log',rotation="1 day", format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {module}.{function} : {message}")
+        self.setFixedSize(self.width(), self.height())
+        logger.add('日志_{time:YYYY-MM-DD}.log', rotation="1 day",
+                   format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {module}.{function} : {message}")
         logger.info('初始化完成.')
 
     @pyqtSlot()
@@ -62,15 +64,13 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         # conver2 = Conver2epub('从前有座灵剑山.txt', '从前有座灵剑山3.epub')
         conver2.conver()
         logger.info('文件转换完成！')
-        reply=QMessageBox(QMessageBox.Icon.Information, '信息', '转换完成,是否打开存储目录？',
-                    QMessageBox.StandardButton.Ok|QMessageBox.StandardButton.No).exec()
-        if reply == QMessageBox.StandardButton.Ok :
+        reply = QMessageBox(QMessageBox.Icon.Information, '信息', '转换完成,是否打开存储目录？',
+                            QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.No).exec()
+        if reply == QMessageBox.StandardButton.Ok:
             dirname, filename = os.path.split(epubfile)
             print(dirname)
             # os.system("start explorer %s" %dirname)
             os.startfile(dirname)
-
-            
 
     @pyqtSlot()
     def on_pb_epub_clicked(self):
@@ -142,20 +142,14 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         self.CW_dir = Ui_Dialog()
         self.CW_dir.setupUi(self.Dialog)
         self.Dialog.setModal(True)
-        
-        
-        
+
         txtfile = self.le_txt.text().strip()
         epubfile = self.le_epub.text().strip()
 
-
         conver2 = Conver2epub(txtfile, epubfile)
         items = conver2.get_dir()
-        
-        
-        
-        
-        for i in items:            
+
+        for i in items:
             self.CW_dir.tb_dir.append(i)
         self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
         self.Dialog.show()
