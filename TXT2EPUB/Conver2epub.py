@@ -34,6 +34,24 @@ class Conver2epub():
 
     def set_identifier(self, id_epub):
         self.id_epub = id_epub
+        
+    def get_dir(self):
+        text_file_path = self.txtfile
+
+        with open(text_file_path, 'r', encoding="utf-8") as f:
+            content = f.read()
+            # 英文章节
+            # regex = "^\s*Chapter\s*[0123456789IVX]*"
+            # 中文章节
+            regex = self.reg
+            # 分割成［'','章节1标题','章节1内容','章节2标题','章节2内容',......］
+            splits = re.split(regex, content, flags=re.M)
+
+            # 按章节分组[(章节1标题,章节1内容）,(章节2标题,章节2内容),...]
+            items = [splits[i]
+                     for i in range(1, len(splits) - 1, 2)]
+        
+        return items
 
     def conver(self):
         book = epub.EpubBook()
@@ -148,5 +166,5 @@ class Conver2epub():
 
 if __name__ == "__main__":
 
-    cover2 = Conver2epub('从前有座灵剑山.txt', '从前有座灵剑山.epub')
+    cover2 = Conver2epub('从前有座灵剑山.txt', '从前有座灵剑山2.epub')
     cover2.conver()
