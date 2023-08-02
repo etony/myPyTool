@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>章节目录</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>book2.png</normaloff>book2.png</iconset>
+  </property>
   <widget class="QTextBrowser" name="tb_dir">
    <property name="geometry">
     <rect>

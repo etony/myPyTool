@@ -18,6 +18,7 @@ class Conver2epub():
         self.language = 'cn'
         self.author = 'etony.an@gmail.com'
         self.cover = 'cover.jpeg'
+        self.encode = 'utf-8'
         self.reg = r'^\s*([第卷][0123456789一二三四五六七八九十零〇百千两]*[章回部节集卷].*)\s*'
 
     def set_reg(self, reg):
@@ -35,10 +36,12 @@ class Conver2epub():
     def set_identifier(self, id_epub):
         self.id_epub = id_epub
         
+    def set_encode(self,encode):
+        self.encode=encode
     def get_dir(self):
         text_file_path = self.txtfile
 
-        with open(text_file_path, 'r', encoding="utf-8") as f:
+        with open(text_file_path, 'r', encoding=self.encode) as f:
             content = f.read()
             # 英文章节
             # regex = "^\s*Chapter\s*[0123456789IVX]*"

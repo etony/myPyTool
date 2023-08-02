@@ -53,6 +53,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         epubfile = self.le_epub.text().strip()
         title = self.le_title.text().strip()
         author = self.le_author.text().strip()
+        reg = self.te_reg.toPlainText().strip()
 
         conver2 = Conver2epub(txtfile, epubfile)
         if len(title) > 1:
@@ -61,9 +62,16 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             conver2.set_author(author)
         if len(self.coverpath) > 1:
             conver2.set_cover(self.coverpath)
+        if len(reg) > 5:
+            conver2.set_reg(reg)
+        if self.cb_encode.currentIndex() != 0:
+            encode = self.cb_encode.currentText()
+            conver2.set_encode(encode)
+            logger.info(f'指定文件编码: {self.cb_encode.currentIndex()}-{encode}')
         # conver2 = Conver2epub('从前有座灵剑山.txt', '从前有座灵剑山3.epub')
         conver2.conver()
         logger.info('文件转换完成！')
+        self.statusBar.showMessage("文件转换完成！")
         reply = QMessageBox(QMessageBox.Icon.Information, '信息', '转换完成,是否打开存储目录？',
                             QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.No).exec()
         if reply == QMessageBox.StandardButton.Ok:
@@ -94,7 +102,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         self.le_author.clear()
         self.le_txt.clear()
         self.le_epub.clear()
-        self.le_reg.clear()
+        self.te_reg.clear()
         self.le_title.clear()
         logger.info('选项重置！')
 
@@ -144,15 +152,28 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         self.Dialog.setModal(True)
 
         txtfile = self.le_txt.text().strip()
-        epubfile = self.le_epub.text().strip()
+        if os.path.exists(txtfile) :
+            
+            epubfile = self.le_epub.text().strip()
+            reg = self.te_reg.toPlainText().strip()
+    
+            conver2 = Conver2epub(txtfile, epubfile)
+            if len(reg) > 5:
+                conver2.set_reg(reg)
+            if self.cb_encode.currentIndex() != 0:
+                encode = self.cb_encode.currentText()
+                conver2.set_encode(encode)
+                logger.info(f'指定文件编码: {self.cb_encode.currentIndex()}-{encode}')                
+            items = conver2.get_dir()
+    
+            for i in items:
+                self.CW_dir.tb_dir.append(i)
+            self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
+            self.Dialog.show()
+            self.statusBar.clearMessage()
+        else:
+            self.statusBar.showMessage("未找到转换文件！")
 
-        conver2 = Conver2epub(txtfile, epubfile)
-        items = conver2.get_dir()
-
-        for i in items:
-            self.CW_dir.tb_dir.append(i)
-        self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
-        self.Dialog.show()
 
 
 if __name__ == "__main__":

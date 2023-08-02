@@ -13,6 +13,9 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(280, 404)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("D:\\work\\GIT\\Python-Study\\TXT2EPUB\\book2.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        Dialog.setWindowIcon(icon)
         self.tb_dir = QtWidgets.QTextBrowser(parent=Dialog)
         self.tb_dir.setGeometry(QtCore.QRect(10, 10, 261, 381))
         self.tb_dir.setObjectName("tb_dir")
