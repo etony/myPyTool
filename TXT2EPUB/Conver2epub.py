@@ -175,12 +175,13 @@ class Conver2txt():
         self.txtfile = txtfile
         self.epubfile = epubfile
         self.code = code
-        self.dirname, filename = os.path.split(epubfile)
+        self.dirname, filename = os.path.split(txtfile)
 
         self.book = epub.read_epub(self.epubfile)
 
     def set_code(self, code='utf-8'):
         self.code = code
+        
 
     def conver(self):
         # book = epub.read_epub(self.epubfile)

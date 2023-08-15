@@ -220,6 +220,8 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             self, "文件保存", output, 'txt(*.txt)')
         if out_txtpath != '':
             self.le_out_txt.setText(out_txtpath)
+            # self.dirname, in_filename = os.path.split(out_txtpath)
+            # print(self.dirname)
 
 
     @pyqtSlot()
