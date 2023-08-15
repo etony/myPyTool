@@ -37,9 +37,10 @@ class Conver2epub():
 
     def set_identifier(self, id_epub):
         self.id_epub = id_epub
-        
-    def set_encode(self,encode):
-        self.encode=encode
+
+    def set_encode(self, encode):
+        self.encode = encode
+
     def get_dir(self):
         text_file_path = self.txtfile
 
@@ -55,7 +56,7 @@ class Conver2epub():
             # 按章节分组[(章节1标题,章节1内容）,(章节2标题,章节2内容),...]
             items = [splits[i]
                      for i in range(1, len(splits) - 1, 2)]
-        
+
         return items
 
     def conver(self):
@@ -168,30 +169,38 @@ class Conver2epub():
         # write to the file
         epub.write_epub(self.epubfile, book, {})
 
+
 class Conver2txt():
-    def __init__(self, epubfile, txtfile):
+    def __init__(self, epubfile, txtfile, code='utf-8'):
         self.txtfile = txtfile
         self.epubfile = epubfile
+        self.code = code
         self.dirname, filename = os.path.split(epubfile)
-        
+
         self.book = epub.read_epub(self.epubfile)
+
+    def set_code(self, code='utf-8'):
+        self.code = code
+
     def conver(self):
         # book = epub.read_epub(self.epubfile)
 
-        with open(self.txtfile,'a') as f:            
+        with open(self.txtfile, 'a', encoding='utf-8') as f:
             for item in self.book.get_items():
-                print(f'item类型:  {item.get_type()} name: {item.get_name()} id: {item.get_id()}')
-                if (item.get_type() == ebooklib.ITEM_IMAGE) and (item.get_name().find('cover')>=0):                    
+                print(
+                    f'item类型:  {item.get_type()} name: {item.get_name()} id: {item.get_id()}')
+                if ((item.get_type() == ebooklib.ITEM_IMAGE) or (item.get_type() == ebooklib.ITEM_COVER)) and (item.get_name().find('cover') >= 0):
                     coverpath = os.path.join(self.dirname, item.get_name())
-                    with open(coverpath,'wb') as ff:                       
+                    with open(coverpath, 'wb') as ff:
                         ff.write(item.get_content())
                         print('cover 已提取')
-                        
+
                 if item.get_type() == ebooklib.ITEM_DOCUMENT:
-                    soup = BeautifulSoup(item.get_content(), 'xml')
+                    soup = BeautifulSoup(
+                        item.get_content().decode('utf-8'), 'xml')
                     f.write(soup.text)
                     f.write('==================================')
-        
+
                     '''
                     ITEM_UNKNOWN = 0
                     ITEM_IMAGE = 1
@@ -205,22 +214,38 @@ class Conver2txt():
                     ITEM_DOCUMENT = 9
                     ITEM_COVER = 10
                     '''
-                    
+
     def get_info(self):
         # book = epub.read_epub(self.epubfile)
-        book_info ={}
+        book_info = {}
         book_info['title'] = self.book.get_metadata('DC', 'title')[0][0]
         book_info['creator'] = self.book.get_metadata('DC', 'creator')[0][0]
-        book_info['contributor'] = self.book.get_metadata('DC', 'contributor')[0][0]
+        book_info['contrib'] = self.book.get_metadata(
+            'DC', 'contributor')[0][0]
         book_info['date'] = self.book.get_metadata('DC', 'date')[0][0]
         return book_info
-    
+
     def get_cover(self):
         # book = epub.read_epub(self.epubfile)
         cover = self.book.get_item_with_id('cover')
-        return cover
-                    
+        if (cover.get_type() == ebooklib.ITEM_IMAGE) or (cover.get_type() == ebooklib.ITEM_COVER):
+            return cover.get_content()
+
+        cover = self.book.get_item_with_id('cover-img')
+        if (cover.get_type() == ebooklib.ITEM_IMAGE) or (cover.get_type() == ebooklib.ITEM_COVER):
+            return cover.get_content()
+
+        items = self.book.get_items_of_type(ebooklib.ITEM_COVER)
+        if len(items):
+            return items[1].get_content()
+
+        items = self.book.get_items_of_type(ebooklib.ITEM_IMAGE)
+        for item in items:
+            if (item.get_name().find('cover') >= 0):
+                return item.get_content()
+
+
 if __name__ == "__main__":
 
-    cover2 = Conver2epub('从前有座灵剑山.txt', '从前有座灵剑山2.epub')
+    cover2 = Conver2epub('从前有座灵剑山.txt', '从前有座灵剑山.epub')
     cover2.conver()

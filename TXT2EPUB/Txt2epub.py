@@ -203,16 +203,18 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             book_info = conver2txt.get_info()
             self.le_book_title.setText(book_info['title'])
             self.le_book_creater.setText(book_info['creator'])
-            self.le_book_contrib.setText(book_info['contributor'])
+            self.le_book_contrib.setText(book_info['contrib'])
             self.le_book_date.setText(book_info['date'])
             self.pb_out_txt.setEnabled(True)
+            
+            logger.info(f'cover type: {type(conver2txt.get_cover())}')
+            
 
     @pyqtSlot()
     def on_pb_out_txt_clicked(self):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
         output = os.path.join(self.in_dirname, 'output')
         out_txtpath, type = QFileDialog.getSaveFileName(
             self, "文件保存", output, 'txt(*.txt)')
@@ -225,7 +227,6 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
         conver2txt = Conver2txt(self.le_in_epub.text(), self.le_out_txt.text())
         # print(conver2txt.get_info())
         conver2txt.conver()
@@ -237,7 +238,6 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
         self.le_book_contrib.clear()
         self.le_book_creater.clear()
         self.le_book_date.clear()
