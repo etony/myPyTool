@@ -205,6 +205,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             self.le_book_creater.setText(book_info['creator'])
             self.le_book_contrib.setText(book_info['contributor'])
             self.le_book_date.setText(book_info['date'])
+            self.pb_out_txt.setEnabled(True)
 
     @pyqtSlot()
     def on_pb_out_txt_clicked(self):
@@ -243,6 +244,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         self.le_book_title.clear()
         self.le_in_epub.clear()
         self.le_out_txt.clear()
+        self.pb_out_txt.setEnabled(False)
 
 
 if __name__ == "__main__":

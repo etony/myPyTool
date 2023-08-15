@@ -195,6 +195,7 @@ class Ui_MainWindow(object):
         self.le_out_txt.setObjectName("le_out_txt")
         self.horizontalLayout_7.addWidget(self.le_out_txt)
         self.pb_out_txt = QtWidgets.QPushButton(parent=self.widget)
+        self.pb_out_txt.setEnabled(False)
         self.pb_out_txt.setObjectName("pb_out_txt")
         self.horizontalLayout_7.addWidget(self.pb_out_txt)
         self.verticalLayout.addLayout(self.horizontalLayout_7)

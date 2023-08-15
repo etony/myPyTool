@@ -173,12 +173,14 @@ class Conver2txt():
         self.txtfile = txtfile
         self.epubfile = epubfile
         self.dirname, filename = os.path.split(epubfile)
+        
+        self.book = epub.read_epub(self.epubfile)
     def conver(self):
-        book = epub.read_epub(self.epubfile)
+        # book = epub.read_epub(self.epubfile)
 
         with open(self.txtfile,'a') as f:            
-            for item in book.get_items():
-                print(f'item类型  {item.get_type()}  {item.get_name()} ')
+            for item in self.book.get_items():
+                print(f'item类型:  {item.get_type()} name: {item.get_name()} id: {item.get_id()}')
                 if (item.get_type() == ebooklib.ITEM_IMAGE) and (item.get_name().find('cover')>=0):                    
                     coverpath = os.path.join(self.dirname, item.get_name())
                     with open(coverpath,'wb') as ff:                       
@@ -205,13 +207,18 @@ class Conver2txt():
                     '''
                     
     def get_info(self):
-        book = epub.read_epub(self.epubfile)
+        # book = epub.read_epub(self.epubfile)
         book_info ={}
-        book_info['title'] = book.get_metadata('DC', 'title')[0][0]
-        book_info['creator'] = book.get_metadata('DC', 'creator')[0][0]
-        book_info['contributor'] = book.get_metadata('DC', 'contributor')[0][0]
-        book_info['date'] = book.get_metadata('DC', 'date')[0][0]
+        book_info['title'] = self.book.get_metadata('DC', 'title')[0][0]
+        book_info['creator'] = self.book.get_metadata('DC', 'creator')[0][0]
+        book_info['contributor'] = self.book.get_metadata('DC', 'contributor')[0][0]
+        book_info['date'] = self.book.get_metadata('DC', 'date')[0][0]
         return book_info
+    
+    def get_cover(self):
+        # book = epub.read_epub(self.epubfile)
+        cover = self.book.get_item_with_id('cover')
+        return cover
                     
 if __name__ == "__main__":
 
