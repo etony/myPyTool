@@ -3,10 +3,8 @@
 """
 Module implementing Txt2epub.
 """
-import logging
 import os
 import sys
-import re
 from loguru import logger
 
 
@@ -18,7 +16,7 @@ from PyQt6.QtGui import QPixmap
 from Ui_Txt2epub import Ui_MainWindow
 from Ui_Dir import Ui_Dialog
 
-from Conver2epub import Conver2epub
+from Conver2epub import Conver2epub, Conver2txt
 
 
 class Txt2epub(QMainWindow, Ui_MainWindow):
@@ -47,7 +45,6 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
 
         txtfile = self.le_txt.text().strip()
         epubfile = self.le_epub.text().strip()
@@ -55,50 +52,58 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         author = self.le_author.text().strip()
         reg = self.te_reg.toPlainText().strip()
 
-        conver2 = Conver2epub(txtfile, epubfile)
-        if len(title) > 1:
-            conver2.set_title(title)
-        if len(author) > 1:
-            conver2.set_author(author)
-        if len(self.coverpath) > 1:
-            conver2.set_cover(self.coverpath)
-        if len(reg) > 5:
-            conver2.set_reg(reg)
-        if self.cb_encode.currentIndex() != 0:
-            encode = self.cb_encode.currentText()
-            conver2.set_encode(encode)
-            logger.info(f'指定文件编码: {self.cb_encode.currentIndex()}-{encode}')
-        # conver2 = Conver2epub('从前有座灵剑山.txt', '从前有座灵剑山3.epub')
-        conver2.conver()
-        logger.info('文件转换完成！')
-        self.statusBar.showMessage("文件转换完成！")
-        reply = QMessageBox(QMessageBox.Icon.Information, '信息', '转换完成,是否打开存储目录？',
-                            QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.No).exec()
-        if reply == QMessageBox.StandardButton.Ok:
-            dirname, filename = os.path.split(epubfile)
-            print(dirname)
-            # os.system("start explorer %s" %dirname)
-            os.startfile(dirname)
+        if os.path.exists(txtfile):
+            conver2 = Conver2epub(txtfile, epubfile)
+            if len(title) > 1:
+                conver2.set_title(title)
+            if len(author) > 1:
+                conver2.set_author(author)
+            if len(self.coverpath) > 1:
+                conver2.set_cover(self.coverpath)
+            if len(reg) > 5:
+                conver2.set_reg(reg)
+            if self.cb_encode.currentIndex() != 0:
+                encode = self.cb_encode.currentText()
+                conver2.set_encode(encode)
+                logger.info(
+                    f'指定文件编码: {self.cb_encode.currentIndex()}-{encode}')
+            # conver2 = Conver2epub('从前有座灵剑山.txt', '从前有座灵剑山3.epub')
+            conver2.conver()
+            logger.info('文件转换完成！')
+            self.statusBar.showMessage("文件转换完成！")
+            reply = QMessageBox(QMessageBox.Icon.Information, '信息', '转换完成,是否打开存储目录？',
+                                QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.No).exec()
+            if reply == QMessageBox.StandardButton.Ok:
+                dirname, filename = os.path.split(epubfile)
+                print(dirname)
+                # os.system("start explorer %s" %dirname)
+                os.startfile(dirname)
+        else:
+            self.statusBar.showMessage("未指定转换文件！")
 
     @pyqtSlot()
     def on_pb_epub_clicked(self):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
         # 前面是地址，后面是文件类型,得到输入地址的文件名和地址txt(*.txt*.xls);;image(*.png)不同类别
-        epubpath, type = QFileDialog.getSaveFileName(
-            self, "文件保存", "output", 'epub(*.epub)')
-        if epubpath != '':
-            self.le_epub.setText(epubpath)
-            logger.info(f'指定存储路径: {epubpath}')
+
+        if len(self.le_txt.text().strip()) > 5 and os.path.exists(self.le_txt.text().strip()):
+            output = os.path.join(self.dirname, 'output')
+            epubpath, type = QFileDialog.getSaveFileName(
+                self, "文件保存", output, 'epub(*.epub)')
+            if epubpath != '':
+                self.le_epub.setText(epubpath)
+                logger.info(f'指定存储路径: {epubpath}')
+        else:
+            logger.info('未指定转换文件！')
+            self.statusBar.showMessage('未指定转换文件！')
 
     @pyqtSlot()
     def on_pb_reset_clicked(self):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
         self.le_author.clear()
         self.le_txt.clear()
         self.le_epub.clear()
@@ -111,27 +116,26 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
         txtpath, txtType = QFileDialog.getOpenFileName(
             self, "选择源文件", "\.", "*.txt;;All Files(*)")
         if txtpath != "":
             self.le_txt.setText(txtpath)
 
-            dirname, filename = os.path.split(txtpath)
+            self.dirname, filename = os.path.split(txtpath)
             file_name, extension = os.path.splitext(os.path.basename(txtpath))
-            self.epubpath = os.path.join(dirname, file_name) + '.epub'
+            self.epubpath = os.path.join(self.dirname, file_name) + '.epub'
             self.title = file_name.strip()
             self.le_epub.setText(self.epubpath)
             self.le_title.setText(self.title)
             self.le_author.setText(self.title)
             logger.info(f'指定转换文件:{txtpath}')
+            self.statusBar.showMessage(f'指定转换文件:{txtpath}')
 
     @pyqtSlot()
     def on_pb_cover_clicked(self):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
         self.coverpath, coverType = QFileDialog.getOpenFileName(
             self, "选择封面图片", "\.", "*.jpg;;All Files(*)")
 
@@ -145,27 +149,27 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
         self.Dialog = QDialog()
         self.CW_dir = Ui_Dialog()
         self.CW_dir.setupUi(self.Dialog)
         self.Dialog.setModal(True)
 
         txtfile = self.le_txt.text().strip()
-        if os.path.exists(txtfile) :
-            
+        if os.path.exists(txtfile):
+
             epubfile = self.le_epub.text().strip()
             reg = self.te_reg.toPlainText().strip()
-    
+
             conver2 = Conver2epub(txtfile, epubfile)
             if len(reg) > 5:
                 conver2.set_reg(reg)
             if self.cb_encode.currentIndex() != 0:
                 encode = self.cb_encode.currentText()
                 conver2.set_encode(encode)
-                logger.info(f'指定文件编码: {self.cb_encode.currentIndex()}-{encode}')                
+                logger.info(
+                    f'指定文件编码: {self.cb_encode.currentIndex()}-{encode}')
             items = conver2.get_dir()
-    
+
             for i in items:
                 self.CW_dir.tb_dir.append(i)
             self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
@@ -174,6 +178,71 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         else:
             self.statusBar.showMessage("未找到转换文件！")
 
+    @pyqtSlot()
+    def on_pb_in_epub_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        in_epubpath, in_epubType = QFileDialog.getOpenFileName(
+            self, "选择源文件", "\.", "*.epub;;All Files(*)")
+        if in_epubpath != "":
+            self.le_in_epub.setText(in_epubpath)
+
+            self.in_dirname, in_filename = os.path.split(in_epubpath)
+            in_file_name, in_extension = os.path.splitext(
+                os.path.basename(in_epubpath))
+            self.out_txtpath = os.path.join(
+                self.in_dirname, in_file_name) + '.txt'
+            self.le_out_txt.setText(self.out_txtpath)
+
+            logger.info(f'指定转换文件:{in_epubpath}')
+            self.statusBar.showMessage(f'指定转换文件:{in_epubpath}')
+
+            conver2txt = Conver2txt(
+                self.le_in_epub.text(), self.le_out_txt.text())
+            book_info = conver2txt.get_info()
+            self.le_book_title.setText(book_info['title'])
+            self.le_book_creater.setText(book_info['creator'])
+            self.le_book_contrib.setText(book_info['contributor'])
+            self.le_book_date.setText(book_info['date'])
+
+    @pyqtSlot()
+    def on_pb_out_txt_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        output = os.path.join(self.in_dirname, 'output')
+        out_txtpath, type = QFileDialog.getSaveFileName(
+            self, "文件保存", output, 'txt(*.txt)')
+        if out_txtpath != '':
+            self.le_out_txt.setText(out_txtpath)
+
+
+    @pyqtSlot()
+    def on_pb_out_conver_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        conver2txt = Conver2txt(self.le_in_epub.text(), self.le_out_txt.text())
+        # print(conver2txt.get_info())
+        conver2txt.conver()
+        logger.info('文件转换完成！')
+        self.statusBar.showMessage("文件转换完成！")
+
+    @pyqtSlot()
+    def on_pb_out_reset_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        self.le_book_contrib.clear()
+        self.le_book_creater.clear()
+        self.le_book_date.clear()
+        self.le_book_title.clear()
+        self.le_in_epub.clear()
+        self.le_out_txt.clear()
 
 
 if __name__ == "__main__":

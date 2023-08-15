@@ -4,9 +4,11 @@ Created on Tue Aug  1 09:04:38 2023
 
 @author: admin
 """
+import ebooklib
 from ebooklib import epub
-# import os
+from bs4 import BeautifulSoup
 import re
+import os
 
 
 class Conver2epub():
@@ -118,7 +120,7 @@ class Conver2epub():
 
         text_file_path = self.txtfile
 
-        with open(text_file_path, 'r', encoding="utf-8") as f:
+        with open(text_file_path, 'r', encoding=self.encode) as f:
             content = f.read()
             # 英文章节
             # regex = "^\s*Chapter\s*[0123456789IVX]*"
@@ -166,7 +168,51 @@ class Conver2epub():
         # write to the file
         epub.write_epub(self.epubfile, book, {})
 
+class Conver2txt():
+    def __init__(self, epubfile, txtfile):
+        self.txtfile = txtfile
+        self.epubfile = epubfile
+        self.dirname, filename = os.path.split(epubfile)
+    def conver(self):
+        book = epub.read_epub(self.epubfile)
 
+        with open(self.txtfile,'a') as f:            
+            for item in book.get_items():
+                print(f'item类型  {item.get_type()}  {item.get_name()} ')
+                if (item.get_type() == ebooklib.ITEM_IMAGE) and (item.get_name().find('cover')>=0):                    
+                    coverpath = os.path.join(self.dirname, item.get_name())
+                    with open(coverpath,'wb') as ff:                       
+                        ff.write(item.get_content())
+                        print('cover 已提取')
+                        
+                if item.get_type() == ebooklib.ITEM_DOCUMENT:
+                    soup = BeautifulSoup(item.get_content(), 'xml')
+                    f.write(soup.text)
+                    f.write('==================================')
+        
+                    '''
+                    ITEM_UNKNOWN = 0
+                    ITEM_IMAGE = 1
+                    ITEM_STYLE = 2
+                    ITEM_SCRIPT = 3
+                    ITEM_NAVIGATION = 4
+                    ITEM_VECTOR = 5
+                    ITEM_FONT = 6
+                    ITEM_VIDEO = 7
+                    ITEM_AUDIO = 8
+                    ITEM_DOCUMENT = 9
+                    ITEM_COVER = 10
+                    '''
+                    
+    def get_info(self):
+        book = epub.read_epub(self.epubfile)
+        book_info ={}
+        book_info['title'] = book.get_metadata('DC', 'title')[0][0]
+        book_info['creator'] = book.get_metadata('DC', 'creator')[0][0]
+        book_info['contributor'] = book.get_metadata('DC', 'contributor')[0][0]
+        book_info['date'] = book.get_metadata('DC', 'date')[0][0]
+        return book_info
+                    
 if __name__ == "__main__":
 
     cover2 = Conver2epub('从前有座灵剑山.txt', '从前有座灵剑山2.epub')
