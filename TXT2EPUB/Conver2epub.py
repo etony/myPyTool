@@ -9,6 +9,7 @@ from ebooklib import epub
 from bs4 import BeautifulSoup
 import re
 import os
+import datetime
 
 
 class Conver2epub():
@@ -66,6 +67,10 @@ class Conver2epub():
         book.set_identifier(self.id_epub)
         book.set_title(self.title)
         book.set_language(self.language)
+        book.add_metadata('DC', 'date', str(datetime.datetime.now()))
+        book.add_metadata('DC', 'contributor', 'etony.an@gmail.com')
+        book.add_metadata('DC', 'description', '请注意，该EPUB文档由TXT文本文件转换生成，原始内容源于互联网。')
+        
         book.add_author(self.author)
         # book.add_author('作者2', file_as='作者2', role='ill', uid='coauthor')
         book.set_cover("cover.jpeg", open(self.cover, 'rb').read())
@@ -73,7 +78,7 @@ class Conver2epub():
         # add default NCX and Nav file
         book.add_item(epub.EpubNcx())
         book.add_item(epub.EpubNav())
-
+        
         # define CSS style
         # style = 'pre{white-space:pre-wrap;background:#f7f9fa;padding:10px 15px;color:#263238;line-height:1.6;font-size:13px;border-radius:3px margin-top: 0;margin-bottom:1em;overflow:auto}b,strong{font-weight:bolder}#title{font-size:16px;color:#212121;font-weight:600;margin-bottom:10px}hr{height:10px;border:0;box-shadow:0 10px 10px -10px #8c8b8b inset}'
 
