@@ -176,6 +176,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
             self.Dialog.show()
             self.statusBar.clearMessage()
+            logger.info('生成章节目录！')
         else:
             self.statusBar.showMessage("未找到转换文件！")
 
