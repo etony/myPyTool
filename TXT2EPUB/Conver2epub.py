@@ -188,13 +188,13 @@ class Conver2txt():
 
         with open(self.txtfile, 'a', encoding='utf-8') as f:
             for item in self.book.get_items():
-                print(
-                    f'item类型:  {item.get_type()} name: {item.get_name()} id: {item.get_id()}')
+                # print(
+                #     f'item类型:  {item.get_type()} name: {item.get_name()} id: {item.get_id()}')
                 if ((item.get_type() == ebooklib.ITEM_IMAGE) or (item.get_type() == ebooklib.ITEM_COVER)) and (item.get_name().find('cover') >= 0):
                     coverpath = os.path.join(self.dirname, item.get_name())
                     with open(coverpath, 'wb') as ff:
                         ff.write(item.get_content())
-                        print('cover 已提取')
+                        # print('cover 已提取')
 
                 if item.get_type() == ebooklib.ITEM_DOCUMENT:
                     soup = BeautifulSoup(

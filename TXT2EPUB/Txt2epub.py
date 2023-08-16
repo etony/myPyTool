@@ -5,6 +5,7 @@ Module implementing Txt2epub.
 """
 import os
 import sys
+import datetime
 from loguru import logger
 
 
@@ -37,7 +38,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         self.setFixedSize(self.width(), self.height())
         logger.add('日志_{time:YYYY-MM-DD}.log', rotation="1 day",
                    format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {module}.{function} : {message}")
-        logger.info('初始化完成.')
+        logger.info('程序启动.')
 
     @pyqtSlot()
     @logger.catch()
@@ -75,7 +76,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
                                 QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.No).exec()
             if reply == QMessageBox.StandardButton.Ok:
                 dirname, filename = os.path.split(epubfile)
-                print(dirname)
+                logger.info(f'打开存贮目录: {dirname}')
                 # os.system("start explorer %s" %dirname)
                 os.startfile(dirname)
         else:
@@ -204,16 +205,19 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             self.le_book_title.setText(book_info['title'])
             self.le_book_creater.setText(book_info['creator'])
             self.le_book_contrib.setText(book_info['contrib'])
-            self.le_book_date.setText(book_info['date'])
+            
+            date = datetime.datetime.fromisoformat(book_info['date'])
+            
+            self.le_book_date.setText(date.strftime('%Y-%m-%d %H:%M:%S'))
             self.pb_out_txt.setEnabled(True)
             
-            logger.info(f'cover type: {type(conver2txt.get_cover())}')
+            # logger.info(f'cover type: {type(conver2txt.get_cover())}')
             
             bookcover = conver2txt.get_cover()
             img = QImage.fromData(bookcover)
             cover = QPixmap.fromImage(img)
             self.lb_cover.setPixmap(cover)
-            
+            logger.info(f'提取epub文件信息完毕: {book_info}')
 
     @pyqtSlot()
     def on_pb_out_txt_clicked(self):
@@ -225,8 +229,6 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             self, "文件保存", output, 'txt(*.txt)')
         if out_txtpath != '':
             self.le_out_txt.setText(out_txtpath)
-            # self.dirname, in_filename = os.path.split(out_txtpath)
-            # print(self.dirname)
 
 
     @pyqtSlot()
@@ -235,7 +237,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         conver2txt = Conver2txt(self.le_in_epub.text(), self.le_out_txt.text())
-        # print(conver2txt.get_info())
+
         if self.cb_out_code.currentIndex() != 0:
             encode = self.cb_out_code.currentText()
             conver2txt.set_code(encode)
