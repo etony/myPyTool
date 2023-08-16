@@ -88,13 +88,27 @@ class Conver2epub():
         body {
             font-family: Cambria, Liberation Serif, Bitstream Vera Serif, Georgia, Times, Times New Roman, serif;
         }
+        
+        h1 {
+              text-align: left;
+              text-transform: uppercase;
+              font-weight: 500; 
+              color:red;
 
+        }
+        
         h2 {
               text-align: left;
               text-transform: uppercase;
-              font-weight: 200;     
+              font-weight: 200; 
+              text-indent: 30%;
         }
+        
+        p {
+              text-indent: 30%;
+              color: #688862
 
+        }
         ol {
                 list-style-type: none;
         }
@@ -150,6 +164,7 @@ class Conver2epub():
                 chapter = epub.EpubHtml(
                     title=str_title, file_name=str_title + '.xhtml', lang='hr')
                 chapter.content = u'<h1>' + str_title + '</h1><p>' + str_content + '</p>'
+                chapter.add_item(nav_css)
 
                 # add chapter
                 book.add_item(chapter)
