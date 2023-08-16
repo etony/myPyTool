@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>C:/Users/admin/.designer/backup/book2.png</normaloff>C:/Users/admin/.designer/backup/book2.png</iconset>
+    <normaloff>book2.png</normaloff>book2.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QTabWidget" name="tabWidget">
@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -70,7 +70,7 @@
          </item>
          <item>
           <property name="text">
-           <string>gb2312</string>
+           <string>gbk</string>
           </property>
          </item>
         </widget>
@@ -241,7 +241,7 @@
        <string/>
       </property>
       <property name="pixmap">
-       <pixmap>C:/Users/admin/.designer/backup/cover.jpeg</pixmap>
+       <pixmap>cover.jpeg</pixmap>
       </property>
       <property name="scaledContents">
        <bool>true</bool>
@@ -294,7 +294,7 @@
        <string>重   置</string>
       </property>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -321,6 +321,20 @@
            <property name="text">
             <string>EPUB</string>
            </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="cb_out_code">
+           <item>
+            <property name="text">
+             <string>utf-8</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>gbk</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>
@@ -398,6 +412,22 @@
         </layout>
        </item>
       </layout>
+     </widget>
+     <widget class="QLabel" name="lb_cover">
+      <property name="geometry">
+       <rect>
+        <x>430</x>
+        <y>10</y>
+        <width>121</width>
+        <height>191</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
      </widget>
     </widget>
    </widget>

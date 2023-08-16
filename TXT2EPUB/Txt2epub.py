@@ -11,7 +11,7 @@ from loguru import logger
 from PyQt6.QtCore import pyqtSlot
 from PyQt6.QtWidgets import QMainWindow, QDialog
 from PyQt6.QtWidgets import QApplication, QFileDialog, QMessageBox
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtGui import QPixmap, QImage
 
 from Ui_Txt2epub import Ui_MainWindow
 from Ui_Dir import Ui_Dialog
@@ -209,6 +209,11 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             
             logger.info(f'cover type: {type(conver2txt.get_cover())}')
             
+            bookcover = conver2txt.get_cover()
+            img = QImage.fromData(bookcover)
+            cover = QPixmap.fromImage(img)
+            self.lb_cover.setPixmap(cover)
+            
 
     @pyqtSlot()
     def on_pb_out_txt_clicked(self):
@@ -231,6 +236,9 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         """
         conver2txt = Conver2txt(self.le_in_epub.text(), self.le_out_txt.text())
         # print(conver2txt.get_info())
+        if self.cb_out_code.currentIndex() != 0:
+            encode = self.cb_out_code.currentText()
+            conver2txt.set_code(encode)
         conver2txt.conver()
         logger.info('文件转换完成！')
         self.statusBar.showMessage("文件转换完成！")
