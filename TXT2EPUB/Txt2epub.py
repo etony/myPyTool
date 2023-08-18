@@ -108,7 +108,8 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         self.le_author.clear()
         self.le_txt.clear()
         self.le_epub.clear()
-        self.te_reg.setPlainText("^\s*([第卷][0123456789一二三四五六七八九十零〇百千两]*[章回部节集卷].*)\s*")
+        self.te_reg.setPlainText(
+            "^\s*([第卷][0123456789一二三四五六七八九十零〇百千两]*[章回部节集卷].*)\s*")
         self.le_title.clear()
         logger.info('选项重置！')
 
@@ -206,14 +207,14 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             self.le_book_title.setText(book_info['title'])
             self.le_book_creater.setText(book_info['creator'])
             self.le_book_contrib.setText(book_info['contrib'])
-            
+
             date = datetime.datetime.fromisoformat(book_info['date'])
-            
+
             self.le_book_date.setText(date.strftime('%Y-%m-%d %H:%M:%S'))
             self.pb_out_txt.setEnabled(True)
-            
+
             # logger.info(f'cover type: {type(conver2txt.get_cover())}')
-            
+
             bookcover = conver2txt.get_cover()
             img = QImage.fromData(bookcover)
             cover = QPixmap.fromImage(img)
@@ -231,7 +232,6 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         if out_txtpath != '':
             self.le_out_txt.setText(out_txtpath)
             logger.info(f'指定转换文件:{out_txtpath}')
-
 
     @pyqtSlot()
     def on_pb_out_conver_clicked(self):
