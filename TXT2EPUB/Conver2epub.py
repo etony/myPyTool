@@ -73,7 +73,10 @@ class Conver2epub():
         
         book.add_author(self.author)
         # book.add_author('作者2', file_as='作者2', role='ill', uid='coauthor')
-        book.set_cover("cover.jpeg", open(self.cover, 'rb').read())
+        
+        if os.path.exists(self.cover): 
+            book.set_cover("cover.jpeg", open(self.cover, 'rb').read())
+
 
         # add default NCX and Nav file
         book.add_item(epub.EpubNcx())
@@ -92,21 +95,32 @@ class Conver2epub():
         h1 {
               text-align: left;
               text-transform: uppercase;
-              font-weight: 500; 
-              color:red;
+              text-indent: 2em;
+              font-family: 微软雅黑;
+              font-weight: bold; 
+              color:#D2691E;
+              line-height: 300%; 
+              margin: 30px 0 0 0;
 
         }
         
         h2 {
               text-align: left;
               text-transform: uppercase;
-              font-weight: 200; 
-              text-indent: 30%;
+              text-indent: 2em;
+              font-family: 微软雅黑;
+              font-weight: bold; 
+              color:#D2691E;
+              line-height: 240%; 
+              margin: 20px 0 0 0;
+
         }
         
         p {
-              text-indent: 30%;
-              color: #688862
+              text-indent: 1.25em;
+              margin: 0;
+              widows: 2;
+              orphans: 2; 
 
         }
         ol {
@@ -163,7 +177,7 @@ class Conver2epub():
                     chr(10), '<br>').replace(chr(160), '')
                 chapter = epub.EpubHtml(
                     title=str_title, file_name=str_title + '.xhtml', lang='hr')
-                chapter.content = u'<h1>' + str_title + '</h1><p>' + str_content + '</p>'
+                chapter.content = u'<h2>' + str_title + '</h2><p>' + str_content + '</p>'
                 chapter.add_item(nav_css)
 
                 # add chapter
