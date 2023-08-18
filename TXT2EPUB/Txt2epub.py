@@ -108,7 +108,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         self.le_author.clear()
         self.le_txt.clear()
         self.le_epub.clear()
-        self.te_reg.clear()
+        self.te_reg.setPlainText("^\s*([第卷][0123456789一二三四五六七八九十零〇百千两]*[章回部节集卷].*)\s*")
         self.le_title.clear()
         logger.info('选项重置！')
 
@@ -230,6 +230,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             self, "文件保存", output, 'txt(*.txt)')
         if out_txtpath != '':
             self.le_out_txt.setText(out_txtpath)
+            logger.info(f'指定转换文件:{out_txtpath}')
 
 
     @pyqtSlot()
@@ -258,6 +259,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         self.le_in_epub.clear()
         self.le_out_txt.clear()
         self.pb_out_txt.setEnabled(False)
+        logger.info('选项重置！')
 
 
 if __name__ == "__main__":
