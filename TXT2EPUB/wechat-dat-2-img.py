@@ -14,7 +14,7 @@ Created on Wed Aug 30 14:55:13 2023
 import os
 into_path = r'D:\backup\tencent\WeChat Files\wxid_6ms6fjqe8zkm11\FileStorage\Image\2021-01'  # 微信image.dat文件路径   
 						#我这把路径写死了，运行可执行文件前 先创建这个路径把dat文件放在这
-out_path = r"D:\backup\tencent\WeChat Files\wxid_6ms6fjqe8zkm11\FileStorage\Image\2021-01\jpg\\"
+out_path = os.path.join(into_path, 'jpg')
 """
     解码
     param f: 微信图片路径

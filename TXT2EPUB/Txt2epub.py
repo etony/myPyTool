@@ -38,7 +38,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         self.setFixedSize(self.width(), self.height())
         logger.add('日志_{time:YYYY-MM-DD}.log', rotation="1 day",
                    format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {module}.{function} : {message}")
-        logger.info('程序启动.')
+        logger.info('程序加载完成.')
 
     @pyqtSlot()
     @logger.catch()
@@ -70,7 +70,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
                     f'指定文件编码: {self.cb_encode.currentIndex()}-{encode}')
             # conver2 = Conver2epub('从前有座灵剑山.txt', '从前有座灵剑山3.epub')
             conver2.conver()
-            logger.info('文件转换完成！')
+            logger.info(f'文件转换完成！   {epubfile}')
             self.statusBar.showMessage("文件转换完成！")
             reply = QMessageBox(QMessageBox.Icon.Information, '信息', '转换完成,是否打开存储目录？',
                                 QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.No).exec()
@@ -244,8 +244,8 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             encode = self.cb_out_code.currentText()
             conver2txt.set_code(encode)
         conver2txt.conver()
-        logger.info('文件转换完成！')
-        self.statusBar.showMessage("文件转换完成！")
+        logger.info(f'文件转换完成！  {self.le_out_txt.text()}')
+        self.statusBar.showMessage(f"文件转换完成！  {self.le_out_txt.text()}")
 
     @pyqtSlot()
     def on_pb_out_reset_clicked(self):
