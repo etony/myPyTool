@@ -77,8 +77,11 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             if reply == QMessageBox.StandardButton.Ok:
                 dirname, filename = os.path.split(epubfile)
                 logger.info(f'打开存贮目录: {dirname}')
-                # os.system("start explorer %s" %dirname)
-                os.startfile(dirname)
+                if sys.platform == 'win32':
+                    # os.system("start explorer %s" %dirname)
+                    os.startfile(dirname)
+                elif sys.platform == 'linux':
+                    os.system('xdg-open "%s"' % dirname)
         else:
             self.statusBar.showMessage("未指定转换文件！")
 
