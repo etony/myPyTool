@@ -29,7 +29,7 @@ def txt2epub(save_as_path, text_file_path, cover_image_path, bookname, author, s
     print(text_file_path)
     if os.path.exists(text_file_path):
         print("开始转换文件")
-        with open(text_file_path, 'r',encoding= "utf-8") as f:
+        with open(text_file_path, 'r', encoding="utf-8") as f:
             content = f.read()
             # 英文章节
             # regex = "^\s*Chapter\s*[0123456789IVX]*"
@@ -39,7 +39,8 @@ def txt2epub(save_as_path, text_file_path, cover_image_path, bookname, author, s
             splits = re.split(regex, content, flags=re.M)
 
             # 按章节分组[(章节1标题,章节1内容）,(章节2标题,章节2内容),...]
-            items = [(splits[i], splits[i + 1].replace(chr(10), '<br>').replace(chr(160), '')) for i in range(1, len(splits) - 1, 2)]
+            items = [(splits[i], splits[i + 1].replace(chr(10), '<br>').replace(chr(160), ''))
+                     for i in range(1, len(splits) - 1, 2)]
 
             # 按step章节分组，组成　[[(章节标题,章节内容）,(章节标题,章节内容)],.....]
             # 后续写入压缩文件时，按分组作为一个xhtml文件
@@ -55,7 +56,8 @@ def txt2epub(save_as_path, text_file_path, cover_image_path, bookname, author, s
                 # images
 
                 # container.xml
-                book.write('./template/META-INF/container.xml', 'META-INF/container.xml')
+                book.write('./template/META-INF/container.xml',
+                           'META-INF/container.xml')
 
                 # text
                 nav_tmp = tmpenv.get_template("text/nav.html")
@@ -67,13 +69,15 @@ def txt2epub(save_as_path, text_file_path, cover_image_path, bookname, author, s
                 index = 0
                 for part in parts:
                     index += 1
-                    part_html = part_tmp.render(part=part, part_index=index, bookname=bookname)
+                    part_html = part_tmp.render(
+                        part=part, part_index=index, bookname=bookname)
                     # 此处文件名要和nav.html里保持一致。
                     book.writestr('text/part_%s.html' % index, part_html)
 
                 # content.opf
                 opf = tmpenv.get_template("content.opf")
-                content_opf = opf.render(parts=parts, bookname=bookname, author=author)
+                content_opf = opf.render(
+                    parts=parts, bookname=bookname, author=author)
                 book.writestr('content.opf', content_opf)
 
                 # cover.jpeg
@@ -102,4 +106,4 @@ def txt2epub(save_as_path, text_file_path, cover_image_path, bookname, author, s
     pass
 
 
-txt2epub('从前有座灵剑山.epub', '从前有座灵剑山.txt', '', bookname='陈阳', author='xulong')
+txt2epub('从前有座灵剑山.epub', '大奉打更人.txt', '', bookname='陈阳', author='xulong')

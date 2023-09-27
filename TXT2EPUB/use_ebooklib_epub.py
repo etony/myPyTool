@@ -6,8 +6,9 @@ Created on Tue Jul 18 14:25:33 2023
 """
 
 from ebooklib import epub
-# import os
+import os
 import re
+import sys
 
 book = epub.EpubBook()
 
@@ -26,40 +27,45 @@ book.add_item(epub.EpubNav())
 
 
 # define CSS style
-# style = 'pre{white-space:pre-wrap;background:#f7f9fa;padding:10px 15px;color:#263238;line-height:1.6;font-size:13px;border-radius:3px margin-top: 0;margin-bottom:1em;overflow:auto}b,strong{font-weight:bolder}#title{font-size:16px;color:#212121;font-weight:600;margin-bottom:10px}hr{height:10px;border:0;box-shadow:0 10px 10px -10px #8c8b8b inset}'
+style = 'pre{white-space:pre-wrap;background:#f7f9fa;padding:10px 15px;color:#263238;line-height:1.6;font-size:13px;border-radius:3px margin-top: 0;margin-bottom:1em;overflow:auto}b,strong{font-weight:bolder}#title{font-size:16px;color:#212121;font-weight:600;margin-bottom:10px}hr{height:10px;border:0;box-shadow:0 10px 10px -10px #8c8b8b inset}'
 
-style = '''
-@namespace epub "http://www.idpf.org/2007/ops";
+# style = '''
+# @namespace epub "http://www.idpf.org/2007/ops";
 
-body {
-    font-family: Cambria, Liberation Serif, Bitstream Vera Serif, Georgia, Times, Times New Roman, serif;
-}
+# body {
+#     font-family: Cambria, Liberation Serif, Bitstream Vera Serif, Georgia, Times, Times New Roman, serif;
+#     color: white;
+# }
+# p {
+#     color: red;
+    
+#     }
 
-h2 {
-      text-align: left;
-      text-transform: uppercase;
-      font-weight: 200;     
-}
+# h2 {
+#       text-align: left;
+#       text-transform: uppercase;
+#       font-weight: 200;     
+# }
 
-ol {
-        list-style-type: none;
-}
+# ol {
+#         list-style-type: none;
+# }
 
-ol > li:first-child {
-        margin-top: 0.3em;
-}
-
-
-nav[epub|type~='toc'] > ol > li > ol  {
-    list-style-type:square;
-}
+# ol > li:first-child {
+#         margin-top: 0.3em;
+# }
 
 
-nav[epub|type~='toc'] > ol > li > ol > li {
-        margin-top: 0.3em;
-}
+# nav[epub|type~='toc'] > ol > li > ol  {
+#     list-style-type:square;
+# }
 
-'''
+
+# nav[epub|type~='toc'] > ol > li > ol > li {
+#         margin-top: 0.3em;
+# }
+
+# '''
 
 # nav_css = epub.EpubItem(
 #     uid="style_nav", file_name="style/nav.css", media_type="text/css", content=style)
@@ -72,7 +78,10 @@ book.add_item(nav_css)
 book.spine = ['cover']
 
 
-text_file_path = '从前有座灵剑山.txt'
+text_file_path = '大奉打更人.txt'
+epub_file_path = '大奉打更人.epub'
+if not os.path.exists(text_file_path):
+    sys.exit(1)
 
 with open(text_file_path, 'r', encoding="utf-8") as f:
     content = f.read()
@@ -94,9 +103,11 @@ with open(text_file_path, 'r', encoding="utf-8") as f:
         str_title = item[0]
         str_content = item[1].replace(chr(10), '<br>').replace(chr(160), '')
         chapter = epub.EpubHtml(
-            title=str_title, file_name=str_title + '.xhtml', lang='hr')
+            title=str_title, file_name=str_title + '.xhtml', lang='zh')
         chapter.content = u'<h1>' + str_title + '</h1><p>' + str_content + '</p>'
-
+        chapter.add_link(href='nav.css', rel='stylesheet', type='text/css')
+        
+ 
         # add chapter
         book.add_item(chapter)
 
@@ -121,4 +132,4 @@ with open(text_file_path, 'r', encoding="utf-8") as f:
 # basic spine
 
 # write to the file
-epub.write_epub('测试.epub', book, {})
+epub.write_epub(epub_file_path, book, {})

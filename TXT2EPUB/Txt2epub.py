@@ -70,7 +70,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
                     f'指定文件编码: {self.cb_encode.currentIndex()}-{encode}')
             # conver2 = Conver2epub('从前有座灵剑山.txt', '从前有座灵剑山3.epub')
             conver2.conver()
-            logger.info('文件转换完成！')
+            logger.info(f'文件转换完成！   {epubfile}')
             self.statusBar.showMessage("文件转换完成！")
             reply = QMessageBox(QMessageBox.Icon.Information, '信息', '转换完成,是否打开存储目录？',
                                 QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.No).exec()
