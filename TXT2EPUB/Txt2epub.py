@@ -38,7 +38,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         self.setFixedSize(self.width(), self.height())
         logger.add('日志_{time:YYYY-MM-DD}.log', rotation="1 day",
                    format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {module}.{function} : {message}")
-        logger.info('程序启动.')
+        logger.info('程序加载完成.')
 
     @pyqtSlot()
     @logger.catch()
@@ -77,8 +77,11 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             if reply == QMessageBox.StandardButton.Ok:
                 dirname, filename = os.path.split(epubfile)
                 logger.info(f'打开存贮目录: {dirname}')
-                # os.system("start explorer %s" %dirname)
-                os.startfile(dirname)
+                if sys.platform == 'win32':
+                    # os.system("start explorer %s" %dirname)
+                    os.startfile(dirname)
+                elif sys.platform == 'linux':
+                    os.system('xdg-open "%s"' % dirname)
         else:
             self.statusBar.showMessage("未指定转换文件！")
 
@@ -244,8 +247,8 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             encode = self.cb_out_code.currentText()
             conver2txt.set_code(encode)
         conver2txt.conver()
-        logger.info('文件转换完成！')
-        self.statusBar.showMessage("文件转换完成！")
+        logger.info(f'文件转换完成！  {self.le_out_txt.text()}')
+        self.statusBar.showMessage(f"文件转换完成！  {self.le_out_txt.text()}")
 
     @pyqtSlot()
     def on_pb_out_reset_clicked(self):
