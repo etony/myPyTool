@@ -109,7 +109,7 @@ class BrowerPasswd(QMainWindow, Ui_MainWindow):
             self.pb_search.setEnabled(True)
             self.pb_reset.setEnabled(True)
 
-        self.statusbar.showMessage("记录: " + str(i))
+        self.statusbar.showMessage("保存的密码:  " + str(i))
 
         self.tv_namepasswd.resizeColumnsToContents()  # 根据内容自动调整列宽
 
