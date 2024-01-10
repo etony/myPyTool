@@ -27,8 +27,7 @@ from Ui_BookList import Ui_mainWindow
 LOG = logging.getLogger(os.path.basename(sys.argv[0]))
 logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S',
-    format=
-    "%(asctime)s - %(levelname)s - 进程:%(process)d - %(filename)s - %(name)s - 行:%(lineno)d - 模块:%(module)s - %(message)s",
+    format="%(asctime)s - %(levelname)s - 进程:%(process)d - %(filename)s - %(name)s - 行:%(lineno)d - 模块:%(module)s - %(message)s",
     level=logging.INFO)
 # logging.basicConfig(
 #     filename='application.log',
@@ -103,13 +102,13 @@ class TableModel(QtCore.QAbstractTableModel):
                     ['书名', '作者', '出版社', '价格', '评分', '人数', '分类', '书柜']] = [
                         row[1], row[2], row[3], row[4], row[5], row[6], row[7],
                         row[8]
-                    ]
+                ]
             else:
                 self._data.loc[self._data.iloc[:, 0] == row[0],
                                ['书名', '作者', '出版社', '价格', '评分', '人数']] = [
                                    row[1], row[2], row[3], row[4], row[5],
                                    row[6]
-                               ]
+                ]
             self.endResetModel()
         else:
             self.beginResetModel()
