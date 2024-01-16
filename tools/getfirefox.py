@@ -400,6 +400,15 @@ class FireFoxPasswd(object):
 
         if not os.path.exists(profile):  # 如果未安装使用Firefox， 返回
             return loginpass
+        
+        # 通过检测注册表，确认是否安装Firefox
+        # import winreg 
+        # FullFirefoxVersion = winreg.QueryValueEx(winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,'SOFTWARE\\Mozilla\\Mozilla Firefox'),'CurrentVersion')[0]
+        # print(FullFirefoxVersion)
+        
+        
+        
+        
         proxy = NSSProxy()
         proxy.initialize(profile)
 
