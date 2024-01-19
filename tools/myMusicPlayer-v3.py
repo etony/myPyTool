@@ -90,7 +90,7 @@ class GetListThread(QThread):
 
         sourcecode = sourcelist[source]
 
-        urlss = ['http://www.xmsj.org/', 'http://y.yin2s.com/']
+        urlss = ['http://miss.qingchengkg.cn/', 'http://www.xmsj.org/', 'http://y.yin2s.com/']
         url = urlss[0]
         header = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.110.430.128 Safari/537.36',
@@ -323,7 +323,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             220, 220, Qt.AspectRatioMode.KeepAspectRatio))
 
         self.pause = False
-        mixer.init(frequency=8000, size=-16, channels=4)
+        mixer.init(frequency=8000, size=-16, channels=2)
 
         self.lw_songs.setStyleSheet("QListWidget{border:1px solid gray; color:black; }"
                                     "QListWidget::Item{padding-top:5px; padding-bottom:1px; }"
