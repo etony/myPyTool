@@ -54,7 +54,7 @@ global sourcelist
 page = 2
 sourcelist = {'网易云': 'netease', '酷我': 'kuwo', 'QQ': 'qq',
               '百度': 'baidu', '一听': 'yiting', '千千': 'tianhe', '咪咕': 'migu'}
-
+urllist={'源1':'http://miss.qingchengkg.cn/','源2':'http://tool.tesiber.com/music/','源3':'https://music.haom.ren/','源4':'http://tool.eleuu.com/music/','源5': 'http://www.xmsj.org/', '源6':'http://y.yin2s.com/'}
 global atimer
 global working
 global lrc_status
@@ -90,8 +90,9 @@ class GetListThread(QThread):
 
         sourcecode = sourcelist[source]
 
-        urlss = ['http://miss.qingchengkg.cn/', 'http://www.xmsj.org/', 'http://y.yin2s.com/']
-        url = urlss[0]
+        # urlss = ['http://miss.qingchengkg.cn/', 'http://www.xmsj.org/', 'http://y.yin2s.com/']
+        url = urllist[urls]
+        # url = urlss[0]
         header = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.110.430.128 Safari/537.36',
             'X-Requested-With': 'XMLHttpRequest'
@@ -700,8 +701,10 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
 
         global source
         global search
+        global urls
 
         source = self.cb_list.currentText().strip('-').strip()
+        urls = self.cb_urls.currentText().strip()
         search = self.le_search.text().strip()
         if len(search) <= 0:
             self.statusbar.showMessage('搜索中 ...  寂寞啊~~~')
