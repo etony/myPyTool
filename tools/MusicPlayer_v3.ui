@@ -22,9 +22,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>50</y>
+      <y>70</y>
       <width>221</width>
-      <height>231</height>
+      <height>211</height>
      </rect>
     </property>
     <property name="toolTip">
@@ -266,79 +266,13 @@
    <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>11</x>
-      <y>11</y>
-      <width>241</width>
-      <height>25</height>
+      <x>10</x>
+      <y>10</y>
+      <width>231</width>
+      <height>51</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QComboBox" name="cb_urls">
-       <item>
-        <property name="text">
-         <string>源1</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>源2</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>源3</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>源4</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="cb_list">
-       <property name="toolTip">
-        <string>搜索频道</string>
-       </property>
-       <item>
-        <property name="text">
-         <string>网易云</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>QQ</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>酷我</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>百度</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>一听</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>咪咕</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>千千</string>
-        </property>
-       </item>
-      </widget>
-     </item>
+    <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QLineEdit" name="le_search">
        <property name="toolTip">
@@ -347,14 +281,84 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pb_search">
-       <property name="toolTip">
-        <string>搜索</string>
-       </property>
-       <property name="text">
-        <string>搜 索</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QComboBox" name="cb_urls">
+         <item>
+          <property name="text">
+           <string>通道1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>通道2</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>通道3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>通道4</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="cb_list">
+         <property name="toolTip">
+          <string>搜索频道</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>网易云</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>QQ</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>酷我</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>百度</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>一听</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>咪咕</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>千千</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pb_search">
+         <property name="toolTip">
+          <string>搜索</string>
+         </property>
+         <property name="text">
+          <string>搜   索</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </widget>

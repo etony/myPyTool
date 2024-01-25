@@ -2,6 +2,7 @@
 
 """
 Module implementing myMusicPlayer.
+pygame == 2.3.0
 """
 from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex, QTimer, QThread, pyqtSignal, QMutex, QPoint, QCoreApplication, QEvent
 from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMenu, QSystemTrayIcon, QMessageBox
@@ -54,7 +55,7 @@ global sourcelist
 page = 2
 sourcelist = {'网易云': 'netease', '酷我': 'kuwo', 'QQ': 'qq',
               '百度': 'baidu', '一听': 'yiting', '千千': 'tianhe', '咪咕': 'migu'}
-urllist={'源1':'http://miss.qingchengkg.cn/','源2':'http://tool.tesiber.com/music/','源3':'https://music.haom.ren/','源4':'http://tool.eleuu.com/music/','源5': 'http://www.xmsj.org/', '源6':'http://y.yin2s.com/'}
+urllist={'通道1':'http://miss.qingchengkg.cn/','通道2':'http://tool.tesiber.com/music/','通道3':'https://music.haom.ren/','通道4':'http://tool.eleuu.com/music/','通道5': 'http://www.xmsj.org/', '通道6':'http://y.yin2s.com/'}
 global atimer
 global working
 global lrc_status
