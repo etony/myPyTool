@@ -55,7 +55,8 @@ global sourcelist
 page = 2
 sourcelist = {'网易云': 'netease', '酷我': 'kuwo', 'QQ': 'qq',
               '百度': 'baidu', '一听': 'yiting', '千千': 'tianhe', '咪咕': 'migu'}
-urllist={'通道1':'http://miss.qingchengkg.cn/','通道2':'http://tool.tesiber.com/music/','通道3':'https://music.haom.ren/','通道4':'http://tool.eleuu.com/music/','通道5': 'http://www.xmsj.org/', '通道6':'http://y.yin2s.com/'}
+urllist = {'通道1': 'http://miss.qingchengkg.cn/', '通道2': 'http://tool.tesiber.com/music/', '通道3': 'https://music.haom.ren/',
+           '通道4': 'http://tool.eleuu.com/music/', '通道5': 'http://www.xmsj.org/', '通道6': 'http://y.yin2s.com/'}
 global atimer
 global working
 global lrc_status
@@ -288,9 +289,8 @@ class LrcThread(QThread):
                 # if lrc_status:
                 str = musicDict.get(musicL[j])
                 self.trigger.emit(str)
-                LOG.info(str) # 输出歌词
+                LOG.info(str)  # 输出歌词
                 time.sleep(musicL[j+1]-musicL[j])
-
 
             # else:
             #     LOG.info("收到终止信号~")
@@ -398,7 +398,8 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
     #         LOG.info('清除')
     # 托盘图标
         self.showAction = QAction("显示", self, triggered=self.showNormal)
-        self.quitAction = QAction("退出", self, triggered=app.quit) #self.quitApp
+        self.quitAction = QAction(
+            "退出", self, triggered=app.quit)  # self.quitApp
         self.showAction.setIcon(QIcon("show.jpg"))
         self.quitAction.setIcon(QIcon("quit.jpg"))
         self.trayIconMenu = QMenu(self)
@@ -413,12 +414,11 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
     def quitApp(self):
         QCoreApplication.quit()
 
-    def changeEvent(self,event):
+    def changeEvent(self, event):
         if event.type() == 105:
             if self.isMinimized():
                 self.hide()
                 print("==========窗口最小化==========")
-
 
     def timer_music(self):
         x = mixer.music.get_pos()
@@ -684,7 +684,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         except:
             pass
 
-        #self.downloadwork = None
+        # self.downloadwork = None
 
     def dislrc(self, lrc):
         self.lw_lrc.addItem(lrc)
@@ -1114,7 +1114,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
     def on_tabWidget_currentChanged(self, index):
         tab = self.tabWidget.currentWidget().objectName()
         LOG.info(f'当前标签页:  {tab}')
-        if tab !="local":
+        if tab != "local":
             self.pb_lrc.setVisible(True)
         else:
             self.pb_lrc.setVisible(False)
