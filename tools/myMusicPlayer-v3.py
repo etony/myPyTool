@@ -322,7 +322,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         self.loadbackground(url)
         pix = QPixmap(background)
         self.lab_background.setPixmap(pix.scaled(
-            220, 220, Qt.AspectRatioMode.KeepAspectRatio))
+            200, 200, Qt.AspectRatioMode.KeepAspectRatio))
 
         self.pause = False
         mixer.init(frequency=8000, size=-16, channels=2)
