@@ -39,7 +39,7 @@
      <rect>
       <x>10</x>
       <y>430</y>
-      <width>241</width>
+      <width>320</width>
       <height>26</height>
      </rect>
     </property>
@@ -197,8 +197,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>521</width>
-        <height>501</height>
+        <width>531</width>
+        <height>511</height>
        </rect>
       </property>
      </widget>
@@ -263,13 +263,13 @@
      <string>三</string>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>10</y>
       <width>231</width>
-      <height>51</height>
+      <height>54</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">

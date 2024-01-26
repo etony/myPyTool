@@ -377,7 +377,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         global filename
         filename = ''
         global urls
-        
+
         self.lw_localsongs.setContextMenuPolicy(
             Qt.ContextMenuPolicy.CustomContextMenu)  # 对象的上下文菜单的策略
         self.lw_songs.setContextMenuPolicy(
@@ -966,7 +966,8 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         global lrc_status
         lrc_status = False
         self.lrcwork.terminate()
-        
+        self.downloadwork.terminate()
+
         mixer.music.stop()
         mixer.quit()
         # os._exit(0)
