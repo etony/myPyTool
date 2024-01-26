@@ -325,7 +325,10 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             200, 200, Qt.AspectRatioMode.KeepAspectRatio))
 
         self.pause = False
-        mixer.init(frequency=8000, size=-16, channels=2)
+        mixer.init(size=-16, channels=2)
+        # frequency这里是调频率...
+        # size参数表示每个音频样本使用的位数。如果值为负，则将使用带符号的样本值。正值表示将使用不带符号的音频样本，无效值会引发异常。
+        # channels参数用于指定是使用单声道还是立体声。 1为单声道，2为立体声。不支持其他值（负值被视为1，大于2的值被视为2）。
 
         self.lw_songs.setStyleSheet("QListWidget{border:1px solid gray; color:black; }"
                                     "QListWidget::Item{padding-top:5px; padding-bottom:1px; }"
@@ -373,6 +376,8 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         songname = ''
         global filename
         filename = ''
+        global urls
+        
         self.lw_localsongs.setContextMenuPolicy(
             Qt.ContextMenuPolicy.CustomContextMenu)  # 对象的上下文菜单的策略
         self.lw_songs.setContextMenuPolicy(
@@ -410,6 +415,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         self.trayIcon.setIcon(QIcon("music-tray.png"))
         self.trayIcon.setContextMenu(self.trayIconMenu)
         self.trayIcon.show()
+        urls = self.cb_urls.currentText().strip()
 
     def quitApp(self):
         QCoreApplication.quit()
@@ -956,10 +962,14 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
 
     @pyqtSlot(QCloseEvent)
     def closeEvent(self, QCloseEvent):
+        LOG.info(f'窗口关闭')
         global lrc_status
         lrc_status = False
         self.lrcwork.terminate()
+        
+        mixer.music.stop()
         mixer.quit()
+        # os._exit(0)
 
     @pyqtSlot()
     def on_hs_value_sliderReleased(self):
@@ -1045,6 +1055,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
 
         LOG.info(f"开始调用线程进行mp3下载: tab-{site} id-{curindex}")
         self.downloadwork = DownloadThread()
+
         try:
             self.downloadwork.start()
             self.downloadwork.trigger.connect(self.beginplay)
