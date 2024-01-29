@@ -415,6 +415,8 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         self.trayIcon.setIcon(QIcon("music-tray.png"))
         self.trayIcon.setContextMenu(self.trayIconMenu)
         self.trayIcon.show()
+        
+        # 下载通道选项
         urls = self.cb_urls.currentText().strip()
 
     def quitApp(self):
@@ -966,7 +968,9 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         global lrc_status
         lrc_status = False
         self.lrcwork.terminate()
-        self.downloadwork.terminate()
+
+        if hasattr(self, 'downloadwork'):
+            self.downloadwork.quit()
 
         mixer.music.stop()
         mixer.quit()
@@ -1143,7 +1147,10 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
 
 if __name__ == "__main__":
     import sys
-    app = QApplication(sys.argv)
+    app = QApplication.instance()
+    if app is None:
+        app = QApplication(sys.argv)
+
     myMusicPlayer = myMusicPlayer()
     myMusicPlayer.show()
     sys.exit(app.exec())
