@@ -24,6 +24,9 @@ from PyQt6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMenu
 from Ui_BookInfo import Ui_Dialog
 from Ui_BookList import Ui_mainWindow
 
+
+from qt_material import apply_stylesheet
+
 LOG = logging.getLogger(os.path.basename(sys.argv[0]))
 logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S',
@@ -671,6 +674,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    apply_stylesheet(app, theme='dark_blue.xml')
     blmain = BLmainWindow()
     blmain.show()
     sys.exit(app.exec())
