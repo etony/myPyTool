@@ -1,3 +1,3 @@
-# Python-Study
+# myPyTool
 
-Python study notes. 
+Small tools developed using Python
