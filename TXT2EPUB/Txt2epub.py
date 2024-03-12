@@ -7,6 +7,7 @@ import os
 import sys
 import datetime
 from loguru import logger
+import chardet
 
 
 from PyQt6.QtCore import pyqtSlot
@@ -134,7 +135,13 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             self.le_title.setText(self.title)
             self.le_author.setText(self.title)
             logger.info(f'指定转换文件:{txtpath}')
-            self.statusBar.showMessage(f'指定转换文件:{txtpath}')
+            self.statusBar.showMessage(f'指定转换文件:{txtpath} ')
+            with open(txtpath, mode='rb') as f:
+                data = f.read(512)
+                print(chardet.detect(data)['encoding'])
+
+            self.statusBar.showMessage(
+                f'指定转换文件:{txtpath} 编码:{chardet.detect(data)["encoding"]} 语言:{chardet.detect(data)["language"]} ')
 
     @pyqtSlot()
     def on_pb_cover_clicked(self):

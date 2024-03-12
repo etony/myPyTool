@@ -152,7 +152,7 @@
            </item>
            <item>
             <property name="text">
-             <string>gbk</string>
+             <string>GB2312</string>
             </property>
            </item>
           </widget>
@@ -312,7 +312,7 @@
            </item>
            <item>
             <property name="text">
-             <string>gbk</string>
+             <string>GB2312</string>
             </property>
            </item>
           </widget>

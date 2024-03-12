@@ -14,7 +14,8 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(597, 279)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("D:\\work\\GIT\\Python-Study\\TXT2EPUB\\book2.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon.addPixmap(QtGui.QPixmap("D:\\work\\GIT\\Python-Study\\TXT2EPUB\\book2.png"),
+                       QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         MainWindow.setWindowIcon(icon)
         self.centralWidget = QtWidgets.QWidget(parent=MainWindow)
         self.centralWidget.setObjectName("centralWidget")
@@ -56,7 +57,8 @@ class Ui_MainWindow(object):
         self.lb_image = QtWidgets.QLabel(parent=self.tab)
         self.lb_image.setGeometry(QtCore.QRect(400, 0, 161, 191))
         self.lb_image.setText("")
-        self.lb_image.setPixmap(QtGui.QPixmap("D:\\work\\GIT\\Python-Study\\TXT2EPUB\\cover.jpeg"))
+        self.lb_image.setPixmap(QtGui.QPixmap(
+            "D:\\work\\GIT\\Python-Study\\TXT2EPUB\\cover.jpeg"))
         self.lb_image.setScaledContents(True)
         self.lb_image.setObjectName("lb_image")
         self.layoutWidget1 = QtWidgets.QWidget(parent=self.tab)
@@ -201,7 +203,8 @@ class Ui_MainWindow(object):
         self.lb_cover = QtWidgets.QLabel(parent=self.tab_2)
         self.lb_cover.setGeometry(QtCore.QRect(400, 0, 161, 191))
         self.lb_cover.setText("")
-        self.lb_cover.setPixmap(QtGui.QPixmap("D:\\work\\GIT\\Python-Study\\TXT2EPUB\\cover.jpeg"))
+        self.lb_cover.setPixmap(QtGui.QPixmap(
+            "D:\\work\\GIT\\Python-Study\\TXT2EPUB\\cover.jpeg"))
         self.lb_cover.setScaledContents(True)
         self.lb_cover.setObjectName("lb_cover")
         self.tabWidget.addTab(self.tab_2, "")
@@ -224,28 +227,32 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "输 入"))
         self.pb_txt.setText(_translate("MainWindow", "..."))
         self.cb_encode.setItemText(0, _translate("MainWindow", "utf-8"))
-        self.cb_encode.setItemText(1, _translate("MainWindow", "gbk"))
+        self.cb_encode.setItemText(1, _translate("MainWindow", "GB2312"))
         self.label_3.setText(_translate("MainWindow", "书 名"))
         self.label_5.setText(_translate("MainWindow", "作 者"))
         self.label_2.setText(_translate("MainWindow", "章 节"))
-        self.te_reg.setPlainText(_translate("MainWindow", "^\\s*([第卷][0123456789一二三四五六七八九十零〇百千两]*[章回部节集卷].*)\\s*"))
+        self.te_reg.setPlainText(_translate(
+            "MainWindow", "^\\s*([第卷][0123456789一二三四五六七八九十零〇百千两]*[章回部节集卷].*)\\s*"))
         self.label_4.setText(_translate("MainWindow", "输 出"))
         self.pb_epub.setText(_translate("MainWindow", "..."))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("MainWindow", "To EPUB"))
-        self.label_9.setText(_translate("MainWindow", "<html><head/><body><p><a href=\"https://etony.github.io/\"><span style=\" text-decoration: underline; color:#0000ff;\">?</span></a></p></body></html>"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(
+            self.tab), _translate("MainWindow", "To EPUB"))
+        self.label_9.setText(_translate(
+            "MainWindow", "<html><head/><body><p><a href=\"https://etony.github.io/\"><span style=\" text-decoration: underline; color:#0000ff;\">?</span></a></p></body></html>"))
         self.pb_out_conver.setText(_translate("MainWindow", "转   换"))
         self.pb_out_reset.setText(_translate("MainWindow", "重   置"))
         self.label_10.setText(_translate("MainWindow", "输 入"))
         self.pb_in_epub.setText(_translate("MainWindow", "EPUB"))
         self.cb_out_code.setItemText(0, _translate("MainWindow", "utf-8"))
-        self.cb_out_code.setItemText(1, _translate("MainWindow", "gbk"))
+        self.cb_out_code.setItemText(1, _translate("MainWindow", "GB2312"))
         self.label_12.setText(_translate("MainWindow", "书 名"))
         self.label_13.setText(_translate("MainWindow", "作 者"))
         self.label_14.setText(_translate("MainWindow", "创 建"))
         self.label_15.setText(_translate("MainWindow", "日 期"))
         self.label_11.setText(_translate("MainWindow", "输 出"))
         self.pb_out_txt.setText(_translate("MainWindow", "TXT"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("MainWindow", "To TXT"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(
+            self.tab_2), _translate("MainWindow", "To TXT"))
 
 
 if __name__ == "__main__":
