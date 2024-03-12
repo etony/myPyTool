@@ -140,7 +140,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
                 data = f.read(512)
                 fileinfo = chardet.detect(data)
                 logger.info(f'文件信息: {fileinfo}')
-                if len(fileinfo['language']) < 2:
+                if fileinfo['language']=='':
                     self.statusBar.showMessage(
                         f'指定转换文件:{txtpath} 编码:{chardet.detect(data)["encoding"]}')
                 else:
