@@ -146,6 +146,8 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
                 else:
                     self.statusBar.showMessage(
                         f'指定转换文件:{txtpath} 编码:{chardet.detect(data)["encoding"]} 语言:{chardet.detect(data)["language"]} ')
+                    self.cb_encode.setCurrentIndex(1)
+                    
                         
 
     @pyqtSlot()

@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -120,7 +120,7 @@
         <x>10</x>
         <y>10</y>
         <width>381</width>
-        <height>141</height>
+        <height>166</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -139,7 +139,7 @@
          <item>
           <widget class="QPushButton" name="pb_txt">
            <property name="text">
-            <string>...</string>
+            <string>TXT</string>
            </property>
           </widget>
          </item>
@@ -147,12 +147,12 @@
           <widget class="QComboBox" name="cb_encode">
            <item>
             <property name="text">
-             <string>utf-8</string>
+             <string>UTF-8</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>GB2312</string>
+             <string>GB18030</string>
             </property>
            </item>
           </widget>
@@ -219,7 +219,7 @@
          <item>
           <widget class="QPushButton" name="pb_epub">
            <property name="text">
-            <string>...</string>
+            <string>EPUB</string>
            </property>
           </widget>
          </item>
@@ -278,7 +278,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>0</y>
+        <y>10</y>
         <width>381</width>
         <height>161</height>
        </rect>
@@ -307,12 +307,12 @@
           <widget class="QComboBox" name="cb_out_code">
            <item>
             <property name="text">
-             <string>utf-8</string>
+             <string>UTF-8</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>GB2312</string>
+             <string>GB18030</string>
             </property>
            </item>
           </widget>
