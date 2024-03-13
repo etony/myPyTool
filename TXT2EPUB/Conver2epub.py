@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 import re
 import os
 import datetime
-
+from opencc import OpenCC
 
 class Conver2epub():
     def __init__(self, txtfile, epubfile):
@@ -216,7 +216,7 @@ class Conver2txt():
     def set_code(self, code='utf-8'):
         self.code = code
 
-    def conver(self):
+    def conver(self,fanjian=False):
         # book = epub.read_epub(self.epubfile)
 
         with open(self.txtfile, 'a', encoding='utf-8') as f:
@@ -233,8 +233,13 @@ class Conver2txt():
                 if item.get_type() == ebooklib.ITEM_DOCUMENT:
                     soup = BeautifulSoup(
                         item.get_content().decode('utf-8'), 'xml')
-                    f.write(soup.text)
-                    f.write('==================================')
+                    if fanjian:
+                        cc = OpenCC('t2s')
+                        f.write(cc.convert(soup.text))
+                        
+                    else:
+                        f.write(soup.text)
+                    f.write('==================================')                        
 
                     '''
                     ITEM_UNKNOWN = 0

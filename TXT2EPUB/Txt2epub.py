@@ -8,7 +8,7 @@ import sys
 import datetime
 from loguru import logger
 import chardet
-
+from opencc import OpenCC
 
 from PyQt6.QtCore import pyqtSlot
 from PyQt6.QtWidgets import QMainWindow, QDialog
@@ -211,6 +211,10 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             self.in_dirname, in_filename = os.path.split(in_epubpath)
             in_file_name, in_extension = os.path.splitext(
                 os.path.basename(in_epubpath))
+            
+            # if self.chb_fanjian.isChecked():
+            #     cc = OpenCC('t2s')
+            #     in_file_name = cc.convert(in_file_name)
             self.out_txtpath = os.path.join(
                 self.in_dirname, in_file_name) + '.txt'
             self.le_out_txt.setText(self.out_txtpath)
@@ -260,7 +264,8 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         if self.cb_out_code.currentIndex() != 0:
             encode = self.cb_out_code.currentText()
             conver2txt.set_code(encode)
-        conver2txt.conver()
+        fanjian = self.chb_fanjian.isChecked()
+        conver2txt.conver(fanjian=fanjian)
         logger.info(f'文件转换完成！  {self.le_out_txt.text()}')
         self.statusBar.showMessage(f"文件转换完成！  {self.le_out_txt.text()}")
 
@@ -278,6 +283,24 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         self.pb_out_txt.setEnabled(False)
         logger.info('选项重置！')
 
+    @pyqtSlot()
+    def on_chb_fanjian_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        in_epubpath = self.le_in_epub.text()
+        self.in_dirname, in_filename = os.path.split(in_epubpath)
+        in_file_name, in_extension = os.path.splitext(
+            os.path.basename(in_epubpath))
+            
+        if self.chb_fanjian.isChecked():
+            cc = OpenCC('t2s')
+            in_file_name = cc.convert(in_file_name)
+            
+        self.out_txtpath = os.path.join(
+            self.in_dirname, in_file_name) + '.txt'
+        self.le_out_txt.setText(self.out_txtpath)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
