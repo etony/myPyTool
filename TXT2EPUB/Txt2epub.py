@@ -140,15 +140,13 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
                 data = f.read(512)
                 fileinfo = chardet.detect(data)
                 logger.info(f'文件信息: {fileinfo}')
-                if fileinfo['language']=='':
+                if fileinfo['language'] == '':
                     self.statusBar.showMessage(
                         f'指定转换文件:{txtpath} 编码:{chardet.detect(data)["encoding"]}')
                 else:
                     self.statusBar.showMessage(
                         f'指定转换文件:{txtpath} 编码:{chardet.detect(data)["encoding"]} 语言:{chardet.detect(data)["language"]} ')
                     self.cb_encode.setCurrentIndex(1)
-                    
-                        
 
     @pyqtSlot()
     def on_pb_cover_clicked(self):
@@ -211,7 +209,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             self.in_dirname, in_filename = os.path.split(in_epubpath)
             in_file_name, in_extension = os.path.splitext(
                 os.path.basename(in_epubpath))
-            
+
             # if self.chb_fanjian.isChecked():
             #     cc = OpenCC('t2s')
             #     in_file_name = cc.convert(in_file_name)
@@ -293,14 +291,15 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         self.in_dirname, in_filename = os.path.split(in_epubpath)
         in_file_name, in_extension = os.path.splitext(
             os.path.basename(in_epubpath))
-            
-        if self.chb_fanjian.isChecked():
+
+        if self.chb_fanjian.isChecked() and (in_file_name != '') and (in_file_name is not None):
             cc = OpenCC('t2s')
             in_file_name = cc.convert(in_file_name)
-            
-        self.out_txtpath = os.path.join(
-            self.in_dirname, in_file_name) + '.txt'
-        self.le_out_txt.setText(self.out_txtpath)
+
+            self.out_txtpath = os.path.join(
+                self.in_dirname, in_file_name) + '.txt'
+            self.le_out_txt.setText(self.out_txtpath)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
