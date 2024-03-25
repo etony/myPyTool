@@ -24,8 +24,9 @@ from PyQt6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMenu
 from Ui_BookInfo import Ui_Dialog
 from Ui_BookList import Ui_mainWindow
 
+import qdarkstyle
 
-from qt_material import apply_stylesheet
+# from qt_material import apply_stylesheet
 
 LOG = logging.getLogger(os.path.basename(sys.argv[0]))
 logging.basicConfig(
@@ -674,7 +675,17 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    apply_stylesheet(app, theme='dark_blue.xml')
+    # apply_stylesheet(app, theme='dark_blue.xml')
     blmain = BLmainWindow()
+
+    app.setStyleSheet(qdarkstyle.load_stylesheet())  # 默认样式：暗黑样式
+
+    # # 浅色样式
+    # app.setStyleSheet(qdarkstyle.load_stylesheet(qdarkstyle.LightPalette))
+    # # 深色样式
+    # app.setStyleSheet(qdarkstyle.load_stylesheet(qdarkstyle.DarkPalette))
+
+    # app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt6'))
+
     blmain.show()
     sys.exit(app.exec())
