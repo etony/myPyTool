@@ -4,8 +4,8 @@
 Module implementing myMusicPlayer.
 pygame == 2.3.0
 """
-from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex, QTimer, QThread, pyqtSignal, QMutex, QPoint, QCoreApplication, QEvent
-from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMenu, QSystemTrayIcon, QMessageBox
+from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex, QTimer, QThread, pyqtSignal, QMutex, QPoint, QCoreApplication
+from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMenu, QSystemTrayIcon
 from PyQt6.QtGui import QPixmap, QCloseEvent, QIcon, QAction
 
 from Ui_MusicPlayer_v3 import Ui_MusicPlayer
@@ -120,7 +120,7 @@ class GetListThread(QThread):
                 self.trigger.emit("ok")
             else:
                 self.trigger.emit("err")
-                LOG.warning(f"列表搜索失败！url:{url} params: {params}" )
+                LOG.warning(f"列表搜索失败！url:{url} params: {params}")
         LOG.info(f"列表搜索结束。 {len(myjson)}")
         return
 
@@ -415,7 +415,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         self.trayIcon.setIcon(QIcon("music-tray.png"))
         self.trayIcon.setContextMenu(self.trayIconMenu)
         self.trayIcon.show()
-        
+
         # 下载通道选项
         urls = self.cb_urls.currentText().strip()
 
@@ -964,7 +964,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
 
     @pyqtSlot(QCloseEvent)
     def closeEvent(self, QCloseEvent):
-        LOG.info(f'窗口关闭')
+        LOG.info('窗口关闭')
         global lrc_status
         lrc_status = False
         self.lrcwork.terminate()
