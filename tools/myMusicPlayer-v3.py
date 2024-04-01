@@ -106,7 +106,7 @@ class GetListThread(QThread):
 
         for i in range(page):
             params = {'input': search, 'filter': 'name',
-                      'type': sourcecode, 'page': i+1}
+                      'type': sourcecode, 'page': i}
             res = requests.post(url, params, headers=header)
             html = res.json()
             if html['code'] == 200:
@@ -120,7 +120,7 @@ class GetListThread(QThread):
                 self.trigger.emit("ok")
             else:
                 self.trigger.emit("err")
-                LOG.warning("列表搜索失败！")
+                LOG.warning(f"列表搜索失败！url:{url} params: {params}" )
         LOG.info(f"列表搜索结束。 {len(myjson)}")
         return
 
