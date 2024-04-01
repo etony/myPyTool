@@ -426,7 +426,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         if event.type() == 105:
             if self.isMinimized():
                 self.hide()
-                print("==========窗口最小化==========")
+                LOG.info("==========窗口最小化==========")
 
     def timer_music(self):
         x = mixer.music.get_pos()

@@ -205,7 +205,7 @@ class Worker(QObject):  # https://mathpretty.com/13641.html
         """Long-running task."""
         for i in range(50):
 
-            print(str(i))
+            LOG.info(str(i))
             time.sleep(3)
 
 
@@ -361,7 +361,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         response = requests.post(url, data=payload, headers=headers)
 
         book_dict = json.loads(response.text)
-        # print(book_dict)
+
         if len(book_dict) > 5:
             author = '/'.join(book_dict['author'])
             if len(book_dict['translator']) > 0:
