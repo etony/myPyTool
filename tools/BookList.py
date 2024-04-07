@@ -205,7 +205,7 @@ class Worker(QObject):  # https://mathpretty.com/13641.html
         """Long-running task."""
         for i in range(50):
 
-            print(str(i))
+            LOG.info(str(i))
             time.sleep(3)
 
 
@@ -275,7 +275,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
+
         csvNamepath, csvType = QFileDialog.getOpenFileName(
             self, "选择存储文件", "\.", "*.csv;;All Files(*)")
 
@@ -298,7 +298,6 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
         # isbn = self.le_isbn_pic.text()
         # bookinfo = self.get_douban_isbn(isbn)
         # self.model.appendRow(bookinfo)
@@ -314,7 +313,6 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
         picNamepath, picType = QFileDialog.getOpenFileName(
             self, "选择条形码图片", ".", "*.png;;*.jpg;;All Files(*)")
 
@@ -363,7 +361,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         response = requests.post(url, data=payload, headers=headers)
 
         book_dict = json.loads(response.text)
-        # print(book_dict)
+
         if len(book_dict) > 5:
             author = '/'.join(book_dict['author'])
             if len(book_dict['translator']) > 0:
@@ -402,7 +400,6 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
         isbn = self.le_isbn_pic.text()
         title = self.le_bookname.text()
         author = self.le_bookauthor.text()
@@ -426,7 +423,6 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
         isbn = self.le_isbn_pic.text()
         bookinfo = self.get_douban_isbn(isbn)
         if len(bookinfo) > 0:
@@ -464,7 +460,6 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         @param index DESCRIPTION
         @type QModelIndex
         """
-        # TODO: not implemented yet
         LOG.info('选定行号: ' + str(index.row()))
 
         model = self.tv_booklist.model()
@@ -500,7 +495,6 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
         # 调用 douban API 接口，根据 isbn编码 更新所有记录
         isbnlist = self.model.getlist(0)
         self.number = 0
@@ -543,7 +537,6 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
         self.le_bookauthor.clear()
         # self.le_bookclass.clear()
         self.cb_bookclass.setCurrentIndex(-1)
@@ -604,7 +597,6 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
         search = self.le_bookname.text().strip()
         self.model.search(search)
         self.statusBar.showMessage("共 " + str(self.model.rowCount()) + " 条记录")
@@ -617,7 +609,6 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         @param index DESCRIPTION
         @type QModelIndex
         """
-        # TODO: not implemented yet
         self.Dialog = QtWidgets.QDialog()
         self.CW_bookinfo = Ui_Dialog()
         self.CW_bookinfo.setupUi(self.Dialog)
