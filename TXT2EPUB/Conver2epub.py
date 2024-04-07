@@ -225,7 +225,7 @@ class Conver2txt():
                 #     f'item类型:  {item.get_type()} name: {item.get_name()} id: {item.get_id()}')
                 if ((item.get_type() == ebooklib.ITEM_IMAGE) or (item.get_type() == ebooklib.ITEM_COVER)) and (item.get_name().find('cover') >= 0):
                     coverpath = os.path.join(self.dirname, item.get_name())
-                    if  not os.path.exists(coverpath): os.mkdir(coverpath)
+                    # if  not os.path.exists(coverpath): os.mkdir(coverpath)
                     with open(coverpath, 'wb') as ff:
                         ff.write(item.get_content())
                         # print('cover 已提取')
