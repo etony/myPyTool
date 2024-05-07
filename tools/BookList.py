@@ -413,7 +413,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             isbn, title, author, publisher, price, self.star, self.num,
             bookclass, bookshelf
         ]
-        LOG.info(f'插入记录 {len(bookinfo)} 项: {bookinfo}')
+        LOG.info(f'插入记录 {len(bookinfo)} 项:  {bookinfo}')
         self.model.updateItem(bookinfo)
 
         self.statusBar.showMessage("共 " + str(self.model.rowCount()) + " 条记录")
@@ -634,7 +634,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.CW_bookinfo.lb_bookcover.setPixmap(QPixmap.fromImage(img))
 
         self.CW_bookinfo.tb_bookinfo.setText(
-            '<b><font color="black" size="5">' + douban_bookinfo[1] +
+            '<b><font color="white" size="5">' + douban_bookinfo[1] +
             '</font></b>')
 
         self.CW_bookinfo.tb_bookinfo.append('<br><b>作者: </b>' +
