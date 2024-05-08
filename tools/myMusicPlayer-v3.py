@@ -109,6 +109,7 @@ class GetListThread(QThread):
                       'type': sourcecode, 'page': i}
             res = requests.post(url, params, headers=header)
             html = res.json()
+            LOG.info(html)
             if html['code'] == 200:
                 myjson = myjson + html['data']
 
