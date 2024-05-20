@@ -11,6 +11,8 @@ from PyQt6 import QtGui
 from Ui_Rpassword import Ui_Form
 
 import random
+import secrets
+import string
 
 class Rpwd(QWidget, Ui_Form):
     """
@@ -27,6 +29,7 @@ class Rpwd(QWidget, Ui_Form):
         self.setupUi(self)
         self.setFixedSize(self.width(), self.height())
         self.passwLen.setValidator(QtGui.QIntValidator())
+        self.Lcharcbx.setDisabled(True)
     
     @pyqtSlot()
     def on_pushButton_clicked(self):
@@ -42,12 +45,14 @@ class Rpwd(QWidget, Ui_Form):
         if self.Numbercbx.isChecked():
             pstr = pstr + '01234567890'
         if self.Speccbx.isChecked():
-            pstr = pstr + '~!@#$%^*<>?'
+            pstr = pstr + '~!@#$%^*<>?'    # "!@#$%^&*()_+~`|}{[]:;?><,./-="  "!#$%&()*+,-./:;<=>?@[\]^_`{|}~"
         prefix = self.prefix.text()
     
-        Spass = ''.join(random.sample(pstr, passlen))
+        # Spass = ''.join(random.sample(pstr, passlen))
         
-        self.getPassword.setPlainText(self.getPassword.toPlainText()+prefix+Spass+'\n')
+        Spass = "".join(secrets.choice(pstr) for _ in range(passlen))
+        
+        self.getPassword.setPlainText(self.getPassword.toPlainText()+ f'{prefix}{Spass:<20}'+ f'{self.passcheck(Spass):>5}' + '\n')
     
     @pyqtSlot()
     def on_btn_reset_clicked(self):
@@ -57,6 +62,31 @@ class Rpwd(QWidget, Ui_Form):
         # TODO: not implemented yet
         self.getPassword.setPlainText('')
 
+
+    def passcheck(self, password):
+        pstrength = 0
+        if len(password) >8:
+            pstrength += 1
+        for p in password:
+            if p.isdecimal():
+                pstrength += 1
+                break
+        for p in password:
+            if p.isalpha() and p.islower():
+                pstrength += 1
+                break
+        for p in password:
+            if p.isalpha() and p.isupper():
+                pstrength += 1
+                break                    
+        for p in password:
+            if p in string.punctuation:
+                pstrength += 1
+                break       
+        print(pstrength)   
+        strength = {0: '弱',1: '弱', 2: '弱', 3: '中', 4: '中', 5: '强', 6: '强'}
+        return  strength[pstrength]
+    
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
