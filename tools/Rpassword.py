@@ -13,6 +13,8 @@ from Ui_Rpassword import Ui_Form
 import random
 import secrets
 import string
+import pyperclip as pc
+
 
 class Rpwd(QWidget, Ui_Form):
     """
@@ -41,19 +43,26 @@ class Rpwd(QWidget, Ui_Form):
         passlen = int(self.passwLen.text())
         pstr = 'abcdefghijklmnopqrstuvwxyz'
         if self.Ucharcbx.isChecked():
-            pstr = pstr + 'ABCDEFGHIJKL MNOPQRSTUVIXYZ'
+            pstr = pstr + 'ABCDEFGHIJKLMNOPQRSTUVIXYZ'
         if self.Numbercbx.isChecked():
             pstr = pstr + '01234567890'
         if self.Speccbx.isChecked():
-            pstr = pstr + '~!@#$%^*<>?'    # "!@#$%^&*()_+~`|}{[]:;?><,./-="  "!#$%&()*+,-./:;<=>?@[\]^_`{|}~"
-            # string.punctuation
+            pstr = pstr + self.specialchar.text().replace(' ', '') #'~!@#$%^&*<>?'    # "!@#$%^&*()_+~`|}{[]:;?><,./-="  "!#$%&()*+,-./:;<=>?@[\]^_`{|}~"
+            # string.punctuation 
+            
+        excludechar = self.Excludechar.text().replace(' ', '')     
+        if len(excludechar) > 0:
+            for echar in excludechar:
+                pstr= pstr.replace(echar, '')
+            
+    
         prefix = self.prefix.text()
     
         # Spass = ''.join(random.sample(pstr, passlen))
         
         Spass = "".join(secrets.choice(pstr) for _ in range(passlen))
         
-        self.getPassword.setPlainText(self.getPassword.toPlainText()+ f'{prefix}{Spass:<20}'+ f'{self.passcheck(Spass):>5}' + '\n')
+        self.getPassword.setPlainText(self.getPassword.toPlainText()+ f'{self.passcheck(Spass):<10}' + f'{prefix}{Spass:<20}'+ '\n')
     
     @pyqtSlot()
     def on_btn_reset_clicked(self):
@@ -87,6 +96,10 @@ class Rpwd(QWidget, Ui_Form):
  
         strength = {0: '弱',1: '弱', 2: '弱', 3: '中', 4: '中', 5: '强', 6: '强'}
         return  strength[pstrength]
+
+    @pyqtSlot()
+    def on_btn_copy_clicked(self):
+        pc.copy(self.getPassword.toPlainText())
     
 if __name__ == "__main__":
     import sys
