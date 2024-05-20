@@ -46,6 +46,7 @@ class Rpwd(QWidget, Ui_Form):
             pstr = pstr + '01234567890'
         if self.Speccbx.isChecked():
             pstr = pstr + '~!@#$%^*<>?'    # "!@#$%^&*()_+~`|}{[]:;?><,./-="  "!#$%&()*+,-./:;<=>?@[\]^_`{|}~"
+            # string.punctuation
         prefix = self.prefix.text()
     
         # Spass = ''.join(random.sample(pstr, passlen))
@@ -83,7 +84,7 @@ class Rpwd(QWidget, Ui_Form):
             if p in string.punctuation:
                 pstrength += 1
                 break       
-        print(pstrength)   
+ 
         strength = {0: '弱',1: '弱', 2: '弱', 3: '中', 4: '中', 5: '强', 6: '强'}
         return  strength[pstrength]
     
