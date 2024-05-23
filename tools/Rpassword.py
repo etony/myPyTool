@@ -20,10 +20,11 @@ class Rpwd(QWidget, Ui_Form):
     """
     Class documentation goes here.
     """
+
     def __init__(self, parent=None):
         """
         Constructor
-        
+
         @param parent reference to the parent widget (defaults to None)
         @type QWidget (optional)
         """
@@ -32,14 +33,14 @@ class Rpwd(QWidget, Ui_Form):
         self.setFixedSize(self.width(), self.height())
         self.passwLen.setValidator(QtGui.QIntValidator())
         self.Lcharcbx.setDisabled(True)
-    
+
     @pyqtSlot()
     def on_pushButton_clicked(self):
         """
         Slot documentation goes here.
         """
         # TODO: not implemented yet
-        
+
         passlen = int(self.passwLen.text())
         pstr = 'abcdefghijklmnopqrstuvwxyz'
         if self.Ucharcbx.isChecked():
@@ -47,23 +48,24 @@ class Rpwd(QWidget, Ui_Form):
         if self.Numbercbx.isChecked():
             pstr = pstr + '01234567890'
         if self.Speccbx.isChecked():
-            pstr = pstr + self.specialchar.text().replace(' ', '') #'~!@#$%^&*<>?'    # "!@#$%^&*()_+~`|}{[]:;?><,./-="  "!#$%&()*+,-./:;<=>?@[\]^_`{|}~"
-            # string.punctuation 
-            
-        excludechar = self.Excludechar.text().replace(' ', '')     
+            # '~!@#$%^&*<>?'    # "!@#$%^&*()_+~`|}{[]:;?><,./-="  "!#$%&()*+,-./:;<=>?@[\]^_`{|}~"
+            pstr = pstr + self.specialchar.text().replace(' ', '')
+            # string.punctuation
+
+        excludechar = self.Excludechar.text().replace(' ', '')
         if len(excludechar) > 0:
             for echar in excludechar:
-                pstr= pstr.replace(echar, '')
-            
-    
+                pstr = pstr.replace(echar, '')
+
         prefix = self.prefix.text()
-    
+
         # Spass = ''.join(random.sample(pstr, passlen))
-        
+
         Spass = "".join(secrets.choice(pstr) for _ in range(passlen))
-        
-        self.getPassword.setPlainText(self.getPassword.toPlainText()+ f'{self.passcheck(Spass):<10}' + f'{prefix}{Spass:<20}'+ '\n')
-    
+
+        self.getPassword.setPlainText(self.getPassword.toPlainText(
+        ) + f'{self.passcheck(Spass):<10}' + f'{prefix}{Spass:<20}' + '\n')
+
     @pyqtSlot()
     def on_btn_reset_clicked(self):
         """
@@ -72,10 +74,9 @@ class Rpwd(QWidget, Ui_Form):
         # TODO: not implemented yet
         self.getPassword.setPlainText('')
 
-
     def passcheck(self, password):
         pstrength = 0
-        if len(password) >8:
+        if len(password) > 8:
             pstrength += 1
         for p in password:
             if p.isdecimal():
@@ -88,19 +89,20 @@ class Rpwd(QWidget, Ui_Form):
         for p in password:
             if p.isalpha() and p.isupper():
                 pstrength += 1
-                break                    
+                break
         for p in password:
             if p in string.punctuation:
                 pstrength += 1
-                break       
- 
-        strength = {0: '弱',1: '弱', 2: '弱', 3: '中', 4: '中', 5: '强', 6: '强'}
-        return  strength[pstrength]
+                break
+
+        strength = {0: '弱', 1: '弱', 2: '弱', 3: '中', 4: '中', 5: '强', 6: '强'}
+        return strength[pstrength]
 
     @pyqtSlot()
     def on_btn_copy_clicked(self):
         pc.copy(self.getPassword.toPlainText())
-    
+
+
 if __name__ == "__main__":
     import sys
     app = QApplication(sys.argv)
