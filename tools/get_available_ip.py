@@ -86,7 +86,7 @@ def main():
             pass
     
     for key, value in iplist.items():
-        if value == '100.00%':
+        if float(value.strip('%')) >= 70: 
             print(key)
         
     
