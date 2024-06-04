@@ -181,7 +181,7 @@ gridline-color: rgb(255, 255, 255);</string>
      <item>
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>出版社:</string>
+        <string>出    版:</string>
        </property>
       </widget>
      </item>

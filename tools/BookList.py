@@ -41,12 +41,12 @@ logging.basicConfig(
 # )
 
 bclass = {'默认': 0, '默认分类': 0, '计划': 1, '已读': 2}
-bcol = ['ISBN', '书名', '作者', '出版社', '价格', '评分', '人数', '分类', '书柜']
+bcol = ['ISBN', '书名', '作者', '出版', '价格', '评分', '人数', '分类', '书柜']
 bdict = {
     'ISBN': [],
     '书名': [],
     '作者': [],
-    '出版社': [],
+    '出版': [],
     '价格': [],
     '评分': [],
     '人数': [],
@@ -103,13 +103,13 @@ class TableModel(QtCore.QAbstractTableModel):
             if len(row) == 9:
                 self._data.loc[
                     self._data.iloc[:, 0] == row[0],
-                    ['书名', '作者', '出版社', '价格', '评分', '人数', '分类', '书柜']] = [
+                    ['书名', '作者', '出版', '价格', '评分', '人数', '分类', '书柜']] = [
                         row[1], row[2], row[3], row[4], row[5], row[6], row[7],
                         row[8]
                 ]
             else:
                 self._data.loc[self._data.iloc[:, 0] == row[0],
-                               ['书名', '作者', '出版社', '价格', '评分', '人数']] = [
+                               ['书名', '作者', '出版', '价格', '评分', '人数']] = [
                                    row[1], row[2], row[3], row[4], row[5],
                                    row[6]
                 ]
@@ -163,7 +163,7 @@ class TableModel(QtCore.QAbstractTableModel):
             self._data['ISBN'].astype(str).str.contains(search)
             | self._data['书名'].astype(str).str.contains(search)
             | self._data['作者'].astype(str).str.contains(search)
-            | self._data['出版社'].astype(str).str.contains(search)
+            | self._data['出版'].astype(str).str.contains(search)
             | self._data['分类'].astype(str).str.contains(search)]
 
         self.endResetModel()
@@ -229,7 +229,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             'ISBN': [],
             '书名': [],
             '作者': [],
-            '出版社': [],
+            '出版': [],
             '价格': [],
             '评分': [],
             '人数': [],
@@ -639,7 +639,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
         self.CW_bookinfo.tb_bookinfo.append('<br><b>作者: </b>' +
                                             douban_bookinfo[2])
-        self.CW_bookinfo.tb_bookinfo.append('<br><b>出版社: </b>' +
+        self.CW_bookinfo.tb_bookinfo.append('<br><b>出版: </b>' +
                                             douban_bookinfo[3])
         self.CW_bookinfo.tb_bookinfo.append('<br><b>价格: </b>' +
                                             douban_bookinfo[4])
