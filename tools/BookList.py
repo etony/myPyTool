@@ -392,6 +392,9 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             recommend = round((float(rating['average']) - 2.5) *
                               math.log(float(rating['numRaters']) + 1))
             bookinfo.append(str(recommend))
+        else:
+            for i in range(13):
+                bookinfo.append(" ")
 
         return bookinfo
 
