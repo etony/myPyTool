@@ -655,7 +655,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.CW_bookinfo.tb_bookinfo.append(
             '<br><b>评分: </b>' + str(douban_bookinfo[11]['average']) + '分/ ' +
             str(douban_bookinfo[11]['numRaters']) + '人')
-        self.CW_bookinfo.tb_bookinfo.append('<br><b>链接: &emsp;&emsp;&emsp;&emsp;&emsp; </b><a style="color: #FFFFFF;" href="'+ douban_bookinfo[12] +'"> 豆瓣</a>')
+        self.CW_bookinfo.tb_bookinfo.append('<br><b>链接: &emsp;&emsp;&emsp;&emsp;&emsp; </b>[<a style="color: #FFFFFF;" href="'+ douban_bookinfo[12] +'"> 豆瓣</a>]')
 
         # r = requests.get(book_dict['image'])
         # im = cv.imdecode(np.frombuffer(r.content, np.uint8), cv.IMREAD_COLOR) # 直接解码网络数据
