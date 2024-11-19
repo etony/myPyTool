@@ -12,6 +12,7 @@ import os
 import datetime
 from opencc import OpenCC
 
+
 class Conver2epub():
     def __init__(self, txtfile, epubfile):
         self.txtfile = txtfile
@@ -215,21 +216,20 @@ class Conver2txt():
 
     def set_code(self, code='utf-8'):
         self.code = code
-        
-        
-    def modi(self,bookinfo):
+
+    def modi(self, bookinfo):
         # self.book.set_identifier(self.id_epub)
 
         self.book.set_unique_metadata('DC', 'title', bookinfo['title'])
-        #self.book.set_language(self.language)
+        # self.book.set_language(self.language)
         self.book.set_unique_metadata('DC', 'date', bookinfo['date'])
         self.book.set_unique_metadata('DC', 'creator', bookinfo['creator'])
         self.book.set_unique_metadata('DC', 'contributor', bookinfo['contrib'])
         self.book.set_unique_metadata('DC', 'description',
-                          '请注意，该EPUB文档由TXT文本文件转换生成，原始内容源于互联网。')
-        epub.write_epub(bookinfo['filename'],self.book,{})        
-        
-    def conver(self,fanjian=False):
+                                      '请注意，该EPUB文档由TXT文本文件转换生成，原始内容源于互联网。')
+        epub.write_epub(bookinfo['filename'], self.book, {})
+
+    def conver(self, fanjian=False):
         # book = epub.read_epub(self.epubfile)
 
         with open(self.txtfile, 'a', encoding='utf-8') as f:
@@ -249,10 +249,10 @@ class Conver2txt():
                     if fanjian:
                         cc = OpenCC('t2s')
                         f.write(cc.convert(soup.text))
-                        
+
                     else:
                         f.write(soup.text)
-                    f.write('==================================')                        
+                    f.write('==================================')
 
                     '''
                     ITEM_UNKNOWN = 0
@@ -270,10 +270,12 @@ class Conver2txt():
 
     def get_info(self):
         # book = epub.read_epub(self.epubfile)
-        book_info = {'title':'未知','creator':'etony.an@gmail.com','contrib':'etony.an@gmail.com','date':'0000-00-00 00:00:00',}
+        book_info = {'title': '未知', 'creator': 'etony.an@gmail.com',
+                     'contrib': 'etony.an@gmail.com', 'date': '0000-00-00 00:00:00', }
         try:
             book_info['title'] = self.book.get_metadata('DC', 'title')[0][0]
-            book_info['creator'] = self.book.get_metadata('DC', 'creator')[0][0]
+            book_info['creator'] = self.book.get_metadata('DC', 'creator')[
+                0][0]
             book_info['contrib'] = self.book.get_metadata(
                 'DC', 'contributor')[0][0]
             book_info['date'] = self.book.get_metadata('DC', 'date')[0][0]
