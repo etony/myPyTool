@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'D:\work\GIT\Python-Study\tools\BookList.ui'
+# Form implementation generated from reading ui file 'BookList.ui'
 #
 # Created by: PyQt6 UI code generator 6.4.2
 #
@@ -14,7 +14,7 @@ class Ui_mainWindow(object):
         mainWindow.setObjectName("mainWindow")
         mainWindow.resize(800, 688)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("D:\\work\\GIT\\Python-Study\\tools\\book2.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        icon.addPixmap(QtGui.QPixmap("book2.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         mainWindow.setWindowIcon(icon)
         self.centralWidget = QtWidgets.QWidget(parent=mainWindow)
         self.centralWidget.setObjectName("centralWidget")
@@ -50,7 +50,7 @@ class Ui_mainWindow(object):
         self.pb_save.setObjectName("pb_save")
         self.horizontalLayout.addWidget(self.pb_save)
         self.layoutWidget1 = QtWidgets.QWidget(parent=self.centralWidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(30, 80, 731, 25))
+        self.layoutWidget1.setGeometry(QtCore.QRect(30, 80, 711, 25))
         self.layoutWidget1.setObjectName("layoutWidget1")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.layoutWidget1)
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -141,6 +141,10 @@ class Ui_mainWindow(object):
         self.pb_insert.setStatusTip("")
         self.pb_insert.setObjectName("pb_insert")
         self.horizontalLayout_2.addWidget(self.pb_insert)
+        self.label_10 = QtWidgets.QLabel(parent=self.centralWidget)
+        self.label_10.setGeometry(QtCore.QRect(745, 85, 16, 20))
+        self.label_10.setOpenExternalLinks(True)
+        self.label_10.setObjectName("label_10")
         mainWindow.setCentralWidget(self.centralWidget)
         self.statusBar = QtWidgets.QStatusBar(parent=mainWindow)
         self.statusBar.setObjectName("statusBar")
@@ -184,6 +188,7 @@ class Ui_mainWindow(object):
         self.pb_getbookinfo.setText(_translate("mainWindow", "获    取"))
         self.pb_insert.setToolTip(_translate("mainWindow", "根据ISBN编码获取图书信息"))
         self.pb_insert.setText(_translate("mainWindow", "更    新"))
+        self.label_10.setText(_translate("mainWindow", "<html><head/><body><p><a href=\"https://etony.github.io/\"><span style=\" text-decoration: underline; color:#ffffff;\">?</span></a></p></body></html>"))
 
 
 if __name__ == "__main__":
