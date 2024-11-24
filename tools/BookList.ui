@@ -113,7 +113,7 @@
      <rect>
       <x>30</x>
       <y>80</y>
-      <width>731</width>
+      <width>711</width>
       <height>25</height>
      </rect>
     </property>
@@ -320,6 +320,22 @@ gridline-color: rgb(255, 255, 255);</string>
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>745</x>
+      <y>85</y>
+      <width>16</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://etony.github.io/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#ffffff;&quot;&gt;?&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="openExternalLinks">
+     <bool>true</bool>
+    </property>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>

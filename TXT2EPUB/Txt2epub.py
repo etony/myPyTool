@@ -4,6 +4,7 @@
 Module implementing Txt2epub.
 """
 import os
+import re
 import sys
 import datetime
 from loguru import logger
@@ -257,13 +258,14 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        conver2txt = Conver2txt(self.le_in_epub.text(), self.le_out_txt.text())
+        self.conver2txt = Conver2txt(
+            self.le_in_epub.text(), self.le_out_txt.text())
 
         if self.cb_out_code.currentIndex() != 0:
             encode = self.cb_out_code.currentText()
-            conver2txt.set_code(encode)
+            self.conver2txt.set_code(encode)
         fanjian = self.chb_fanjian.isChecked()
-        conver2txt.conver(fanjian=fanjian)
+        self.conver2txt.conver(fanjian=fanjian)
         logger.info(f'文件转换完成！  {self.le_out_txt.text()}')
         self.statusBar.showMessage(f"文件转换完成！  {self.le_out_txt.text()}")
 
@@ -299,6 +301,52 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             self.out_txtpath = os.path.join(
                 self.in_dirname, in_file_name) + '.txt'
             self.le_out_txt.setText(self.out_txtpath)
+
+    @pyqtSlot()
+    def on_pb_out_modi_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        self.conver2txt = Conver2txt(
+            self.le_in_epub.text(), self.le_out_txt.text())
+        bookinfo = {}
+        bookinfo['title'] = self.le_book_title.text()
+        bookinfo['creator'] = self.le_book_creater.text()
+        bookinfo['contrib'] = self.le_book_contrib.text()
+        bookinfo['date'] = self.le_book_date.text()
+        # bookinfo['language'] = self.chb_fanjian.isChecked()
+        bookinfo['filename'] = self.le_in_epub.text()
+        logger.info(f'文件信息：  {bookinfo}')
+        self.conver2txt.modi(bookinfo)
+        logger.info(f'文件修改完成！  {self.le_out_txt.text()}')
+        self.statusBar.showMessage(f"文件修改完成！  {self.le_out_txt.text()}")
+
+    @pyqtSlot()
+    def on_pb_bat_rename_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+
+        for root, dirs, files in os.walk(self.in_dirname):
+            for file in files:
+                old_file_name = os.path.join(root, file)
+                file_name, file_extension = os.path.splitext(
+                    os.path.basename(file))
+                if file_extension == '.epub':
+                    conver2txt = Conver2txt(
+                        os.path.join(root, file), self.le_out_txt.text())
+                    book_info = conver2txt.get_info()
+
+                    filename = re.split(r"[(（：【]", book_info['title'], maxsplit=1, flags=0)[
+                        0] + '_' + book_info['creator']
+                    new_file_name = os.path.join(
+                        root, filename + file_extension)
+                    try:
+                        os.rename(old_file_name, new_file_name)
+                    except:
+                        pass
 
 
 if __name__ == "__main__":

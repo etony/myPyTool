@@ -42,12 +42,15 @@
    <property name="geometry">
     <rect>
      <x>330</x>
-     <y>180</y>
+     <y>150</y>
      <width>141</width>
-     <height>261</height>
+     <height>291</height>
     </rect>
    </property>
    <property name="openExternalLinks">
+    <bool>true</bool>
+   </property>
+   <property name="openLinks">
     <bool>true</bool>
    </property>
   </widget>
