@@ -307,7 +307,6 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
         self.conver2txt = Conver2txt(
             self.le_in_epub.text(), self.le_out_txt.text())
         bookinfo = {}
@@ -327,14 +326,15 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
-
-        for root, dirs, files in os.walk(self.in_dirname):
+        dir_path = QFileDialog.getExistingDirectory(self, "选择epub文件目录", "\.",)
+        epubfile =[]
+        for root, dirs, files in os.walk(dir_path):
             for file in files:
                 old_file_name = os.path.join(root, file)
                 file_name, file_extension = os.path.splitext(
                     os.path.basename(file))
                 if file_extension == '.epub':
+                    epubfile.append(file)
                     conver2txt = Conver2txt(
                         os.path.join(root, file), self.le_out_txt.text())
                     book_info = conver2txt.get_info()
@@ -347,6 +347,8 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
                         os.rename(old_file_name, new_file_name)
                     except:
                         pass
+        logger.info(f'批量改名完成: {dir_path}--{len(epubfile)}')
+        self.statusBar.showMessage(f"批量改名完成: {dir_path}")
 
 
 if __name__ == "__main__":

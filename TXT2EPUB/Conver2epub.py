@@ -227,6 +227,15 @@ class Conver2txt():
         self.book.set_unique_metadata('DC', 'contributor', bookinfo['contrib'])
         self.book.set_unique_metadata('DC', 'description',
                                       '请注意，该EPUB文档由TXT文本文件转换生成，原始内容源于互联网。')
+        ## 重建书签
+        # toc = []
+        
+        # for item in self.book.get_items():
+        #     if item.get_type()== ebooklib.ITEM_DOCUMENT:
+
+        #         toc.append(epub.Link(item.get_name(), item.get_id(), 'intro'))
+
+        # self.book.toc = tuple(toc)     
         epub.write_epub(bookinfo['filename'], self.book, {})
 
     def conver(self, fanjian=False):
