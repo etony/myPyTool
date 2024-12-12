@@ -312,7 +312,7 @@ class Conver2txt():
                 return item.get_content()
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    cover2 = Conver2epub('从前有座灵剑山.txt', '从前有座灵剑山.epub')
-    cover2.conver()
+#     cover2 = Conver2epub('从前有座灵剑山.txt', '从前有座灵剑山.epub')
+#     cover2.conver()

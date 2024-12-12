@@ -21,11 +21,10 @@ class Ui_Dialog(object):
         self.lb_bookcover.setOpenExternalLinks(True)
         self.lb_bookcover.setObjectName("lb_bookcover")
         self.tb_bookinfo = QtWidgets.QTextBrowser(parent=Dialog)
-        # self.tb_bookinfo.setEnabled(False)
-        self.tb_bookinfo.setGeometry(QtCore.QRect(330, 150, 141, 291))
+        self.tb_bookinfo.setEnabled(True)
+        self.tb_bookinfo.setGeometry(QtCore.QRect(330, 130, 141, 311))
         self.tb_bookinfo.setOpenExternalLinks(True)
         self.tb_bookinfo.setOpenLinks(True)
-        self.tb_bookinfo.setAlignment(QtCore.Qt.AlignmentFlag.AlignBottom)
         self.tb_bookinfo.setObjectName("tb_bookinfo")
 
         self.retranslateUi(Dialog)
