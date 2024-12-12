@@ -28,11 +28,11 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
-      <string>To EPUB</string>
+      <string>转 EPUB</string>
      </attribute>
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
@@ -118,7 +118,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>10</y>
+        <y>0</y>
         <width>381</width>
         <height>166</height>
        </rect>
@@ -230,13 +230,13 @@
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>To TXT</string>
+      <string>转 TXT</string>
      </attribute>
      <widget class="QLabel" name="label_9">
       <property name="geometry">
        <rect>
-        <x>550</x>
-        <y>190</y>
+        <x>380</x>
+        <y>180</y>
         <width>21</width>
         <height>20</height>
        </rect>
@@ -380,7 +380,7 @@
         <x>400</x>
         <y>0</y>
         <width>161</width>
-        <height>191</height>
+        <height>201</height>
        </rect>
       </property>
       <property name="text">
@@ -393,10 +393,10 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>180</y>
         <width>361</width>
         <height>25</height>
