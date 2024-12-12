@@ -288,7 +288,6 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        # TODO: not implemented yet
         in_epubpath = self.le_in_epub.text()
         self.in_dirname, in_filename = os.path.split(in_epubpath)
         in_file_name, in_extension = os.path.splitext(
@@ -326,8 +325,9 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         """
         Slot documentation goes here.
         """
-        dir_path = QFileDialog.getExistingDirectory(self, "选择epub文件目录", "\.",QFileDialog.show)
-        epubfile =[]
+        dir_path = QFileDialog.getExistingDirectory(
+            self, "选择epub文件目录", "\.", QFileDialog.show)
+        epubfile = []
         for root, dirs, files in os.walk(dir_path):
             for file in files:
                 old_file_name = os.path.join(root, file)
