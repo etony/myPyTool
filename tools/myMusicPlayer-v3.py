@@ -5,8 +5,9 @@ Module implementing myMusicPlayer.
 pygame == 2.3.0
 """
 from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex, QTimer, QThread, pyqtSignal, QMutex, QPoint, QCoreApplication
-from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMenu, QSystemTrayIcon
+from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMenu, QSystemTrayIcon, QStyleFactory
 from PyQt6.QtGui import QPixmap, QCloseEvent, QIcon, QAction
+
 
 from Ui_MusicPlayer_v3 import Ui_MusicPlayer
 import requests
@@ -419,6 +420,8 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
 
         # 下载通道选项
         urls = self.cb_urls.currentText().strip()
+        
+        self.cbbox.addItems(['windows11','Fusion'])
 
     def quitApp(self):
         QCoreApplication.quit()
@@ -1144,6 +1147,10 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             self.lw_lrc.setVisible(True)
 
         pass
+
+    @pyqtSlot(str)
+    def on_cbbox_textActivated(self, p0):
+        QApplication.setStyle(QStyleFactory.create(p0))
 
 
 if __name__ == "__main__":

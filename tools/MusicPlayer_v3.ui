@@ -22,9 +22,9 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>80</y>
+      <y>99</y>
       <width>200</width>
-      <height>200</height>
+      <height>181</height>
      </rect>
     </property>
     <property name="toolTip">
@@ -361,6 +361,16 @@
       </layout>
      </item>
     </layout>
+   </widget>
+   <widget class="QComboBox" name="cbbox">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>70</y>
+      <width>231</width>
+      <height>22</height>
+     </rect>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

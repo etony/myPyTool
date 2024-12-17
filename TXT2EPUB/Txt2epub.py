@@ -326,29 +326,34 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         dir_path = QFileDialog.getExistingDirectory(
-            self, "选择epub文件目录", "\.", QFileDialog.show)
+            None, "选择epub文件目录", "\.")
         epubfile = []
         for root, dirs, files in os.walk(dir_path):
             for file in files:
                 old_file_name = os.path.join(root, file)
+                # f_old_file_name = os.path.join(root, 'F_'+file)
                 file_name, file_extension = os.path.splitext(
                     os.path.basename(file))
                 if file_extension == '.epub':
                     epubfile.append(file)
-                    conver2txt = Conver2txt(
-                        os.path.join(root, file), self.le_out_txt.text())
-                    book_info = conver2txt.get_info()
-
-                    filename = re.split(r"[(（：【]", book_info['title'], maxsplit=1, flags=0)[
-                        0] + '_' + book_info['creator']
-                    new_file_name = os.path.join(
-                        root, filename + file_extension)
                     try:
+                        conver2txt = Conver2txt(
+                            os.path.join(root, file), self.le_out_txt.text())
+                        book_info = conver2txt.get_info()
+    
+                        filename = re.split(r"[(（：【]", book_info['title'], maxsplit=1, flags=0)[
+                            0] + '_' + book_info['creator']
+                        new_file_name = os.path.join(
+                            root, filename + file_extension)
+                    
                         os.rename(old_file_name, new_file_name)
                     except:
+                        # os.rename(old_file_name, f_old_file_name)
+                        logger.info(f'重命名失败: {file}')
                         pass
-        logger.info(f'批量改名完成: {dir_path} - {len(epubfile)} 个文件')
-        self.statusBar.showMessage(f"批量改名完成: {dir_path} 个文件")
+        logger.info(f'批量重命名完成: {dir_path} - {len(epubfile)} 个文件')
+        self.statusBar.showMessage(f"批量重命名完成: {dir_path} 个文件")
+
 
 
 if __name__ == "__main__":
