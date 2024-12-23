@@ -280,7 +280,7 @@ class Conver2txt():
     def get_info(self):
         # book = epub.read_epub(self.epubfile)
         book_info = {'title': '未知', 'creator': 'etony.an@gmail.com',
-                     'contrib': 'etony.an@gmail.com', 'date': '0000-00-00 00:00:00', }
+                     'contrib': 'etony.an@gmail.com', 'date': '1000-10-10 10:10:10', }
         try:
             book_info['title'] = self.book.get_metadata('DC', 'title')[0][0]
             book_info['creator'] = self.book.get_metadata('DC', 'creator')[

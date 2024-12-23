@@ -95,14 +95,17 @@
        </item>
       </layout>
      </widget>
-     <widget class="QLabel" name="lb_image">
+     <widget class="ClickableLabel" name="lb_image">
       <property name="geometry">
        <rect>
         <x>400</x>
         <y>0</y>
         <width>161</width>
-        <height>191</height>
+        <height>201</height>
        </rect>
+      </property>
+      <property name="mouseTracking">
+       <bool>true</bool>
       </property>
       <property name="text">
        <string/>
@@ -383,6 +386,12 @@
         <height>201</height>
        </rect>
       </property>
+      <property name="cursor">
+       <cursorShape>OpenHandCursor</cursorShape>
+      </property>
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
       <property name="text">
        <string/>
       </property>
@@ -483,6 +492,13 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ClickableLabel</class>
+   <extends>QLabel</extends>
+   <header>clickablelabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -41,6 +41,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         logger.add('日志_{time:YYYY-MM-DD}.log', rotation="1 day",
                    format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {module}.{function} : {message}")
         logger.info('程序加载完成.')
+        # self.lb_cover.clicked.connect(self.on_lb_cover_clicked)
 
     @pyqtSlot()
     @logger.catch()
@@ -124,7 +125,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         txtpath, txtType = QFileDialog.getOpenFileName(
-            self, "选择源文件", "\.", "*.txt;;All Files(*)")
+            self, "选择源文件", ".", "*.txt;;All Files(*)")
         if txtpath != "":
             self.le_txt.setText(txtpath)
 
@@ -155,7 +156,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         self.coverpath, coverType = QFileDialog.getOpenFileName(
-            self, "选择封面图片", "\.", "*.jpg;;All Files(*)")
+            self, "选择封面图片", ".", "*.jpg;;All Files(*)")
 
         if self.coverpath != "":
             cover = QPixmap(self.coverpath)
@@ -203,7 +204,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         in_epubpath, in_epubType = QFileDialog.getOpenFileName(
-            self, "选择源文件", "\.", "*.epub;;All Files(*)")
+            self, "选择源文件", ".", "*.epub;;All Files(*)")
         if in_epubpath != "":
             self.le_in_epub.setText(in_epubpath)
 
@@ -326,7 +327,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         Slot documentation goes here.
         """
         dir_path = QFileDialog.getExistingDirectory(
-            None, "选择epub文件目录", "\.")
+            None, "选择epub文件目录", ".")
         epubfile = []
         for root, dirs, files in os.walk(dir_path):
             for file in files:
@@ -353,7 +354,16 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
                         pass
         logger.info(f'批量重命名完成: {dir_path} - {len(epubfile)} 个文件')
         self.statusBar.showMessage(f"批量重命名完成: {dir_path} 个文件")
+    
+    @pyqtSlot()
+    def on_lb_image_clicked(self):
+        self.coverpath, coverType = QFileDialog.getOpenFileName(
+            self, "选择封面图片", ".", "*.jpg;;All Files(*)")
 
+        if self.coverpath != "":
+            cover = QPixmap(self.coverpath)
+            self.lb_image.setPixmap(cover)
+            logger.info(f'指定封面图片:{self.coverpath}')
 
 
 if __name__ == "__main__":
