@@ -5,8 +5,9 @@ Module implementing myMusicPlayer.
 pygame == 2.3.0
 """
 from PyQt6.QtCore import pyqtSlot, Qt, QModelIndex, QTimer, QThread, pyqtSignal, QMutex, QPoint, QCoreApplication
-from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMenu, QSystemTrayIcon
+from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMenu, QSystemTrayIcon, QStyleFactory
 from PyQt6.QtGui import QPixmap, QCloseEvent, QIcon, QAction
+
 
 from Ui_MusicPlayer_v3 import Ui_MusicPlayer
 import requests
@@ -252,7 +253,7 @@ class LrcThread(QThread):
     def __del__(self):
         # 线程状态改变与线程终止
         self.working = False
-        self.wait()
+        # self.wait()
 
     def run(self):
         LOG.info(f'歌词显示~~~~ tab-{site}  id-{curindex}')
@@ -405,7 +406,7 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
     # 托盘图标
         self.showAction = QAction("显示", self, triggered=self.showNormal)
         self.quitAction = QAction(
-            "退出", self, triggered=app.quit)  # self.quitApp
+            "退出", self, triggered=self.quitApp)  # app.quit
         self.showAction.setIcon(QIcon("show.jpg"))
         self.quitAction.setIcon(QIcon("quit.jpg"))
         self.trayIconMenu = QMenu(self)
@@ -420,8 +421,13 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
         # 下载通道选项
         urls = self.cb_urls.currentText().strip()
 
+        self.cbbox.addItems(['windows11', 'Fusion'])
+
     def quitApp(self):
-        QCoreApplication.quit()
+        self.trayIcon = None
+        # app.quit()
+        sys.exit(app.exec())
+        # QCoreApplication.quit()
 
     def changeEvent(self, event):
         if event.type() == 105:
@@ -1144,6 +1150,17 @@ class myMusicPlayer(QMainWindow, Ui_MusicPlayer):
             self.lw_lrc.setVisible(True)
 
         pass
+
+    @pyqtSlot(str)
+    def on_cbbox_textActivated(self, p0):
+        QApplication.setStyle(QStyleFactory.create(p0))
+        # QApplication.setPalette(QApplication.style().standardPalette())
+        # time.sleep(5)
+        # QApplication.setPalette(QApplication.palette())
+
+    def flush(self):
+        pass
+        # 避免出现 RuntimeError: wrapped C/C++ object of type LrcThread has been deleted
 
 
 if __name__ == "__main__":

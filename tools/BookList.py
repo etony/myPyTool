@@ -656,7 +656,13 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.CW_bookinfo.tb_bookinfo.append(
             '<br><b>评分: </b>' + str(douban_bookinfo[11]['average']) + '分/ ' +
             str(douban_bookinfo[11]['numRaters']) + '人')
-        self.CW_bookinfo.tb_bookinfo.append('<br><b>链接: &emsp;&emsp;&emsp;&emsp;&emsp; </b>[<a style="color: #FFFFFF;" href="'+ douban_bookinfo[12] +'"> 豆瓣</a>]')
+        self.CW_bookinfo.tb_bookinfo.append(
+            '<br><b>链接: &emsp;&emsp;&emsp;&emsp;&emsp; </b>[<a style="color: #FFFFFF;" href="' + douban_bookinfo[12] + '"> 豆瓣 </a>]')
+
+        Recomm = ((float(douban_bookinfo[11]['average'])) - 2.5) * \
+            math.log(float(douban_bookinfo[11]['numRaters']))
+        self.CW_bookinfo.tb_bookinfo.append(
+            '<br><b>推荐: </b>' + str(round(Recomm)))
 
         # r = requests.get(book_dict['image'])
         # im = cv.imdecode(np.frombuffer(r.content, np.uint8), cv.IMREAD_COLOR) # 直接解码网络数据
@@ -665,10 +671,21 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # self.CW_bookinfo.tb_bookinfo.append('<a href="https://www.douban.com">douban</a>')
 
         self.Dialog.setWindowTitle("图书信息 - " + douban_bookinfo[1])
-        LOG.info(f'获取封面信息 {len(douban_bookinfo)} 项: {douban_bookinfo}')
 
+        LOG.info(f'获取封面信息 {len(douban_bookinfo)} 项: {douban_bookinfo}')
         self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
+
         self.Dialog.show()
+        tb_y = self.CW_bookinfo.tb_bookinfo.pos().y()
+
+        tb_height = self.CW_bookinfo.tb_bookinfo.document().size().height() + \
+                    self.CW_bookinfo.tb_bookinfo.contentsMargins().top() + \
+                    self.CW_bookinfo.tb_bookinfo.contentsMargins().bottom() 
+        self.CW_bookinfo.tb_bookinfo.setFixedHeight(round(tb_height))
+        move_y = 311-round(tb_height)
+        self.CW_bookinfo.tb_bookinfo.setGeometry(self.CW_bookinfo.tb_bookinfo.pos().x(), 
+                                                 tb_y+move_y, self.CW_bookinfo.tb_bookinfo.width(), 
+                                                 self.CW_bookinfo.tb_bookinfo.height())
 
 
 if __name__ == "__main__":
