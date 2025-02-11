@@ -79,9 +79,9 @@ def main():
         ips = get_valid_ip(url)
         ips_current = get_current_ip(url_current)
         ip = mping(ips_current+ips, step)
-        if len(ip)>0:
+        if len(ip) > 0:
             print(f"\n该域名的可用ip地址：{', '.join(ip)}")
-        else :
+        else:
             print("\n\033[1;31m该域名无可用ip地址.\033[0m")
 
 
