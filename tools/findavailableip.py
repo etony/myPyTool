@@ -48,7 +48,7 @@ def get_current_ip(url):
 
 
 def mping(ips, step):
-    valid_ip = []
+    valid_ip = {}
     length = len(ips)
     for i in range(0, length, step):
         j = i + step
@@ -61,7 +61,7 @@ def mping(ips, step):
 
             for addr, rtt in results.items():
                 print(f"{addr} 响应时间为 {rtt} 秒")
-                valid_ip.append(addr)
+                valid_ip[addr]= rtt
             if no_results:
                 print(f"\n以下地址没有响应：{', '.join(no_results)}\n")
         except:
@@ -80,7 +80,10 @@ def main():
         ips_current = get_current_ip(url_current)
         ip = mping(ips_current+ips, step)
         if len(ip) > 0:
-            print(f"\n该域名的可用ip地址：{', '.join(ip)}")
+            # 根据响应值排序
+            sorted_by_value = dict(sorted(ip.items(), key=lambda item: item[1]))
+            print(sorted_by_value)
+            print(f"\n该域名的可用ip地址：{', '.join(sorted_by_value)}")
         else:
             print("\n\033[1;31m该域名无可用ip地址.\033[0m")
 
