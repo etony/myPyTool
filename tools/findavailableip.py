@@ -63,7 +63,7 @@ def mping(ips, step):
                 print(f"{addr} 响应时间为 {rtt} 秒")
                 valid_ip.append(addr)
             if no_results:
-                print(f"以下地址没有响应：{', '.join(no_results)}")
+                print(f"\n以下地址没有响应：{', '.join(no_results)}\n")
         except:
             pass
     return valid_ip
