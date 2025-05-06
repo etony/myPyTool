@@ -277,7 +277,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         """
 
         csvNamepath, csvType = QFileDialog.getOpenFileName(
-            self, "选择存储文件", "\.", "*.csv;;All Files(*)")
+            self, "选择存储文件", ".", "*.csv;;All Files(*)")
 
         if csvNamepath != "":
             df = pd.read_csv(csvNamepath, dtype='object')  # 数据全部转换为字符串型
@@ -428,7 +428,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         Slot documentation goes here.
         """
         isbn = self.le_isbn_pic.text()
-        bookinfo = self.get_douban_isbn(isbn)
+        bookinfo = self.get_douban_isbn(isbn.strip())
         if len(bookinfo) > 0:
             self.le_bookname.setText(bookinfo[1])
             self.le_bookauthor.setText(bookinfo[2])
@@ -686,6 +686,14 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
                                                  tb_y+move_y, self.CW_bookinfo.tb_bookinfo.width(), 
                                                  self.CW_bookinfo.tb_bookinfo.height())
 
+    @pyqtSlot()
+    def on_pb_search_douban_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        raise NotImplementedError
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -697,7 +705,7 @@ if __name__ == "__main__":
     # # 浅色样式
     # app.setStyleSheet(qdarkstyle.load_stylesheet(qdarkstyle.LightPalette))
     # # 深色样式
-    # app.setStyleSheet(qdarkstyle.load_stylesheet(qdarkstyle.DarkPalette))
+    # app.setStyleSheet(qdarkstyle.load_stylesheet(qdarkstyle.DarkPalette)) 
 
     # app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt6'))
 
