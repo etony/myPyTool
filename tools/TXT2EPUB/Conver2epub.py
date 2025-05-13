@@ -6,7 +6,7 @@ Created on Tue Aug  1 09:04:38 2023
 """
 import ebooklib
 from ebooklib import epub
-import kindle_maker
+from pymobi import mobi
 from bs4 import BeautifulSoup
 import re
 import os
@@ -324,18 +324,32 @@ class epub2mobi():
         title = self.book.get_metadata("DC", "title")[0][0]
         author = self.book.get_metadata("DC", "creator")[0][0]
 
-        # 获取内容
-        content = ""
-        for item_id, href in self.book.spine:
-            item = self.book.get_item(item_id)
-        content += item.get_content()
+        mobi_book = mobi.MobiBook()
+        
+        for item in self.book.get_items():
+            if item.get_type() == ebooklib.ITEM_DOCUMENT:
+                print('==================================')
+                print('NAME : ', item.get_name())
+                print('----------------------------------')
+                print(item.get_content().decode('utf-8'))
+                print('==================================')
+                
+                mobi_book.add_chapter(item.get_name(),item.get_content().decode('utf-8'))
+        
+        
+        mobi_book.save(self.mobifile)
+        #         content += item.get_content().decode('utf-8')
+        # # for item_id, href in self.book.spine:
+        # #     item = self.book.get_item_with_id(item_id)
+        # #     print(item)
+        # #     content += item.get_content()
 
-        # 创建MOBI文件
-        km = kindle_maker.KM(self.filename.rsplit('.', 1)[0]+".mobi")
-        km.set_title(title)
-        km.set_author(author)
-        km.add_chapter("Chapter 1", content)
-        km.make()
+        # # 创建MOBI文件
+        # km = kindle_maker.KM(self.mobifile)
+        # km.set_title(title)
+        # km.set_author(author)
+        # km.add_chapter("Chapter 1", content)
+        # km.make()
 # if __name__ == "__main__":
 
 #     cover2 = Conver2epub('从前有座灵剑山.txt', '从前有座灵剑山.epub')

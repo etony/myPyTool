@@ -61,7 +61,7 @@ class Ui_MainWindow(object):
         self.lb_image.setGeometry(QtCore.QRect(400, 0, 161, 201))
         self.lb_image.setMouseTracking(True)
         self.lb_image.setText("")
-        self.lb_image.setPixmap(QtGui.QPixmap("TXT2EPUB\\cover.jpeg"))
+        self.lb_image.setPixmap(QtGui.QPixmap("cover.jpeg"))
         self.lb_image.setScaledContents(True)
         self.lb_image.setObjectName("lb_image")
         self.layoutWidget1 = QtWidgets.QWidget(parent=self.tab)

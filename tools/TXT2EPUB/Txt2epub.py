@@ -75,7 +75,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             conver2.conver()
             logger.info(f'文件转换完成！   {epubfile}')
             self.statusBar.showMessage("文件转换完成！")
-            self.pb_mobi.setEnabled(True)
+            #self.pb_mobi.setEnabled(True)
             reply = QMessageBox(QMessageBox.Icon.Information, '信息', '转换完成,是否打开存储目录？',
                                 QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.No).exec()
             if reply == QMessageBox.StandardButton.Ok:
