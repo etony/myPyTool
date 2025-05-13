@@ -19,7 +19,7 @@ from PyQt6.QtGui import QPixmap, QImage
 from Ui_Txt2epub import Ui_MainWindow
 from Ui_Dir import Ui_Dialog
 
-from Conver2epub import Conver2epub, Conver2txt
+from Conver2epub import Conver2epub, Conver2txt, epub2mobi
 
 
 class Txt2epub(QMainWindow, Ui_MainWindow):
@@ -75,6 +75,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             conver2.conver()
             logger.info(f'文件转换完成！   {epubfile}')
             self.statusBar.showMessage("文件转换完成！")
+            self.pb_mobi.setEnabled(True)
             reply = QMessageBox(QMessageBox.Icon.Information, '信息', '转换完成,是否打开存储目录？',
                                 QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.No).exec()
             if reply == QMessageBox.StandardButton.Ok:
@@ -102,6 +103,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             if epubpath != '':
                 self.le_epub.setText(epubpath)
                 logger.info(f'指定存储路径: {epubpath}')
+                #self.pb_mobi.setEnabled(True)
         else:
             logger.info('未指定转换文件！')
             self.statusBar.showMessage('未指定转换文件！')
@@ -365,6 +367,12 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             self.lb_image.setPixmap(cover)
             logger.info(f'指定封面图片:{self.coverpath}')
 
+    @pyqtSlot()
+    def on_pb_mobi_clicked(self):
+        epubfile = self.le_epub.text().strip()
+        mobifile = epubfile.rsplit('.', 1)[0]+".mobi"
+        e2mobi = epub2mobi(epubfile,mobifile)
+        e2mobi.e2mobi()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

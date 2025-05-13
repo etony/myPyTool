@@ -16,19 +16,6 @@
   <property name="sizeGripEnabled">
    <bool>true</bool>
   </property>
-  <widget class="QPushButton" name="pb_search_douban">
-   <property name="geometry">
-    <rect>
-     <x>310</x>
-     <y>10</y>
-     <width>80</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>PushButton</string>
-   </property>
-  </widget>
   <widget class="QTableView" name="tv_booksearch">
    <property name="geometry">
     <rect>
@@ -39,15 +26,27 @@
     </rect>
    </property>
   </widget>
-  <widget class="QLineEdit" name="le_search_douban">
+  <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>291</width>
-     <height>22</height>
+     <width>381</width>
+     <height>26</height>
     </rect>
    </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QLineEdit" name="le_search_douban"/>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pb_search_douban">
+      <property name="text">
+       <string>搜    索</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

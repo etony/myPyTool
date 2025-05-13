@@ -40,7 +40,7 @@
         <x>10</x>
         <y>180</y>
         <width>381</width>
-        <height>25</height>
+        <height>26</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout">
@@ -87,6 +87,16 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="pb_mobi">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>转 mobi</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="pb_cover">
          <property name="text">
           <string>封   面</string>
@@ -123,7 +133,7 @@
         <x>10</x>
         <y>0</y>
         <width>381</width>
-        <height>166</height>
+        <height>169</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -408,7 +418,7 @@
         <x>10</x>
         <y>180</y>
         <width>361</width>
-        <height>25</height>
+        <height>26</height>
        </rect>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_10">

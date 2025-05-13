@@ -22,6 +22,7 @@ from PyQt6.QtGui import QIcon, QImage, QPixmap
 from PyQt6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMenu
 
 from Ui_BookInfo import Ui_Dialog
+from Ui_BooSearch import Ui_Dialog_S
 from Ui_BookList import Ui_mainWindow
 
 import qdarkstyle
@@ -688,11 +689,12 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
     @pyqtSlot()
     def on_pb_search_douban_clicked(self):
-        """
-        Slot documentation goes here.
-        """
-        # TODO: not implemented yet
-        raise NotImplementedError
+        self.Dialog = QtWidgets.QDialog()
+        self.CW_booksearch = Ui_Dialog_S()
+        self.CW_booksearch.setupUi(self.Dialog)
+        self.Dialog.setModal(True)
+        self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
+        self.Dialog.show()
 
 
 if __name__ == "__main__":

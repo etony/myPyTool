@@ -4,13 +4,13 @@
 Module implementing BookSearch.
 """
 
-from PyQt6.QtCore import pyqtSlot
-from PyQt6.QtWidgets import QDialog
+from PyQt6.QtCore import pyqtSlot, QUrl
+from PyQt6.QtWidgets import QApplication, QDialog
 
-from .Ui_BooSearch import Ui_Dialog
+from Ui_BooSearch import Ui_Dialog_S
+import sys
 
-
-class BookSearch(QDialog, Ui_Dialog):
+class BookSearch(QDialog, Ui_Dialog_S):
     """
     Class documentation goes here.
     """
@@ -32,3 +32,10 @@ class BookSearch(QDialog, Ui_Dialog):
         """
         # TODO: not implemented yet
         raise NotImplementedError
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    dl = BookSearch()
+
+    dl.show()
+    sys.exit(app.exec())

@@ -6,11 +6,12 @@ Created on Tue Aug  1 09:04:38 2023
 """
 import ebooklib
 from ebooklib import epub
+import kindle_maker
 from bs4 import BeautifulSoup
 import re
 import os
 import datetime
-from opencc import OpenCC
+from opencc import OpenCC # pip install opencc-python-reimplemented
 
 
 class Conver2epub():
@@ -311,7 +312,30 @@ class Conver2txt():
             if (item.get_name().find('cover') >= 0):
                 return item.get_content()
 
+class epub2mobi():
+    def __init__(self, epubfile, mobifile, code='utf-8'):
+        self.mobifile = mobifile
+        self.epubfile = epubfile
+        self.code = code
+        self.dirname, self.filename = os.path.split(epubfile)
 
+        self.book = epub.read_epub(self.epubfile)
+    def e2mobi(self):
+        title = self.book.get_metadata("DC", "title")[0][0]
+        author = self.book.get_metadata("DC", "creator")[0][0]
+
+        # 获取内容
+        content = ""
+        for item_id, href in self.book.spine:
+            item = self.book.get_item(item_id)
+        content += item.get_content()
+
+        # 创建MOBI文件
+        km = kindle_maker.KM(self.filename.rsplit('.', 1)[0]+".mobi")
+        km.set_title(title)
+        km.set_author(author)
+        km.add_chapter("Chapter 1", content)
+        km.make()
 # if __name__ == "__main__":
 
 #     cover2 = Conver2epub('从前有座灵剑山.txt', '从前有座灵剑山.epub')
