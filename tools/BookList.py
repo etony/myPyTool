@@ -22,6 +22,7 @@ from PyQt6.QtGui import QIcon, QImage, QPixmap
 from PyQt6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMenu
 
 from Ui_BookInfo import Ui_Dialog
+from Ui_BooSearch import Ui_Dialog_S
 from Ui_BookList import Ui_mainWindow
 
 import qdarkstyle
@@ -278,7 +279,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         """
 
         csvNamepath, csvType = QFileDialog.getOpenFileName(
-            self, "选择存储文件", "\.", "*.csv;;All Files(*)")
+            self, "选择存储文件", ".", "*.csv;;All Files(*)")
 
         if csvNamepath != "":
             df = pd.read_csv(csvNamepath, dtype='object')  # 数据全部转换为字符串型
@@ -429,7 +430,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         Slot documentation goes here.
         """
         isbn = self.le_isbn_pic.text()
-        bookinfo = self.get_douban_isbn(isbn)
+        bookinfo = self.get_douban_isbn(isbn.strip())
         if len(bookinfo) > 0:
             self.le_bookname.setText(bookinfo[1])
             self.le_bookauthor.setText(bookinfo[2])
@@ -687,6 +688,15 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
                                                  tb_y+move_y, self.CW_bookinfo.tb_bookinfo.width(), 
                                                  self.CW_bookinfo.tb_bookinfo.height())
 
+    @pyqtSlot()
+    def on_pb_search_douban_clicked(self):
+        self.Dialog = QtWidgets.QDialog()
+        self.CW_booksearch = Ui_Dialog_S()
+        self.CW_booksearch.setupUi(self.Dialog)
+        self.Dialog.setModal(True)
+        self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
+        self.Dialog.show()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -698,7 +708,7 @@ if __name__ == "__main__":
     # # 浅色样式
     # app.setStyleSheet(qdarkstyle.load_stylesheet(qdarkstyle.LightPalette))
     # # 深色样式
-    # app.setStyleSheet(qdarkstyle.load_stylesheet(qdarkstyle.DarkPalette))
+    # app.setStyleSheet(qdarkstyle.load_stylesheet(qdarkstyle.DarkPalette)) 
 
     # app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt6'))
 

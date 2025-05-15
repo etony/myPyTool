@@ -46,7 +46,7 @@
       <x>30</x>
       <y>10</y>
       <width>731</width>
-      <height>25</height>
+      <height>26</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -113,8 +113,8 @@
      <rect>
       <x>30</x>
       <y>80</y>
-      <width>711</width>
-      <height>25</height>
+      <width>731</width>
+      <height>26</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -163,6 +163,16 @@ gridline-color: rgb(255, 255, 255);</string>
        </property>
        <property name="text">
         <string>查    询</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pb_search_douban">
+       <property name="toolTip">
+        <string>根据给出内容查询列表</string>
+       </property>
+       <property name="text">
+        <string>搜    索</string>
        </property>
       </widget>
      </item>
@@ -262,7 +272,7 @@ gridline-color: rgb(255, 255, 255);</string>
       <x>30</x>
       <y>40</y>
       <width>731</width>
-      <height>25</height>
+      <height>26</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -324,7 +334,7 @@ gridline-color: rgb(255, 255, 255);</string>
    <widget class="QLabel" name="label_10">
     <property name="geometry">
      <rect>
-      <x>745</x>
+      <x>770</x>
       <y>85</y>
       <width>16</width>
       <height>20</height>

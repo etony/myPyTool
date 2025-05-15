@@ -24,6 +24,15 @@ def get_weather():
     soup = BeautifulSoup(response.content, 'html.parser')
 
     weather = soup.find('p', class_='wea').text
+
+    wea = soup.findAll('p', class_='wea')
+    temp = soup.findAll('p', class_='tem')
+    wind = soup.findAll('p', class_='win')
+    
+    print(f'今天：{wea[0].text}, 温度: {temp[0].text.strip()}, 风力: {wind[0].text.strip()}')
+    print(f'明天：{wea[1].text}, 温度: {temp[1].text.strip()}, 风力: {wind[1].text.strip()}')
+    print(f'后天：{wea[2].text}, 温度: {temp[2].text.strip()}, 风力: {wind[2].text.strip()}')
+
     
     temp = soup.find('p', class_='tem').text.strip()
     wind = soup.find('p', class_='win').text.strip()
