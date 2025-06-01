@@ -12,6 +12,7 @@ import sys
 import requests
 from PyQt6.QtGui import QStandardItemModel, QStandardItem
 import pandas as pd
+import numpy as np
 
 class BookSearch(QDialog, Ui_Dialog_S):
     """
@@ -77,7 +78,8 @@ class BookSearch(QDialog, Ui_Dialog_S):
                 
                 
         # 创建表格模型和表头
-        df = pd.DataFrame(books)
+        df = pd.DataFrame(np.array(books)[:,0:9])
+        print(df)
         table_model = QStandardItemModel(df.shape[0], df.shape[1])
         table_model.setHorizontalHeaderLabels(['ISBN', '书名', '作者', '出版', '价格', '评分', '人数', '分类', '书柜'])
         
