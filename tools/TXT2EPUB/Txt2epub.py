@@ -117,7 +117,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         self.le_txt.clear()
         self.le_epub.clear()
         self.te_reg.setPlainText(
-            "^\s*([第卷][0123456789一二三四五六七八九十零〇百千两]*[章回部节集卷].*)\s*")
+            r"^\s*([第卷][0123456789一二三四五六七八九十零〇百千两]*[章回部节集卷].*)\s*")
         self.le_title.clear()
         logger.info('选项重置！')
 
