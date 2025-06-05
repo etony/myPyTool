@@ -21,10 +21,10 @@ from PyQt6.QtCore import pyqtSignal, pyqtSlot, QModelIndex, QObject, QPoint, Qt,
 from PyQt6.QtGui import QIcon, QImage, QPixmap
 from PyQt6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMenu
 
-from Ui_BookInfo import Ui_Dialog
-from Ui_BooSearch import Ui_Dialog_S
+# from Ui_BookInfo import Ui_Dialog
+# from Ui_BooSearch import Ui_Dialog_S
 from Ui_BookList import Ui_mainWindow
-import BooSearch
+import BookSearch
 import BookInfo
 
 import qdarkstyle
@@ -708,7 +708,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # self.Dialog.setModal(True)
         # self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
         # self.Dialog.show()
-        bs = BooSearch.BookSearch(self)
+        bs = BookSearch.BookSearch(self)
         bs.bookinfoSignal.connect(self.getDialogSignal)
         search = self.le_bookname.text().strip()
         if len(search) >= 2:
@@ -717,7 +717,10 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         bs.show()
 
     def getDialogSignal(self, connect):
+        LOG.info(f'获取图书信息: {connect}')
         self.model.updateItem(connect)
+        self.statusBar.showMessage(
+            "共 " + str(self.model.rowCount()) + " 条记录" + self.appver)
 
 
 if __name__ == "__main__":
