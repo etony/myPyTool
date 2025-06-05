@@ -4,7 +4,7 @@
 Module implementing BookSearch.
 """
 
-from PyQt6.QtCore import pyqtSlot, QUrl
+from PyQt6.QtCore import pyqtSlot, QUrl, QModelIndex, pyqtSignal
 from PyQt6.QtWidgets import QApplication, QDialog
 
 from Ui_BooSearch import Ui_Dialog_S
@@ -18,7 +18,8 @@ class BookSearch(QDialog, Ui_Dialog_S):
     """
     Class documentation goes here.
     """
-
+    bookinfoSignal = pyqtSignal(list)
+    
     def __init__(self, parent=None):
         """
         Constructor
@@ -48,11 +49,13 @@ class BookSearch(QDialog, Ui_Dialog_S):
 
         response = requests.get(url, params=params, headers=headers)
 
-        booklist = response.json()['books']
-        books = []
+        booklist = response.json()['books']        
+        self.books = []
         for book_dict in booklist:
             bookinfo = []
             if len(book_dict) > 5:
+                print('==='*30)
+                print(book_dict)
                 author = '/'.join(book_dict['author'])
                 if len(book_dict['translator']) > 0:
                     author += ' 译者: '
@@ -74,25 +77,46 @@ class BookSearch(QDialog, Ui_Dialog_S):
                 bookinfo.append(book_dict['pubdate'])
                 bookinfo.append(book_dict['rating'])
                 bookinfo.append(book_dict['alt'])
-                books.append(bookinfo)
+                self.books.append(bookinfo)
                 
                 
         # 创建表格模型和表头
-        df = pd.DataFrame(np.array(books)[:,0:9])
+        df = pd.DataFrame(np.array(self.books)[:,0:9])
         print(df)
-        table_model = QStandardItemModel(df.shape[0], df.shape[1])
-        table_model.setHorizontalHeaderLabels(['ISBN', '书名', '作者', '出版', '价格', '评分', '人数', '分类', '书柜'])
+        self.table_model = QStandardItemModel(df.shape[0], df.shape[1])
+        self.table_model.setHorizontalHeaderLabels(['ISBN', '书名', '作者', '出版', '价格', '评分', '人数', '分类', '书柜'])
         
         # 用数据填充模型
         for i, row in df.iterrows():
             for j in range(df.shape[1]):
-                table_model.setItem(i, j, QStandardItem(str(row[j])))
+                self.table_model.setItem(i, j, QStandardItem(str(row[j])))
         
         # 绑定模型到表格视图
-        self.tv_booksearch.setModel(table_model)
+        self.tv_booksearch.setModel(self.table_model)
         
         # 显示表格视图
         self.tv_booksearch.show()                
+
+    @pyqtSlot(QModelIndex)
+    def on_tv_booksearch_doubleClicked(self, index):
+        """
+        Slot documentation goes here.
+
+        @param index DESCRIPTION
+        @type QModelIndex
+        """
+        # TODO: not implemented y
+        bookinfo = self.books[index.row()]
+        print(bookinfo)
+        self.bookinfoSignal.emit(bookinfo)
+        self.close()
+
+    # def show(self):
+    #     app = QApplication(sys.argv)
+    #     dl = BookSearch()
+
+    #     dl.show()
+    #     sys.exit(app.exec())
                 
                 
         

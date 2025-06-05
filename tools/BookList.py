@@ -24,6 +24,7 @@ from PyQt6.QtWidgets import QApplication, QFileDialog, QMainWindow, QMenu
 from Ui_BookInfo import Ui_Dialog
 from Ui_BooSearch import Ui_Dialog_S
 from Ui_BookList import Ui_mainWindow
+import BooSearch
 
 import qdarkstyle
 
@@ -690,13 +691,21 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
     @pyqtSlot()
     def on_pb_search_douban_clicked(self):
-        self.Dialog = QtWidgets.QDialog()
-        self.CW_booksearch = Ui_Dialog_S()
-        self.CW_booksearch.setupUi(self.Dialog)
-        self.Dialog.setModal(True)
-        self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
-        self.Dialog.show()
-
+        # self.Dialog = QtWidgets.QDialog()
+        # self.CW_booksearch = Ui_Dialog_S()
+        # self.CW_booksearch.setupUi(self.Dialog)
+        # self.Dialog.setModal(True)
+        # self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
+        # self.Dialog.show()
+        bs = BooSearch.BookSearch(self)
+        bs.bookinfoSignal.connect(self.getDialogSignal)
+        search = self.le_bookname.text().strip()
+        if len(search) >=2 :
+            bs.le_search_douban.setText(search)
+        bs.show()
+        
+    def getDialogSignal(self, connect):
+        self.model.updateItem(connect)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

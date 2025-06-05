@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>查询</string>
   </property>
   <property name="sizeGripEnabled">
    <bool>true</bool>
@@ -25,8 +25,11 @@
      <height>251</height>
     </rect>
    </property>
+   <property name="toolTip">
+    <string>查询结果，双击选定</string>
+   </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -37,7 +40,11 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QLineEdit" name="le_search_douban"/>
+     <widget class="QLineEdit" name="le_search_douban">
+      <property name="toolTip">
+       <string>关键字</string>
+      </property>
+     </widget>
     </item>
     <item>
      <widget class="QPushButton" name="pb_search_douban">

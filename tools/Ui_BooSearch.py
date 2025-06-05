@@ -14,30 +14,38 @@ class Ui_Dialog_S(object):
         Dialog.setObjectName("Dialog")
         Dialog.resize(400, 300)
         Dialog.setSizeGripEnabled(True)
-        self.pb_search_douban = QtWidgets.QPushButton(parent=Dialog)
-        self.pb_search_douban.setGeometry(QtCore.QRect(310, 10, 80, 24))
-        self.pb_search_douban.setObjectName("pb_search_douban")
         self.tv_booksearch = QtWidgets.QTableView(parent=Dialog)
         self.tv_booksearch.setGeometry(QtCore.QRect(10, 40, 381, 251))
         self.tv_booksearch.setObjectName("tv_booksearch")
-        self.le_search_douban = QtWidgets.QLineEdit(parent=Dialog)
-        self.le_search_douban.setGeometry(QtCore.QRect(10, 10, 291, 22))
+        self.layoutWidget = QtWidgets.QWidget(parent=Dialog)
+        self.layoutWidget.setGeometry(QtCore.QRect(10, 10, 381, 26))
+        self.layoutWidget.setObjectName("layoutWidget")
+        self.horizontalLayout = QtWidgets.QHBoxLayout(self.layoutWidget)
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.le_search_douban = QtWidgets.QLineEdit(parent=self.layoutWidget)
         self.le_search_douban.setObjectName("le_search_douban")
+        self.horizontalLayout.addWidget(self.le_search_douban)
+        self.pb_search_douban = QtWidgets.QPushButton(parent=self.layoutWidget)
+        self.pb_search_douban.setObjectName("pb_search_douban")
+        self.horizontalLayout.addWidget(self.pb_search_douban)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.pb_search_douban.setText(_translate("Dialog", "PushButton"))
+        Dialog.setWindowTitle(_translate("Dialog", "查询"))
+        self.tv_booksearch.setToolTip(_translate("Dialog", "查询结果，双击选定"))
+        self.le_search_douban.setToolTip(_translate("Dialog", "关键字"))
+        self.pb_search_douban.setText(_translate("Dialog", "搜    索"))
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Dialog = QtWidgets.QDialog()
-    ui = Ui_Dialog_S()
+    ui = Ui_Dialog()
     ui.setupUi(Dialog)
     Dialog.show()
     sys.exit(app.exec())
