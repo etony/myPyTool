@@ -28,7 +28,7 @@
      </rect>
     </property>
     <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;加载 CSV 文件&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;加载包含图书信息的 CSV 文件&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="dragEnabled">
      <bool>true</bool>
@@ -63,14 +63,14 @@
         <bool>false</bool>
        </property>
        <property name="toolTip">
-        <string>CSV文件路径</string>
+        <string>包含图书信息列表的CSV文件路径</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pb_load">
        <property name="toolTip">
-        <string>加载CSV文件</string>
+        <string>加载包含图书信息的CSV文件</string>
        </property>
        <property name="statusTip">
         <string/>
@@ -146,7 +146,7 @@ gridline-color: rgb(255, 255, 255);</string>
      <item>
       <widget class="QPushButton" name="pb_reset">
        <property name="toolTip">
-        <string>清空图书信息</string>
+        <string>重新加载图书列表</string>
        </property>
        <property name="statusTip">
         <string/>
@@ -169,7 +169,7 @@ gridline-color: rgb(255, 255, 255);</string>
      <item>
       <widget class="QPushButton" name="pb_search_douban">
        <property name="toolTip">
-        <string>根据给出内容查询列表</string>
+        <string>根据关键字，搜索豆瓣图书信息</string>
        </property>
        <property name="text">
         <string>搜    索</string>
@@ -196,7 +196,11 @@ gridline-color: rgb(255, 255, 255);</string>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="le_publisher"/>
+      <widget class="QLineEdit" name="le_publisher">
+       <property name="toolTip">
+        <string>出版社</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_6">
@@ -206,7 +210,11 @@ gridline-color: rgb(255, 255, 255);</string>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="le_price"/>
+      <widget class="QLineEdit" name="le_price">
+       <property name="toolTip">
+        <string>图书定价</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_7">
@@ -217,6 +225,9 @@ gridline-color: rgb(255, 255, 255);</string>
      </item>
      <item>
       <widget class="QComboBox" name="cb_bookclass">
+       <property name="toolTip">
+        <string>是否已读</string>
+       </property>
        <property name="editable">
         <bool>true</bool>
        </property>
@@ -248,7 +259,11 @@ gridline-color: rgb(255, 255, 255);</string>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="le_bookshelf"/>
+      <widget class="QLineEdit" name="le_bookshelf">
+       <property name="toolTip">
+        <string>放置位置</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="label_9">
@@ -261,6 +276,9 @@ gridline-color: rgb(255, 255, 255);</string>
       <widget class="QLineEdit" name="le_average">
        <property name="enabled">
         <bool>false</bool>
+       </property>
+       <property name="toolTip">
+        <string>豆瓣评分</string>
        </property>
       </widget>
      </item>
@@ -286,7 +304,7 @@ gridline-color: rgb(255, 255, 255);</string>
      <item>
       <widget class="QLineEdit" name="le_isbn_pic">
        <property name="toolTip">
-        <string>图书ISBN编码</string>
+        <string>图书ISBN编码(isbn13)</string>
        </property>
       </widget>
      </item>
@@ -306,7 +324,7 @@ gridline-color: rgb(255, 255, 255);</string>
      <item>
       <widget class="QPushButton" name="pb_getbookinfo">
        <property name="toolTip">
-        <string>根据ISBN编码获取图书信息</string>
+        <string>根据ISBN编码获取豆瓣图书信息,并插入列表</string>
        </property>
        <property name="statusTip">
         <string/>
@@ -319,7 +337,7 @@ gridline-color: rgb(255, 255, 255);</string>
      <item>
       <widget class="QPushButton" name="pb_insert">
        <property name="toolTip">
-        <string>根据ISBN编码获取图书信息</string>
+        <string>将修改后的图书信息更新至列表</string>
        </property>
        <property name="statusTip">
         <string/>

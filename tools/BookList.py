@@ -25,6 +25,7 @@ from Ui_BookInfo import Ui_Dialog
 from Ui_BooSearch import Ui_Dialog_S
 from Ui_BookList import Ui_mainWindow
 import BooSearch
+import BookInfo
 
 import qdarkstyle
 
@@ -271,7 +272,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             Qt.ContextMenuPolicy.CustomContextMenu)  # 对象的上下文菜单的策略
         self.number = 0
         self.barstr = ''
-        self.appver = '   ver-1.0'
+        self.appver = '   ver-1.0.1'
+        self.statusBar.showMessage(self.appver)
 
     @pyqtSlot()
     def on_pb_load_clicked(self):
@@ -294,7 +296,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             self.le_booklist.setText(csvNamepath)
             # self.table.setModel(self.model)
             rowscount = self.model.rowCount()
-            self.statusBar.showMessage("共 " + str(rowscount) + " 条记录   ver-1.0")
+            self.statusBar.showMessage(
+                "共 " + str(rowscount) + " 条记录" + self.appver)
 
     @pyqtSlot()
     def on_pb_save_clicked(self):
@@ -423,7 +426,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         LOG.info(f'插入记录 {len(bookinfo)} 项:  {bookinfo}')
         self.model.updateItem(bookinfo)
 
-        self.statusBar.showMessage("共 " + str(self.model.rowCount()) + " 条记录   ver-1.0")
+        self.statusBar.showMessage(
+            "共 " + str(self.model.rowCount()) + " 条记录" + self.appver)
 
     @pyqtSlot()
     def on_pb_getbookinfo_clicked(self):
@@ -452,7 +456,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             # self.model.appendRow(bookinfo)
             self.model.updateItem(bookinfo)
             self.statusBar.showMessage("共 " + str(self.model.rowCount()) +
-                                       " 条记录   ver-1.0")
+                                       " 条记录" + self.appver)
         else:
             LOG.warning("ISBN书号有误:  " + isbn)
             QtWidgets.QMessageBox.warning(
@@ -526,7 +530,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
         self.thread.finished.connect(lambda: self.pb_refresh.setEnabled(True))
         self.thread.finished.connect(lambda: self.statusBar.showMessage(
-            "共 " + str(self.model.rowCount()) + " 条记录   ver-1.0"))
+            "共 " + str(self.model.rowCount()) + " 条记录" + self.appver))
 
         # 多线程刷新图书信息    结束
 
@@ -554,7 +558,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.le_price.clear()
         self.le_publisher.clear()
         self.model.reset()
-        self.statusBar.showMessage("共 " + str(self.model.rowCount()) + " 条记录   ver-1.0")
+        self.statusBar.showMessage(
+            "共 " + str(self.model.rowCount()) + " 条记录" + self.appver)
 
     def genLoveMenu(self, pos):
         menu = QMenu(self)
@@ -597,7 +602,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
                         LOG.info(f"删除信息： {isbn}")
                     self.statusBar.showMessage("共 " +
                                                str(self.model.rowCount()) +
-                                               " 条记录   ver-1.0")
+                                               " 条记录" + self.appver)
 
     @pyqtSlot()
     def on_pb_search_clicked(self):
@@ -606,7 +611,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         """
         search = self.le_bookname.text().strip()
         self.model.search(search)
-        self.statusBar.showMessage("共 " + str(self.model.rowCount()) + " 条记录   ver-1.0")
+        self.statusBar.showMessage(
+            "共 " + str(self.model.rowCount()) + " 条记录" + self.appver)
 
     @pyqtSlot(QModelIndex)
     def on_tv_booklist_doubleClicked(self, index):
@@ -616,10 +622,12 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         @param index DESCRIPTION
         @type QModelIndex
         """
-        self.Dialog = QtWidgets.QDialog()
-        self.CW_bookinfo = Ui_Dialog()
-        self.CW_bookinfo.setupUi(self.Dialog)
-        self.Dialog.setModal(True)
+        # self.Dialog = QtWidgets.QDialog()
+        # self.CW_bookinfo = Ui_Dialog()
+        # self.CW_bookinfo.setupUi(self.Dialog)
+        # self.Dialog.setModal(True)
+        self.CW_bookinfo = BookInfo.BookInfo()
+        self.CW_bookinfo.setModal(True)
 
         # self.Dialog.setWindowModality(Qt.ApplicationModal)
         # 在PyQt6中，QtCore.Qt.ApplicationModal属性已经被移除，
@@ -672,21 +680,24 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # cv.waitKey(0)
         # self.CW_bookinfo.tb_bookinfo.append('<a href="https://www.douban.com">douban</a>')
 
-        self.Dialog.setWindowTitle("图书信息 - " + douban_bookinfo[1])
+        # self.Dialog.setWindowTitle("图书信息 - " + douban_bookinfo[1])
 
         LOG.info(f'获取封面信息 {len(douban_bookinfo)} 项: {douban_bookinfo}')
-        self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
+        # self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
 
-        self.Dialog.show()
+        # self.Dialog.show()
+
+        self.CW_bookinfo.setWindowTitle("图书信息 - " + douban_bookinfo[1])
+        self.CW_bookinfo.show()
         tb_y = self.CW_bookinfo.tb_bookinfo.pos().y()
 
         tb_height = self.CW_bookinfo.tb_bookinfo.document().size().height() + \
-                    self.CW_bookinfo.tb_bookinfo.contentsMargins().top() + \
-                    self.CW_bookinfo.tb_bookinfo.contentsMargins().bottom() 
+            self.CW_bookinfo.tb_bookinfo.contentsMargins().top() + \
+            self.CW_bookinfo.tb_bookinfo.contentsMargins().bottom()
         self.CW_bookinfo.tb_bookinfo.setFixedHeight(round(tb_height))
         move_y = 311-round(tb_height)
-        self.CW_bookinfo.tb_bookinfo.setGeometry(self.CW_bookinfo.tb_bookinfo.pos().x(), 
-                                                 tb_y+move_y, self.CW_bookinfo.tb_bookinfo.width(), 
+        self.CW_bookinfo.tb_bookinfo.setGeometry(self.CW_bookinfo.tb_bookinfo.pos().x(),
+                                                 tb_y+move_y, self.CW_bookinfo.tb_bookinfo.width(),
                                                  self.CW_bookinfo.tb_bookinfo.height())
 
     @pyqtSlot()
@@ -700,12 +711,14 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         bs = BooSearch.BookSearch(self)
         bs.bookinfoSignal.connect(self.getDialogSignal)
         search = self.le_bookname.text().strip()
-        if len(search) >=2 :
+        if len(search) >= 2:
             bs.le_search_douban.setText(search)
+        bs.setModal(True)
         bs.show()
-        
+
     def getDialogSignal(self, connect):
         self.model.updateItem(connect)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
@@ -717,7 +730,7 @@ if __name__ == "__main__":
     # # 浅色样式
     # app.setStyleSheet(qdarkstyle.load_stylesheet(qdarkstyle.LightPalette))
     # # 深色样式
-    # app.setStyleSheet(qdarkstyle.load_stylesheet(qdarkstyle.DarkPalette)) 
+    # app.setStyleSheet(qdarkstyle.load_stylesheet(qdarkstyle.DarkPalette))
 
     # app.setStyleSheet(qdarkstyle.load_stylesheet(qt_api='pyqt6'))
 
