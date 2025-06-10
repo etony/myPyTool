@@ -2,7 +2,7 @@
   "header": {
     "comment": "eric project file for project Python-Study",
     "copyright": "Copyright (C) 2025 etony.an@gmail.com, etony.an@gmail.com",
-    "saved": "2025-05-12, 17:38:37"
+    "saved": "2025-06-10, 17:27:53"
   },
   "project": {
     "AUTHOR": "etony.an@gmail.com",
@@ -84,7 +84,6 @@
     },
     "RESOURCES": [],
     "SOURCES": [
-      "BooSearch.py",
       "BookInfo.py",
       "BookList.py",
       "BrowerPasswd.py",
