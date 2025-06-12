@@ -18,7 +18,7 @@ import webbrowser
 
 ssl._create_default_https_context = ssl._create_unverified_context
 
-site = 'zh.zlibrary-asia.se'
+site = 'github.com'
 
 cur_url = 'https://site.ip138.com/domain/read.do?domain=' + site
 pre_url = 'https://site.ip138.com/' +site
