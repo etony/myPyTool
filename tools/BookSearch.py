@@ -19,7 +19,7 @@ class BookSearch(QDialog, Ui_Dialog_S):
     """
     Class documentation goes here.
     """
-    bookinfoSignal = pyqtSignal(list)
+    bookinfoSignal = pyqtSignal(list) #创建自定义信号，在不同的页面或组件之间传递信息和信号。
 
     def __init__(self, parent=None):
         """
