@@ -192,7 +192,7 @@ class Ui_mainWindow(object):
         self.le_bookshelf.setToolTip(_translate("mainWindow", "放置位置"))
         self.label_9.setText(_translate("mainWindow", "评   分:"))
         self.le_average.setToolTip(_translate("mainWindow", "豆瓣评分"))
-        self.tv_booklist.setToolTip(_translate("mainWindow", "<html><head/><body><p>加载包含图书信息的 CSV 文件</p></body></html>"))
+        self.tv_booklist.setToolTip(_translate("mainWindow", "<html><head/><body><p>双击查看图书详情</p></body></html>"))
 
 
 if __name__ == "__main__":

@@ -14,6 +14,8 @@ Created on Wed Aug 30 14:55:13 2023
 import os
 into_path = r'C:\Users\admin\Documents\WeChat Files\wxid_6ms6fjqe8zkm11\FileStorage\MsgAttach\38797bbf5fa6f73b42f4803496bf6661\Image\2024-10'  # 微信image.dat文件路径   
 						#我这把路径写死了，运行可执行文件前 先创建这个路径把dat文件放在这
+                        
+into_path = r'F:\备份\xwechat_files\wxid_6ms6fjqe8zkm11_1252\msg\attach\966e8a41ace30b51978f9d50e9a44b45\2024-10\Img'
 out_path = os.path.join(into_path, 'jpg')
 """
     解码

@@ -324,7 +324,7 @@ gridline-color: rgb(255, 255, 255);</string>
      <item>
       <widget class="QTableView" name="tv_booklist">
        <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;加载包含图书信息的 CSV 文件&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;双击查看图书详情&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="dragEnabled">
         <bool>true</bool>
