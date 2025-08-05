@@ -387,10 +387,10 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         str_options = self.le_options.text().strip()
 
         if len(str_dbname)>=3:
-            self.str_commad += '-D '+ str_dbname
+            self.str_commad += ' -D '+ str_dbname
 
         if len(str_tablename):
-            self.str_commad += '-T'+ str_tablename
+            self.str_commad += ' -T '+ str_tablename
             
         if len(str_options) >= 3:
             self.str_commad += str_options
