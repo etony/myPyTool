@@ -12,7 +12,7 @@ import re
 import os
 import datetime
 from opencc import OpenCC # pip install opencc-python-reimplemented
-from kindlestrip import KindleStrip
+# from kindlestrip import KindleStrip
 
 class Conver2epub():
     def __init__(self, txtfile, epubfile):
@@ -347,12 +347,12 @@ class epub2mobi():
         book = ebooklib.epub.read_epub(self.epubfile)
         
         # 使用KindleStrip进行转换
-        ks = KindleStrip()
-        ks.input_file = self.epubfile
-        ks.output_file = self.mobifile
-        ks.strip()
+        # ks = KindleStrip()
+        # ks.input_file = self.epubfile
+        # ks.output_file = self.mobifile
+        # ks.strip()
         
-        print(f"转换完成，MOBI文件已保存到：{self.mobifile}")
+        # print(f"转换完成，MOBI文件已保存到：{self.mobifile}")
         #         content += item.get_content().decode('utf-8')
         # # for item_id, href in self.book.spine:
         # #     item = self.book.get_item_with_id(item_id)
