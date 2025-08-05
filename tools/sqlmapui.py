@@ -436,6 +436,28 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
             if tamp_list not in "__init__.py":
                 self.cbb_tampers.addItem(tamp_list)
 
+    @pyqtSlot(str)
+    def on_le_dbname_textChanged(self, p0):
+        """
+        Slot documentation goes here.
+
+        @param p0 DESCRIPTION
+        @type str
+        """
+        # TODO: not implemented yet
+        raise NotImplementedError
+
+    @pyqtSlot(str)
+    def on_le_tablename_textChanged(self, p0):
+        """
+        Slot documentation goes here.
+
+        @param p0 DESCRIPTION
+        @type str
+        """
+        # TODO: not implemented yet
+        raise NotImplementedError
+
 
 if __name__ == "__main__":
     import sys
