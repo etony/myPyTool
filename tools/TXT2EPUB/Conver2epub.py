@@ -6,13 +6,13 @@ Created on Tue Aug  1 09:04:38 2023
 """
 import ebooklib
 from ebooklib import epub
-from pymobi import mobi
+#from pymobi import mobi
 from bs4 import BeautifulSoup
 import re
 import os
 import datetime
 from opencc import OpenCC # pip install opencc-python-reimplemented
-from kindlestrip import KindleStrip
+#from kindlestrip import KindleStrip
 
 class Conver2epub():
     def __init__(self, txtfile, epubfile):
