@@ -194,7 +194,9 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         @param checked DESCRIPTION
         @type bool
         """
-        # TODO: not implemented yet
+        if checked:
+            self.le_dbname.setText("")
+
 
     @pyqtSlot(bool)
     def on_cb_tables_clicked(self, checked):
@@ -204,7 +206,8 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         @param checked DESCRIPTION
         @type bool
         """
-        # TODO: not implemented yet
+        if checked:
+            self.le_tablename.setText("")
 
     @pyqtSlot(bool)
     def on_cb_columns_clicked(self, checked):
@@ -378,6 +381,20 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
             self.str_commad += self.cb_users.text()
         if self.cb_roles.isChecked():
             self.str_commad += self.cb_roles.text()
+            
+        str_dbname = self.le_dbname.text().strip()
+        str_tablename = self.le_tablename.text().strip()
+        str_options = self.le_options.text().strip()
+
+        if len(str_dbname)>=3:
+            self.str_commad += ' -D '+ str_dbname
+
+        if len(str_tablename):
+            self.str_commad += ' -T '+ str_tablename
+            
+        if len(str_options) >= 3:
+            self.str_commad += str_options
+
 
         self.tb_command.setTextColor(Qt.GlobalColor.blue)
         if self.cbb_tampers.currentIndex() > 0:
@@ -436,6 +453,25 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
             if tamp_list not in "__init__.py":
                 self.cbb_tampers.addItem(tamp_list)
 
+    @pyqtSlot(str)
+    def on_le_dbname_textChanged(self, p0):
+        """
+        Slot documentation goes here.
+
+        @param p0 DESCRIPTION
+        @type str
+        """
+        self.cb_currentdb.setChecked(False)
+
+    @pyqtSlot(str)
+    def on_le_tablename_textChanged(self, p0):
+        """
+        Slot documentation goes here.
+
+        @param p0 DESCRIPTION
+        @type str
+        """
+        self.cb_tables.setChecked(False)
 
 if __name__ == "__main__":
     import sys
