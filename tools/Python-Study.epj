@@ -2,7 +2,7 @@
   "header": {
     "comment": "eric project file for project Python-Study",
     "copyright": "Copyright (C) 2025 etony.an@gmail.com, etony.an@gmail.com",
-    "saved": "2025-07-31, 17:41:07"
+    "saved": "2025-08-06, 18:04:17"
   },
   "project": {
     "AUTHOR": "etony.an@gmail.com",
@@ -45,6 +45,7 @@
       "Rpassword.ui",
       "TXT2EPUB/Txt2epub.ui",
       "imageconver.ui",
+      "imagexif.ui",
       "myDevHub.ui",
       "pygame_mp3.ui",
       "qthreadtest.ui",

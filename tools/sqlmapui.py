@@ -12,6 +12,7 @@ import subprocess
 import os
 import platform
 
+
 class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     """
     Class documentation goes here.
@@ -20,7 +21,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def __init__(self, parent=None):
         """
         Constructor
-        
+
         @param parent reference to the parent widget (defaults to None)
         @type QWidget (optional)
         """
@@ -31,7 +32,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
             self.pb_getcommand.setDisabled(True)
         self.str_commad = ""
         self.cbb_tampers.addItem("")
-        #dir = os.getcwd() + "/tamper/"
+        # dir = os.getcwd() + "/tamper/"
         dir = os.path.join(os.getcwd(), "tamper")
         if os.path.exists(dir):
             self.load_temperfile(dir)
@@ -42,7 +43,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_forms_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -52,7 +53,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_batch_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -62,7 +63,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_osshell_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -72,7 +73,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_random_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -82,7 +83,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_o_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -92,7 +93,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_sqlshell_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -102,7 +103,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_keeplive_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -112,7 +113,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_level3_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -124,7 +125,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_risk2_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -136,7 +137,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_level5_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -148,7 +149,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_risk3_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -160,7 +161,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_banner_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -170,7 +171,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_dbs_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -180,7 +181,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_currentuser_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -190,19 +191,18 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_currentdb_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
         if checked:
             self.le_dbname.setText("")
 
-
     @pyqtSlot(bool)
     def on_cb_tables_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -213,7 +213,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_columns_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -223,7 +223,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_isdba_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -233,7 +233,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_passwords_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -243,7 +243,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_privileges_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -253,7 +253,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_users_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -263,7 +263,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_roles_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -273,7 +273,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_mysql_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -286,7 +286,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_oracle_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -299,7 +299,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_cb_mssql_clicked(self, checked):
         """
         Slot documentation goes here.
-        
+
         @param checked DESCRIPTION
         @type bool
         """
@@ -312,7 +312,7 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
     def on_le_url_textChanged(self, p0):
         """
         Slot documentation goes here.
-        
+
         @param p0 DESCRIPTION
         @type str
         """
@@ -381,20 +381,19 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
             self.str_commad += self.cb_users.text()
         if self.cb_roles.isChecked():
             self.str_commad += self.cb_roles.text()
-            
+
         str_dbname = self.le_dbname.text().strip()
         str_tablename = self.le_tablename.text().strip()
         str_options = self.le_options.text().strip()
 
-        if len(str_dbname)>=3:
-            self.str_commad += ' -D '+ str_dbname
+        if len(str_dbname) >= 3:
+            self.str_commad += ' -D ' + str_dbname
 
         if len(str_tablename):
-            self.str_commad += ' -T '+ str_tablename
-            
+            self.str_commad += ' -T ' + str_tablename
+
         if len(str_options) >= 3:
             self.str_commad += str_options
-
 
         self.tb_command.setTextColor(Qt.GlobalColor.blue)
         if self.cbb_tampers.currentIndex() > 0:
@@ -420,13 +419,13 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         #                      stdout=subprocess.PIPE,
         #                      stderr=subprocess.PIPE)
         SYSTEM_PLATFORM = platform.system()
-        if(SYSTEM_PLATFORM == "Linux"):
-            os.system("x-terminal-emulator -e '"+ cmd + "'")
+        if (SYSTEM_PLATFORM == "Linux"):
+            os.system("x-terminal-emulator -e '" + cmd + "'")
         elif (SYSTEM_PLATFORM == "Windows"):
             os.system("start cmd.exe /k " + cmd)
-            
-        #os.system("start cmd.exe /k " + cmd)
-        #os.system("x-terminal-emulator -e '"+ cmd + "'")
+
+        # os.system("start cmd.exe /k " + cmd)
+        # os.system("x-terminal-emulator -e '"+ cmd + "'")
 
     @pyqtSlot()
     def on_pb_selectSqlmap_clicked(self):
@@ -462,6 +461,14 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         @type str
         """
         self.cb_currentdb.setChecked(False)
+        if len(self.le_dbname.text().strip()) >= 3:
+            self.cb_tables.setCheckable(True)
+            self.le_tablename.setReadOnly(False)
+        else:
+            self.cb_tables.setChecked(False)
+            self.cb_tables.setCheckable(False)
+            self.le_tablename.setText("")
+            self.le_tablename.setReadOnly(True)
 
     @pyqtSlot(str)
     def on_le_tablename_textChanged(self, p0):
@@ -472,6 +479,11 @@ class SqlmapUI(QMainWindow, Ui_SqlmapUI):
         @type str
         """
         self.cb_tables.setChecked(False)
+        if len(self.le_tablename.text().strip()) >= 3:
+            self.cb_columns.setCheckable(True)
+        else:
+            self.cb_columns.setCheckable(False)
+
 
 if __name__ == "__main__":
     import sys

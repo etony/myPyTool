@@ -698,7 +698,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         move_y = 311-round(tb_height)
         self.CW_bookinfo.tb_bookinfo.setGeometry(self.CW_bookinfo.tb_bookinfo.pos().x(),
                                                  tb_y+move_y, self.CW_bookinfo.tb_bookinfo.width(),
-                                                    self.CW_bookinfo.tb_bookinfo.height())
+                                                 self.CW_bookinfo.tb_bookinfo.height())
 
     @pyqtSlot()
     def on_pb_search_douban_clicked(self):
