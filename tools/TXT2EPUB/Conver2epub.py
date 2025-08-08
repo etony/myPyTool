@@ -6,7 +6,7 @@ Created on Tue Aug  1 09:04:38 2023
 """
 import ebooklib
 from ebooklib import epub
-from pymobi import mobi
+#from pymobi import mobi
 from bs4 import BeautifulSoup
 import re
 import os
