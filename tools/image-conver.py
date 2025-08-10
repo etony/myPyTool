@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Module implementing Image-Conver.
+
+pip install opencv-contrib-python
 """
 
 from PyQt6.QtCore import pyqtSlot, Qt
