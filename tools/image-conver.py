@@ -5,11 +5,11 @@ Module implementing Image-Conver.
 pip install opencv-contrib-python
 """
 
-from PyQt6.QtCore import pyqtSlot, Qt
+from PyQt6.QtCore import pyqtSlot
 from PyQt6.QtWidgets import QMainWindow, QFileDialog
 
 from Ui_imageconver import Ui_MainWindow
-from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6 import QtGui, QtWidgets
 from model import Generator
 import torch
 from torchvision.transforms.functional import to_tensor, to_pil_image
