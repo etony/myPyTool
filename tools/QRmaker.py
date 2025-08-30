@@ -63,8 +63,13 @@ class QRmaker(QMainWindow, Ui_MainWindow):
 
             det = cv2.QRCodeDetector()
             val, pts, st_code = det.detectAndDecode(img)
-            self.te_out.setPlainText(val)
-            self.LOG.info("二维码加载完毕！")
+            if len(val)>0:
+                self.te_out.setPlainText(val)
+                self.LOG.info("二维码加载完毕！")
+                self.statusbar.showMessage("二维码加载完毕！")
+            else:
+                self.statusbar.showMessage("无法识别二维码！")
+                    
 
     @pyqtSlot()
     def on_pb_read_clicked(self):
@@ -78,9 +83,13 @@ class QRmaker(QMainWindow, Ui_MainWindow):
         img = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGB2BGR)
         det = cv2.QRCodeDetector()
         val, pts, st_code = det.detectAndDecode(img)
-        self.te_out.setPlainText(val)
-        self.LOG.info("二维码读取完毕！")
-
+        if len(val)>0:
+            self.te_out.setPlainText(val)
+            self.LOG.info("二维码读取完毕！")
+            self.statusbar.showMessage("二维码加载完毕！")
+        else:
+            self.statusbar.showMessage("无法识别二维码！")
+                    
     @pyqtSlot()
     def on_pb_create_clicked(self):
         """
@@ -178,7 +187,7 @@ class QRmaker(QMainWindow, Ui_MainWindow):
                 logo_w = 48
 
         self.LOG.info(f"logo resize: {logo_w}   {logo_h}")
-        logo = logo.resize((logo_w, logo_h), Image.ANTIALIAS)
+        logo = logo.resize((logo_w, logo_h), Image.LANCZOS)
 
         self.LOG.info(f'{w}:{h}  {logo_w}:{logo_h}')
         l_w = int((w - logo_w) / 2)
