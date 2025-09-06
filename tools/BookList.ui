@@ -155,7 +155,7 @@
           <string/>
          </property>
          <property name="text">
-          <string>更    新</string>
+          <string>保    存</string>
          </property>
         </widget>
        </item>
