@@ -43,7 +43,7 @@ class Image_Conver(QMainWindow, Ui_MainWindow):
         # TODO: not implemented yet
         global imgNamepath
         imgNamepath, imgType = QFileDialog.getOpenFileName(
-            self, "选择图片", "D:\\", "*.png;;*.jpg;;All Files(*)")
+            self, "选择图片", "", "*.png;;*.jpg;;All Files(*)")
 
         if imgNamepath != "":
             self.label_2.setScaledContents(True)
@@ -125,7 +125,7 @@ class Image_Conver(QMainWindow, Ui_MainWindow):
         # TODO: not implemented yet
         img = self.label.pixmap().toImage()
         fpath, ftype = QFileDialog.getSaveFileName(
-            self, "保存", "D:\\", "*.jpg;;*.png;;All Files(*)")
+            self, "保存图片", "", "*.jpg;;*.png;;All Files(*)")
         img.save(fpath)
 
     def load_image(self, image_path, x32=False):
