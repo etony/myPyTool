@@ -91,7 +91,7 @@ def main():
             pass
 
     if len(iplist) >= 1:
-        print(f"\n{'='*20} 可用IP {'='*20}\n")
+        print(f"\n\033[32m{'='*20} 可用IP {'='*20}\033[0m\n")
         for key, value in iplist.items():
             if float(value.strip('%')) >= 70:
                 print(key)
@@ -107,7 +107,7 @@ def main():
         except:
             pass
     if len(iplist) >= 1:
-        print(f"\n{'='*20} 可用IP {'='*20}\n")
+        print(f"\n\033[32m{'='*20} 可用IP {'='*20}\033[0m\n")
         for key, value in iplist.items():
             if float(value.strip('%')) >= 70:
                 print(key)
