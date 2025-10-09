@@ -102,6 +102,19 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QPushButton" name="pb_template">
+         <property name="toolTip">
+          <string>识别ISBN图片，获取ISBN编码</string>
+         </property>
+         <property name="statusTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>模    板</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>

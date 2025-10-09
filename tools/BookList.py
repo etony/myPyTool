@@ -722,6 +722,18 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.statusBar.showMessage(
             "共 " + str(self.model.rowCount()) + " 条记录" + self.appver)
 
+    @pyqtSlot()
+    def on_pb_template_clicked(self):
+        """
+        Slot documentation goes here.
+        """
+        # TODO: not implemented yet
+        csvNamepath, csvType = QFileDialog.getSaveFileName(
+            self, "导出模板", "模板", "*.csv;;All Files(*)")
+        if csvNamepath != "":
+            df = self.model._data
+            df.head(0).to_csv(csvNamepath, index=False)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
