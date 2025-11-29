@@ -104,18 +104,58 @@ class TableModel(QtCore.QAbstractTableModel):
             return str(value) if not pd.isna(value) else ""
 
     def rowCount(self, parent=None):  # index):
-        """返回表格行数（筛选后）"""
+        """
+        【PyQt 表格模型必需重写方法】返回表格的总行数（筛选后的数据行数）
+        作用：QTableView 会调用此方法获取表格行数，从而渲染对应数量的行
+        
+        :param parent: PyQt 模型规范要求的父索引参数，用于树形模型（如 QTreeView）的父子节点计数；
+                       表格模型（QTableView）中无父子节点，该参数恒为 QModelIndex()（空索引/None）
+        :type parent: QModelIndex | None
+        :return: 表格的总行数，即底层 DataFrame 的行数
+        :rtype: int
+        :note:
+            1. self._data.shape[0] 是 pandas DataFrame 获取行数的高效方式（O(1) 时间复杂度）；
+            2. 若需返回「筛选后/过滤后」的行数，需先更新 self._data 为筛选后的 DataFrame；
+            3. 空 DataFrame 时返回 0，QTableView 会显示空表格，无异常。
+        """
+        # 核心逻辑：返回 DataFrame 的行数（shape[0] 等价于 len(self._data)，但性能更优）
+        # shape 返回元组 (行数, 列数)，shape[0] 取行数，shape[1] 取列数
         return self._data.shape[0]
 
     def appendRow(self, arowdata):
         """
-        新增一行数据
-        :param arowdata: 行数据字典（key为列名）
+        核心方法：向表格模型中新增一行数据，并通知视图刷新
+        适配PyQt模型规范：通过beginResetModel/endResetModel触发视图重新渲染，保证数据同步
+        
+        :param arowdata: 待新增的行数据，支持两种格式（兼容设计）：
+                         1. 字典（推荐）：key为列名，value为对应列的值（如{"ISBN":"978xxx", "书名":"Python编程"}）
+                         2. 列表/元组：按列顺序匹配的值（需与_data的列顺序完全一致）
+        :type arowdata: dict | list | tuple
+        :raises KeyError: 若字典的key与_data的列名不匹配时触发
+        :raises ValueError: 若数据类型与列的 dtype 不兼容时触发
         """
-        self.beginResetModel()
-        # 转换为DataFrame并追加到原始数据
-        self._data.loc[self._data.shape[0]] = arowdata
-        self.endResetModel()
+        try:
+            # ===================== PyQt模型刷新通知 =====================
+            # 通知视图：模型数据即将重置（必须配对begin/end，否则视图不刷新）
+            # 作用：暂停视图更新，避免多次触发刷新，提升性能；结束后视图重新读取模型数据
+            self.beginResetModel()
+
+            # ===================== DataFrame追加数据 =====================
+            # self._data.shape[0]：获取当前DataFrame的行数（作为新行的索引）
+            # loc赋值：按索引追加一行，自动对齐列名（字典格式）或按列顺序填充（列表/元组）
+            # 示例：若当前有5行，新行索引为5，直接赋值实现追加
+            self._data.loc[self._data.shape[0]] = arowdata
+
+        except KeyError as e:
+            # 列名不匹配时的异常提示（便于调试）
+            raise KeyError(f"新增行失败：列名不匹配 - {e}，当前模型列名：{list(self._data.columns)}")
+        except ValueError as e:
+            # 数据类型不兼容时的异常提示
+            raise ValueError(f"新增行失败：数据类型不兼容 - {e}")
+        finally:
+            # ===================== 结束模型刷新通知 =====================
+            # 必须调用，通知视图：模型数据已重置，立即刷新展示新数据
+            self.endResetModel()
 
     def updateData(self, data):
         """
@@ -427,6 +467,9 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             # df.insert(loc=5, column='评分', value=0)
             # df.insert(loc=6, column='人数', value=0)
             # 索引重置：将pandas默认的0起始索引改为1起始（符合用户对“第1行”的直观认知）
+            print(df.shape)
+            df = df.dropna(axis=0, subset=["ISBN"])
+            print(df.shape)
             df.index = df.index + 1
             # 空值填充：将DataFrame中的NaN/空值替换为空字符串（避免表格显示“NaN”，提升UI体验）
             df.fillna('', inplace=True)
