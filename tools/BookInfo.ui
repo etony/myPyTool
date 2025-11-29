@@ -67,6 +67,19 @@
     <string>Next &gt;&gt;</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="pb_prev">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>430</y>
+     <width>61</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>&lt;&lt; Prev</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

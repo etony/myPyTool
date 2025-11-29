@@ -457,13 +457,22 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # isbn = self.le_isbn_pic.text()
         # bookinfo = self.get_douban_isbn(isbn)
         # self.model.appendRow(bookinfo)
-
-        csvNamepath, csvType = QFileDialog.getSaveFileName(
-            self, "保存存储文件", "E:\\minipan\\Seafile\\资料", "*.csv;;All Files(*)")
-        if csvNamepath != "":
-            df = self.model._data
-            df.to_csv(csvNamepath, index=False)
-
+        
+        try:
+            csvNamepath, csvType = QFileDialog.getSaveFileName(
+                self, "保存存储文件", "E:\\minipan\\Seafile\\资料", "*.csv;;All Files(*)")
+            if csvNamepath != "":
+                df = self.model._data
+                df.to_csv(csvNamepath, index=False)
+                
+        except PermissionError as e:
+            QtWidgets.QMessageBox.warning(
+                self,                # 父窗口（主窗口）
+                "错误",              # 提示框标题
+                f"文件写入失败：\n{str(e)} \n\n\n请检查文件是否被其他程序占用或以管理员身份运行本程序！",    # 提示内容
+                QtWidgets.QMessageBox.StandardButton.Ok  # 确认按钮
+            )
+                
     @pyqtSlot()
     def on_pb_scan_clicked(self):
         """
@@ -633,60 +642,101 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
     @pyqtSlot()
     def on_pb_insert_clicked(self):
         """
-        插入/更新图书信息到表格
+        槽函数：响应“插入/更新”按钮点击事件
+        核心逻辑：
+        1. 从界面输入框/下拉框提取图书信息（ISBN、书名、作者等）
+        2. 组装图书信息列表（兼容模型的字段顺序）
+        3. 日志记录待插入/更新的信息（便于调试）
+        4. 调用表格模型的updateItem方法：
+           - 若ISBN已存在：更新对应行的信息
+           - 若ISBN不存在：插入新行
+        5. 更新状态栏，显示当前表格总记录数+软件版本
+        注：分类字段已从文本框改为下拉框，保证分类值规范
         """
-        isbn = self.le_isbn_pic.text()
-        title = self.le_bookname.text()
-        author = self.le_bookauthor.text()
-        publisher = self.le_publisher.text()
-        price = self.le_price.text()
-        # bookclass = self.le_bookclass.text()
-        bookclass = self.cb_bookclass.currentText()
-        bookshelf = self.le_bookshelf.text()
+        # ===================== 1. 提取界面输入的图书信息 =====================
+        isbn = self.le_isbn_pic.text()          # ISBN输入框
+        title = self.le_bookname.text()         # 书名输入框
+        author = self.le_bookauthor.text()      # 作者输入框
+        publisher = self.le_publisher.text()    # 出版社输入框
+        price = self.le_price.text()            # 价格输入框
 
+        # 分类字段：从下拉框（cb_bookclass）获取选中文本（替代旧文本框le_bookclass）
+        # bookclass = self.le_bookclass.text()  # 注释掉的旧逻辑：文本框输入，易不规范        
+        bookclass = self.cb_bookclass.currentText()
+        bookshelf = self.le_bookshelf.text() # 书柜位置输入框
+
+        # ===================== 2. 组装图书信息列表（匹配模型字段顺序） =====================
+        # 字段顺序：ISBN、书名、作者、出版社、价格、评分、评价人数、分类、书柜
         bookinfo = [
-            isbn, title, author, publisher, price, self.star, self.num,
+            isbn, title, author, publisher, price, 
+            self.star, self.num, # 评分/评价人数（从实例变量获取，由豆瓣API填充）
             bookclass, bookshelf
         ]
-        LOG.info(f'插入记录 {len(bookinfo)} 项:  {bookinfo}')
-        self.model.updateItem(bookinfo)
-
+        # ===================== 3. 日志记录 & 模型更新 =====================
+        LOG.info(f'插入记录 {len(bookinfo)} 项:  {bookinfo}') # 调试用：记录操作数据
+        self.model.updateItem(bookinfo) # 核心：插入新行或更新已有ISBN的行
+        
+        # ===================== 4. 更新状态栏反馈 =====================
         self.statusBar.showMessage(
             "共 " + str(self.model.rowCount()) + " 条记录" + self.appver)
 
     @pyqtSlot()
     def on_pb_getbookinfo_clicked(self):
         """
-        通过豆瓣接口获取图书信息
+        槽函数：响应“获取图书信息”按钮点击事件
+        核心逻辑：
+        1. 从ISBN输入框提取ISBN，调用豆瓣API获取完整图书信息
+        2. 校验API返回数据有效性：
+           - 有效：填充界面输入框，设置分类/书柜默认值，更新表格模型
+           - 无效：日志警告+弹窗提示ISBN错误
+        3. 格式化评分显示（平均分/评价人数），更新状态栏记录数
+        注：分类字段适配下拉框，无选中时默认选第0项（如“计划”）
         """
-        isbn = self.le_isbn_pic.text()
-        bookinfo = self.get_douban_isbn(isbn.strip())
-        if len(bookinfo) > 0:
-            self.le_bookname.setText(bookinfo[1])
-            self.le_bookauthor.setText(bookinfo[2])
-            self.le_publisher.setText(bookinfo[3])
-            self.le_price.setText(bookinfo[4])
-            self.star = bookinfo[5]
-            self.num = bookinfo[6]
-            self.le_average.setText(f"{self.star} / {self.num}")
-            LOG.info(f"获取评分: 评分:{self.star} 人数:{self.num}")
+        # ===================== 1. 提取ISBN并调用豆瓣API =====================
+        isbn = self.le_isbn_pic.text()   # 提取ISBN并去除首尾空格（避免空/空格干扰）
+        bookinfo = self.get_douban_isbn(isbn.strip())  # 调用豆瓣API获取图书信息
 
+        # ===================== 2. 校验API返回数据有效性 =====================
+        if len(bookinfo) > 0:
+            # ===================== 3. 填充界面输入框（从API返回数据提取） =====================
+            self.le_bookname.setText(bookinfo[1])    # 书名
+            self.le_bookauthor.setText(bookinfo[2])  # 作者+译者
+            self.le_publisher.setText(bookinfo[3])  # 出版社
+            self.le_price.setText(bookinfo[4])      # 价格（清洗后）
+            
+            # 提取并格式化评分/评价人数
+            self.star = bookinfo[5]  # 豆瓣平均分（实例变量，供插入/更新使用）
+            self.num = bookinfo[6]   # 评价人数（实例变量，供插入/更新使用）
+            self.le_average.setText(f"{self.star} / {self.num}")  # 格式化显示
+            LOG.info(f"获取评分: 评分:{self.star} 人数:{self.num}")  # 日志记录评分信息
+
+            # ===================== 4. 设置分类/书柜默认值（保证字段非空） =====================
+            # 旧逻辑：文本框分类为空时设为“未设”（已替换为下拉框）
             # if len(self.le_bookclass.text().strip()) == 0:
             #     self.le_bookclass.setText("未设")
             #     self.le_bookshelf.setText("未知")
+            
+            # 新逻辑：下拉框无选中文本时，默认选中第0项（如“计划”），书柜设为“未知”
             if len(self.cb_bookclass.currentText().strip()) == 0:
-                self.cb_bookclass.setCurrentIndex(0)
-                self.le_bookshelf.setText("未知")
+                self.cb_bookclass.setCurrentIndex(0) # 选中下拉框第0项（默认分类）
+                self.le_bookshelf.setText("未知")    # 书柜默认值
 
-            # self.model.appendRow(bookinfo)
-            self.model.updateItem(bookinfo)
+            # ===================== 5. 更新表格模型（插入/更新） =====================
+            # self.model.appendRow(bookinfo)  # 注释掉的旧逻辑：仅插入新行（无更新逻辑）
+            self.model.updateItem(bookinfo)  # 核心：有则更新，无则插入
+            # ===================== 6. 更新状态栏反馈 =====================
             self.statusBar.showMessage("共 " + str(self.model.rowCount()) +
                                        " 条记录" + self.appver)
         else:
+            # ===================== 7. 无效ISBN处理（日志+弹窗提示） =====================
             LOG.warning("ISBN书号有误:  " + isbn)
+            # 弹窗提示用户ISBN错误（模态提示框，强制用户确认）
             QtWidgets.QMessageBox.warning(
-                self, "错误", "ISBN书号有误！",
-                QtWidgets.QMessageBox.StandardButton.Yes)
+                self,                # 父窗口（主窗口）
+                "错误",              # 提示框标题
+                "ISBN书号有误！",    # 提示内容
+                QtWidgets.QMessageBox.StandardButton.Yes  # 确认按钮
+            )
 
     @pyqtSlot(QModelIndex)
     def on_tv_booklist_clicked(self, index):

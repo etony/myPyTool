@@ -29,6 +29,9 @@ class Ui_Dialog(object):
         self.pb_next = QtWidgets.QPushButton(parent=Dialog)
         self.pb_next.setGeometry(QtCore.QRect(410, 430, 61, 23))
         self.pb_next.setObjectName("pb_next")
+        self.pb_prev = QtWidgets.QPushButton(parent=Dialog)
+        self.pb_prev.setGeometry(QtCore.QRect(330, 430, 61, 23))
+        self.pb_prev.setObjectName("pb_prev")
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -37,6 +40,7 @@ class Ui_Dialog(object):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "图书信息"))
         self.pb_next.setText(_translate("Dialog", "Next >>"))
+        self.pb_prev.setText(_translate("Dialog", "<< Prev"))
 
 
 if __name__ == "__main__":
