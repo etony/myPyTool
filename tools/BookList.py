@@ -292,32 +292,60 @@ class Worker(QObject):  # https://mathpretty.com/13641.html
 class BLmainWindow(QMainWindow, Ui_mainWindow):
     """
     图书信息管理系统主窗口类
+    继承关系：
+    - QMainWindow：PyQt6主窗口基类，提供菜单栏、状态栏、中心窗口等核心结构
+    - Ui_mainWindow：Qt Designer生成的UI类，包含主窗口所有控件（表格、按钮、输入框等）
+    核心职责：
+    1. 初始化主窗口UI并固定尺寸，避免用户随意调整导致布局错乱
+    2. 创建初始空数据模型，绑定到图书列表表格（tv_booklist）
+    3. 配置表格视图的布局规则（列宽自适应/可手动调整）、上下文菜单策略
+    4. 初始化全局状态变量（批量刷新计数、进度前缀、版本号），设置状态栏初始显示
     """
 
     def __init__(self, parent=None):
-
+        """
+        构造函数：初始化图书管理系统主窗口
+        
+        @param parent: 父窗口对象（默认None，主窗口无父窗口）
+        @type parent: QWidget | None
+        """
+        # ===================== 1. 父类初始化 & 窗口基础配置 =====================
+        # 调用父类构造函数，初始化QMainWindow和Ui_mainWindow的控件        
         super().__init__(parent)
+        # 加载UI界面（由Ui_mainWindow提供的setupUi方法，初始化所有控件）
         self.setupUi(self)
+        # 固定窗口大小：禁止用户拉伸/缩小窗口，保证布局稳定性（适配UI设计尺寸）
         self.setFixedSize(self.width(), self.height())
 
+        # ===================== 2. 创建初始空数据模型（DataFrame） =====================
+        # 定义初始空数据的字段结构（与表格列一一对应）
         data = {
-            'ISBN': [],
-            '书名': [],
-            '作者': [],
-            '出版': [],
-            '价格': [],
-            '评分': [],
-            '人数': [],
-            '分类': [],
-            '书柜': []
+            'ISBN': [],      # 图书唯一标识
+            '书名': [],      # 图书名称
+            '作者': [],      # 作者（含译者）
+            '出版': [],      # 出版社
+            '价格': [],      # 价格（清洗后）
+            '评分': [],      # 豆瓣平均分
+            '人数': [],      # 豆瓣评价人数
+            '分类': [],      # 自定义分类（如“计划”“已读”）
+            '书柜': []       # 书柜位置（如“A区1层”）
         }
-
+        # 创建空DataFrame，强制所有字段为字符串类型（避免后续数据类型异常）
         df = pd.DataFrame(data=data, dtype=object)
+        # 索引从1开始（适配用户对“第1行”的直观认知，而非编程默认的0起始）
         df.index = df.index + 1  # 调整 qtableview 序号
 
+
+        # ===================== 3. 初始化表格模型并绑定到表格视图 =====================
+        # 实例化自定义表格模型（TableModel），适配PyQt6的QTableView，支持DataFrame数据源
         self.model = TableModel(df)
+        # 将模型绑定到图书列表表格（tv_booklist），初始化表头和空数据
         self.tv_booklist.setModel(self.model)  # 填充 Qtableview 表头
+        # 显示表格的垂直表头（行号列），便于用户查看行序号
         self.tv_booklist.verticalHeader().setVisible(True)
+
+        # ===================== 4. 注释掉的历史代码（保留供参考） =====================
+        # 旧逻辑：使用QStandardItemModel（已替换为自定义TableModel，适配DataFrame）        
         # self.model = QtGui.QStandardItemModel()
         # self.model.setHorizontalHeaderLabels(
         #     ['ISBN', '书名', '作者', '出版社', '价格', '分类', '书柜'])
@@ -332,19 +360,36 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # self.tv_booklist.setColumnWidth(6, 60)
         # self.tv_booklist.horizontalHeader().setSectionResizeMode(1,QtWidgets.QHeaderView.ResizeMode.Stretch)
 
+
+        # ===================== 5. 表格列宽布局配置（混合自适应+手动调整） =====================
+        # 全局列宽策略：默认所有列自适应拉伸（填充窗口宽度）
         self.tv_booklist.horizontalHeader().setSectionResizeMode(
             QtWidgets.QHeaderView.ResizeMode.Stretch)
+        # 单独配置关键列为“可手动调整”（用户可按需拉伸/缩小）：
+        # 列1（书名）：支持手动调整宽度（避免长书名被挤压）        
         self.tv_booklist.horizontalHeader().setSectionResizeMode(
             1, QtWidgets.QHeaderView.ResizeMode.Interactive)
+        # 列2（作者）：支持手动调整宽度
         self.tv_booklist.horizontalHeader().setSectionResizeMode(
             2, QtWidgets.QHeaderView.ResizeMode.Interactive)
+        # 列3（出版社）：支持手动调整宽度
         self.tv_booklist.horizontalHeader().setSectionResizeMode(
             3, QtWidgets.QHeaderView.ResizeMode.Interactive)
+        
+        # ===================== 6. 上下文菜单配置 =====================
+        # 设置表格的上下文菜单策略为“自定义”：右键点击表格时触发自定义菜单逻辑
+        # 替代默认的系统菜单，实现右键删除、导出等自定义功能
         self.tv_booklist.setContextMenuPolicy(
             Qt.ContextMenuPolicy.CustomContextMenu)  # 对象的上下文菜单的策略
-        self.number = 0
-        self.barstr = ''
-        self.appver = '   ver-1.0.1'
+        
+
+        # ===================== 7. 初始化全局状态变量 =====================
+        self.number = 0          # 批量刷新计数（记录已刷新的图书数量）
+        self.barstr = ''         # 批量刷新进度前缀（如“信息更新:100/”）
+        self.appver = '   ver-1.0.1'  # 软件版本号（用于状态栏显示）
+
+        # ===================== 8. 初始化状态栏显示 =====================
+        # 状态栏默认显示软件版本号，给用户版本反馈
         self.statusBar.showMessage(self.appver)
 
     # ===================== 按钮槽函数 =====================
