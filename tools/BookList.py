@@ -32,7 +32,7 @@ import BookInfo
 import qdarkstyle
 
 
-# 配置日志（记录程序运行信息/错误）
+# 初始化日志对象（确保全局已定义，若未定义可补充：LOG = logging.getLogger(__name__)）
 LOG = logging.getLogger(os.path.basename(sys.argv[0]))
 logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S',
@@ -351,25 +351,56 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
     @pyqtSlot()
     def on_pb_load_clicked(self):
         """
-        加载CSV格式的图书数据
+        槽函数：响应“加载CSV”按钮点击事件，加载本地CSV格式的图书数据到表格
+        核心逻辑：
+        1. 打开文件选择对话框，筛选CSV格式文件（兼容所有文件兜底）
+        2. 读取CSV文件并做数据预处理：
+           - 强制所有字段为字符串类型（避免ISBN/评分等字段类型异常）
+           - 填充空值为空字符串（避免表格显示NaN）
+           - 索引从1开始（符合用户直观的行号认知）
+        3. 初始化表格模型并绑定到图书列表表格，展示加载的数据
+        4. 记录加载的文件路径，更新状态栏显示总记录数+软件版本
+        注：核心优化点是数据类型和空值处理，避免CSV加载后表格显示异常
         """
-        # 打开文件选择对话框
+        # ===================== 1. 打开文件选择对话框，选择CSV文件 =====================
+        # 参数说明：
+        # - self：父窗口对象，用于关联对话框
+        # - "选择存储文件"：对话框标题
+        # - "."：默认打开路径（当前工作目录）
+        # - "*.csv;;All Files(*)"：文件类型过滤（优先显示CSV，兜底显示所有文件）
+        # 返回值：csvNamepath=选中的CSV文件路径，csvType=选中的文件类型（如"*.csv"）
         csvNamepath, csvType = QFileDialog.getOpenFileName(
             self, "选择存储文件", ".", "*.csv;;All Files(*)")
-
+        # ===================== 2. 校验是否选中有效文件（空路径则跳过处理） =====================
         if csvNamepath != "":
-            # 读取CSV文件（UTF-8编码）
+            # ===================== 3. 读取CSV文件并进行数据预处理 =====================
+            # 读取CSV：
+            # - dtype='object'：强制所有字段为字符串类型（关键！避免ISBN前导零丢失、数字字段被识别为数值型）
+            # - 默认UTF-8编码（适配大多数CSV文件，若有乱码可补充encoding='gbk'等）
             df = pd.read_csv(csvNamepath, dtype='object')  # 数据全部转换为字符串型
+            # 注释掉的历史逻辑：手动插入评分/人数列（已由CSV文件自带字段替代）
             # df.insert(loc=5, column='评分', value=0)
             # df.insert(loc=6, column='人数', value=0)
+            # 索引重置：将pandas默认的0起始索引改为1起始（符合用户对“第1行”的直观认知）
             df.index = df.index + 1
+            # 空值填充：将DataFrame中的NaN/空值替换为空字符串（避免表格显示“NaN”，提升UI体验）
             df.fillna('', inplace=True)
 
+            # ===================== 4. 初始化表格模型并绑定到表格视图 =====================
+            # 实例化自定义表格模型（TableModel），传入预处理后的DataFrame
             self.model = TableModel(df)
+            # 将模型绑定到图书列表表格（tv_booklist），完成数据展示
             self.tv_booklist.setModel(self.model)  # 填充csv数据
+            
+            # ===================== 5. 记录文件路径 & 更新状态栏反馈 =====================
+            # 将加载的CSV文件路径填充到输入框（le_booklist），便于用户查看当前加载的文件
             self.le_booklist.setText(csvNamepath)
+            # 注释掉的历史逻辑：旧表格控件绑定（已替换为tv_booklist）
             # self.table.setModel(self.model)
+            
+            # 获取表格模型的总行数（加载的记录数）
             rowscount = self.model.rowCount()
+            # 状态栏显示：总记录数 + 软件版本信息（self.appver为版本号字符串）
             self.statusBar.showMessage(
                 "共 " + str(rowscount) + " 条记录" + self.appver)
 
@@ -391,23 +422,52 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
     @pyqtSlot()
     def on_pb_scan_clicked(self):
         """
-        扫描条形码图片，识别ISBN
+        槽函数：响应“扫描条形码”按钮点击事件
+        核心逻辑：
+        1. 打开文件选择对话框，选择本地条形码图片（支持png/jpg格式）
+        2. 解决OpenCV中文路径读取问题：通过np.fromfile+cv.imdecode读取图片
+        3. 图像处理优化：灰度化→二值化，增强条形码对比度，提升识别率
+        4. 条形码解码：使用pyzbar识别图片中的条形码数据（ISBN）
+        5. 结果填充：将识别到的ISBN填充到ISBN输入框（le_isbn_pic）
+        注：核心优化点是中文路径兼容和图像预处理，解决条形码识别成功率低的问题
         """
+        # ===================== 1. 打开文件选择对话框，选择条形码图片 =====================
+        # 参数说明：
+        # - self：父窗口对象
+        # - "选择条形码图片"：对话框标题
+        # - "."：默认打开路径（当前目录）
+        # - "*.png;;*.jpg;;All Files(*)"：文件类型过滤（仅显示png/jpg/所有文件）
+        # 返回值：picNamepath=选中文件的路径，picType=选中的文件类型
         picNamepath, picType = QFileDialog.getOpenFileName(
             self, "选择条形码图片", ".", "*.png;;*.jpg;;All Files(*)")
-
+        
+        # ===================== 2. 校验是否选中图片（空路径则不处理） =====================
         if picNamepath != "":
             # image = cv.imread(img_path)
+            # ===================== 3. 读取图片（兼容中文路径） =====================
+            # 问题：cv.imread不支持中文路径，会返回None
+            # 解决方案：np.fromfile读取文件字节→cv.imdecode解码为图像
+            # cv.IMREAD_COLOR：以彩色模式读取（忽略透明度）
             image = cv.imdecode(np.fromfile(picNamepath, dtype=np.uint8),
                                 cv.IMREAD_COLOR)
 
+            # ===================== 4. 图像预处理（提升条形码识别率） =====================
+            # 步骤1：灰度化（将彩色图转为灰度图，减少颜色干扰）
             gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
+            # 步骤2：二值化（将灰度图转为黑白二值图，增强条形码边缘对比度）
+            # - 第一步：OTSU自动计算最优阈值（返回值binary为计算出的阈值）
             binary, _ = cv.threshold(gray, 0, 255, cv.THRESH_OTSU)
+            # - 第二步：用OTSU阈值执行二值化，mat为二值化后的图像
             binary, mat = cv.threshold(gray, binary, 255, cv.THRESH_BINARY)
 
+            # ===================== 5. 条形码解码 =====================
+            # pyzbar.decode：识别图像中的条形码，返回条形码对象列表（支持EAN13等ISBN格式）
             barcode = pyzbar.decode(mat)
+            # ===================== 6. 提取ISBN并填充输入框 =====================
+            # 遍历识别到的条形码（通常只有1个）
             for bar in barcode:
+                # bar.data：条形码原始二进制数据→解码为UTF-8字符串（即ISBN）
                 self.le_isbn_pic.setText(bar.data.decode("utf-8"))
 
             # data =['xxxxxx', '西线无战事', '作者: [德] 雷马克 翻译:朱雯', '上海人民出版社', '45.00', '计划', '未设置']
@@ -420,69 +480,109 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             # self.tv_booklist.setModel(self.model)
 
     def get_douban_isbn(self, isbn):
+
         """
-        调用豆瓣API获取图书信息
-        :param isbn: 图书ISBN
-        :return: 图书信息字典（空字典表示失败）
+        核心方法：调用豆瓣图书API，根据ISBN获取图书完整信息并格式化
+        核心逻辑：
+        1. 校验ISBN长度有效性（仅处理13/17位ISBN，适配豆瓣API规则）
+        2. 配置豆瓣API请求参数（apikey、模拟移动端请求头防反爬）
+        3. 发送POST请求获取图书JSON数据（适配豆瓣API的请求方式）
+        4. 解析响应数据，清洗/格式化核心字段（作者+译者、价格等）
+        5. 计算图书推荐度（兼顾评分和评价人数，处理边界值避免计算异常）
+        6. 无效数据处理：返回固定长度的空值列表，保证调用方数据结构统一
+        7. 有效数据处理：返回包含14个字段的图书信息列表（13个基础字段+1个推荐度）
+    
+        @param isbn: 图书ISBN编号（豆瓣API仅支持13/17位有效ISBN）
+        @type isbn: str
+        @return: 图书信息列表，有效数据时含14个字段，无效时为13个空格的列表
+                 字段索引说明（有效数据）：
+                 0: ISBN          1: 书名          2: 作者+译者    3: 出版社
+                 4: 价格（清洗后） 5: 豆瓣平均分    6: 评价人数    7: 分类（默认"计划"）
+                 8: 书柜（默认"未设置"） 9: 封面小图URL  10: 出版日期  11: 完整评分字典
+                 12: 豆瓣详情页URL 13: 推荐度（计算值）
+        @rtype: list
         """
-        # 调用豆瓣API获取完整详情（含封面、简介等）
+        # ===================== 1. 初始化返回值 & ISBN有效性校验 =====================
+        # 初始化图书信息列表（最终返回）
         bookinfo = []
+        # 校验ISBN长度：豆瓣API仅识别13位标准ISBN，17位为特殊格式（如带分隔符），其他长度直接返回空列表
         if len(isbn) != 13 and len(isbn) != 17:
             return bookinfo
-        # 豆瓣API地址（公开接口）
+        # ===================== 2. 配置豆瓣API请求参数 =====================
+        # 豆瓣图书API地址（按ISBN查询的固定路径）
         url = "https://api.douban.com/v2/book/isbn/" + isbn
 
+        # API密钥（apikey）：豆瓣开放平台申请，用于提升API调用限额，避免请求被拦截
         # apikey=0df993c66c0c636e29ecbb5344252a4a
         # apikey=0ac44ae016490db2204ce0a042db2916
         payload = {'apikey': '0ab215a8b1977939201640fa14c66bab'}
+        # 请求头：模拟iPhone移动端浏览器，规避豆瓣API的反爬机制（PC端请求易被限制）
         headers = {
             "Referer":
-            "https://m.douban.com/tv/american",
+            "https://m.douban.com/tv/american", # 模拟移动端来源页，提升请求合法性
             "User-Agent":
             "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"
         }
 
         # {"content-type": "multipart/form-data;","User-Agent": "MicroMessenger/","Referer": "https://servicewechat.com/wx2f9b06c1de1ccfca/91/page-frame.html"}
-
+        
+        # ===================== 3. 发送API请求并解析响应 =====================
+        # 发送POST请求（豆瓣该API支持POST，相比GET更不易被反爬拦截）
         response = requests.post(url, data=payload, headers=headers)
-
+        
+        # 解析JSON响应为字典
         book_dict = json.loads(response.text)
 
+        # ===================== 4. 数据有效性校验 =====================
+        # 校验响应数据是否完整（字典长度>5，避免返回空/残缺数据
         if len(book_dict) > 5:
+            # ===================== 5. 数据清洗与格式化 =====================
+            # 处理作者+译者：作者用/分隔，有译者则追加“译者:XXX”
             author = '/'.join(book_dict['author'])
             if len(book_dict['translator']) > 0:
                 author += ' 译者: '
                 author += '/'.join(book_dict['translator'])
+            # 提取评分信息（包含平均分、评价人数）
             rating = book_dict['rating']
+            # 清洗价格：移除CNY/元符号，去除首尾空格（兼容不同格式的价格字符串）
             price = book_dict['price']
             price = price.replace('CNY', '').replace('元', '').strip()
-            bookinfo.append(isbn)
-            bookinfo.append(book_dict['title'])
-            bookinfo.append(author)
-            bookinfo.append(book_dict['publisher'])
-            bookinfo.append(price)
-            bookinfo.append(rating['average'])
-            bookinfo.append(rating['numRaters'])
-            bookinfo.append('计划')
-            bookinfo.append('未设置')
-            # bookinfo.append(book_dict['image'])
-            bookinfo.append(book_dict['images']['small'])
-            bookinfo.append(book_dict['pubdate'])
-            bookinfo.append(book_dict['rating'])
-            bookinfo.append(book_dict['alt'])
-            # bookinfo.append('')
-            # bookinfo.append('')
-            LOG.info(rating)
-            # 计算推荐度
 
-            LOG.info(f'图书详细信息:   {book_dict}')
+            # ===================== 6. 填充图书信息列表（按固定索引） =====================
+            bookinfo.append(isbn)                          # 0: ISBN
+            bookinfo.append(book_dict['title'])            # 1: 书名
+            bookinfo.append(author)                        # 2: 作者+译者
+            bookinfo.append(book_dict['publisher'])        # 3: 出版社
+            bookinfo.append(price)                         # 4: 价格（清洗后）
+            bookinfo.append(rating['average'])             # 5: 豆瓣平均分
+            bookinfo.append(rating['numRaters'])           # 6: 评价人数
+            bookinfo.append('计划')                        # 7: 分类（默认值）
+            bookinfo.append('未设置')                      # 8: 书柜位置（默认值）
+            bookinfo.append(book_dict['images']['small'])  # 9: 封面小图URL（替代原image字段）
+            bookinfo.append(book_dict['pubdate'])          # 10: 出版日期
+            bookinfo.append(book_dict['rating'])           # 11: 完整评分字典（含平均分/人数）
+            bookinfo.append(book_dict['alt'])              # 12: 豆瓣图书详情页URL
+    
+            # ===================== 7. 计算图书推荐度（自定义公式） =====================
+            # 日志记录评分信息（便于调试推荐度计算）
+            LOG.info(f"ISBN {isbn} 评分信息：{rating}")
+            LOG.info(f"ISBN {isbn} 完整图书信息：{book_dict}")
+            
+            # 推荐度公式：(平均分 - 2.5) × ln(评价人数 + 1)
+            # 设计逻辑：
+            # - 减2.5：过滤低分图书（平均分<2.5时推荐度为负）
+            # - +1：避免评价人数为0时ln(0)抛出数学异常
+            # - round：四舍五入取整
             recommend = round((float(rating['average']) - 2.5) *
-                              math.log(float(rating['numRaters']) + 1))
-            bookinfo.append(str(recommend))
+                              math.log(float(rating['numRaters']) + 1)) 
+            bookinfo.append(str(recommend)) # 13: 推荐度（字符串格式）
         else:
+            # ===================== 8. 无效数据处理（返回固定长度空值） =====================
+            # 响应数据残缺时，填充13个空格，保证返回列表长度统一，避免调用方索引越界
             for i in range(13):
                 bookinfo.append(" ")
-
+        
+        # ===================== 9. 返回格式化后的图书信息 =====================        
         return bookinfo
 
     @pyqtSlot()
@@ -548,67 +648,136 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         """
         单击表格行，填充输入框
         """
-        LOG.info('选定行号: ' + str(index.row()))
+        """
+        槽函数：响应图书列表表格（tv_booklist）的单击事件
+        核心逻辑：
+        1. 记录选中行号（日志调试）
+        2. 从表格模型中获取选中行的完整图书信息
+        3. 将图书信息逐一填充到界面输入框/下拉框，实现“选中行→编辑框回填”
+        4. 格式化评分信息（平均分/评价人数），分类下拉框匹配预定义分类索引
+        
+        @param index: 单击位置的模型索引，包含选中行/列的位置信息
+        @type index: QModelIndex
+        """
+        # ===================== 1. 日志记录：记录选中的行号（便于调试） =====================
+        LOG.info('选定行号: ' + str(index.row())) #index.row()  # 获取单击的行索引（从0开始）
 
+        # ===================== 2. 获取选中行的图书信息 =====================
+        # 获取表格绑定的数据源模型
         model = self.tv_booklist.model()
+        # 从模型中提取选中行的完整图书信息（getItem为自定义方法，返回行数据列表）
         bookinfo = model.getItem(index.row())
-        # 填充输入框
+        # ===================== 3. 填充基础信息输入框 =====================
+        # ISBN输入框（le_isbn_pic）：转为字符串避免类型显示异常
         self.le_isbn_pic.setText(str(bookinfo[0]))
         self.le_bookname.setText(bookinfo[1])
         self.le_bookauthor.setText(bookinfo[2])
         self.le_publisher.setText(bookinfo[3])
         self.le_price.setText(bookinfo[4])
+        
+        # ===================== 4. 处理评分信息（格式化显示） =====================
+        # 提取评分（bookinfo[5]）和评价人数（bookinfo[6]）
         self.star = bookinfo[5]
         self.num = bookinfo[6]
+        # 格式化评分显示：“平均分 / 评价人数”（如：8.5 / 10000）
         self.le_average.setText(f"{self.star} / {self.num}")
+        # 日志记录评分信息（调试用，便于排查数据显示问题）
         LOG.info(f"获取评分: 评分:{self.star} 人数:{self.num}")
         # self.le_bookclass.setText(bookinfo[5])
+        # ===================== 5. 设置图书分类下拉框 =====================
+        # 注释掉的旧逻辑：直接填充分类文本（已替换为下拉框索引匹配）
+        # self.le_bookclass.setText(bookinfo[5])
+        
+        # bookinfo[7]为分类文本（如“计划”），通过bclass映射转为下拉框索引
+        # bclass字典：键=分类文本，值=下拉框选项索引（如{"计划":1}）
         self.cb_bookclass.setCurrentIndex(bclass[bookinfo[7]])
 
+        # ===================== 6. 填充书柜位置输入框 =====================
         self.le_bookshelf.setText(bookinfo[8])
 
     def refreshonebookinfo(self, arow):
         """
-        更新图书信息
-
+        核心方法：单本图书信息刷新（多线程批量刷新的回调方法）
+        核心逻辑：
+        1. 根据传入的ISBN调用豆瓣API，获取最新图书信息
+        2. 校验返回数据的有效性（核心字段≥7个），避免无效数据更新
+        3. 记录关键图书信息日志（便于调试），更新表格模型中的对应记录
+        4. 递增刷新计数，更新状态栏显示当前刷新进度
+        注：该方法由多线程的progress信号触发，逐本刷新图书信息，避免UI阻塞
+    
+        @param arow: 待刷新图书的ISBN（唯一标识），由多线程传递
+        @type arow: str
         """
+        # ===================== 1. 调用豆瓣API获取单本图书最新信息 =====================
+        # get_douban_isbn：自定义方法，传入ISBN返回图书信息列表（含ISBN、书名、作者等）
         bookinfo = self.get_douban_isbn(arow)
 
+        # ===================== 2. 数据有效性校验（避免无效数据更新） =====================
+        # 校验返回的图书信息至少包含7个核心字段（ISBN、书名、作者、出版社、价格、评分、评价人数）
         if len(bookinfo) >= 7:
+            # 日志记录：拼接前5个核心字段（ISBN、书名、作者、出版社、价格），便于调试
             LOG.info('-'.join(bookinfo[:5]))
+            # 更新表格模型中的对应记录（ISBN为唯一标识，存在则更新，不存在则新增）
             self.model.updateItem(bookinfo)
+        # ===================== 3. 递增刷新计数，更新进度反馈 =====================
+        # self.number：批量刷新的全局计数，每刷新一本+1    
         self.number += 1
 
+        # 更新状态栏：显示当前刷新进度（格式：信息更新:总数量/当前数量）
+        # self.barstr：预定义进度前缀（如"信息更新:100/"），拼接当前计数后显示
         self.statusBar.showMessage(self.barstr + str(self.number))
 
     @pyqtSlot()
     def on_pb_refresh_clicked(self):
         """
-        批量刷新表格中所有ISBN的图书信息
+        槽函数：响应“批量刷新”按钮点击事件，多线程批量更新表格中所有ISBN的图书信息
+        核心设计：
+        1. 避免UI线程阻塞：将耗时的API调用放到子线程执行
+        2. 生命周期管理：线程/工作对象完成后自动销毁，避免内存泄漏
+        3. 状态反馈：禁用刷新按钮防止重复点击，线程结束后恢复按钮并更新状态栏
+        4. 进度传递：通过自定义信号逐本刷新图书信息，实时反馈进度
         """
+        # ===================== 1. 准备刷新数据 =====================
+        # 从表格模型中获取第0列（ISBN列）的所有数据（去重/非空处理由getlist实现）
         # 调用 douban API 接口，根据 isbn编码 更新所有记录
         isbnlist = self.model.getlist(0)
+        # 初始化刷新计数（用于进度提示）
         self.number = 0
+        # 构建进度提示字符串（格式：信息更新: 总数量/）
         self.barstr = '信息更新:' + str(len(isbnlist)) + '/'
 
-        # 多线程刷新图书信息   开始
-
+        # ===================== 2. 多线程配置（核心：避免UI阻塞） =====================
+        # Step 1: 创建QThread线程对象（管理子线程生命周期）
         self.thread = QThread()
-        # Step 3: Create a worker object
+        # Step 2: 创建工作对象（封装批量刷新逻辑，不含UI操作）
         self.worker = RefreshBookinfoList(isbnlist)
-        # Step 4: Move worker to the thread
+        # Step 3: 将工作对象移动到子线程（PyQt6要求：UI相关操作必须在主线程，耗时操作在子线程）
         self.worker.moveToThread(self.thread)
-        # Step 5: Connect signals and slots
+
+            # ===================== 3. 信号槽绑定（线程/工作对象通信） =====================
+            # 线程启动 → 触发工作对象的run方法（开始批量刷新）
         self.thread.started.connect(self.worker.run)  # 通知开始
+        
+        # 工作对象完成刷新 → 通知线程退出（结束子线程）
         self.worker.finished.connect(self.thread.quit)  # 结束后通知结束
+        # 工作对象完成 → 销毁工作对象（释放内存，避免泄漏）
         self.worker.finished.connect(self.worker.deleteLater)  # 完成后删除对象
+        # 线程退出 → 销毁线程对象（释放内存）
         self.thread.finished.connect(self.thread.deleteLater)  # 完成后删除对象
+        # 工作对象的progress信号 → 绑定到单本图书刷新方法（逐本更新UI）
         self.worker.progress.connect(
             self.refreshonebookinfo)  # 绑定 progress 的信号
+        
+        # ===================== 4. 启动线程 & 控制UI状态 =====================
+        # 启动子线程（触发thread.started信号，进而执行worker.run）
         self.thread.start()
+        # 禁用刷新按钮：防止用户重复点击导致多线程冲突
         self.pb_refresh.setEnabled(False)
 
+        # ===================== 5. 线程结束后的回调逻辑 =====================
+        # 线程结束 → 恢复刷新按钮可用状态（lambda表达式传递无参回调）
         self.thread.finished.connect(lambda: self.pb_refresh.setEnabled(True))
+        # 线程结束 → 更新状态栏提示（显示总记录数+软件版本）
         self.thread.finished.connect(lambda: self.statusBar.showMessage(
             "共 " + str(self.model.rowCount()) + " 条记录" + self.appver))
 
@@ -626,18 +795,42 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
     @pyqtSlot()
     def on_pb_reset_clicked(self):
         """
-        重置筛选状态，清空输入框
+        槽函数：响应“重置”按钮点击事件
+        核心逻辑：
+        1. 清空所有图书信息输入框（作者、书名、书柜、价格、出版社等）
+        2. 重置图书分类下拉框为“无选中”状态（替代旧文本框清空逻辑）
+        3. 恢复表格模型的筛选状态（显示所有图书记录，取消之前的搜索/筛选）
+        4. 更新状态栏，显示当前表格的总记录数 + 软件版本信息
         """
+        # ===================== 1. 清空各字段输入框 =====================
+        # 清空作者输入框
+
         self.le_bookauthor.clear()
         # self.le_bookclass.clear()
+        # 注释掉的旧逻辑：清空图书分类文本框（已替换为下拉框cb_bookclass）
+        # self.le_bookclass.clear()
+        # 重置图书分类下拉框为无选中状态（index=-1），而非默认选中第一项
         self.cb_bookclass.setCurrentIndex(-1)
         # self.le_booklist.clear()
+        # 注释掉的旧逻辑：清空图书列表相关输入框（该控件已移除/未使用）
+        # self.le_booklist.clear()
+        # 清空书名输入框
         self.le_bookname.clear()
+        # 清空书柜位置输入框
         self.le_bookshelf.clear()
         # self.le_isbn_pic.clear()
+        # 注释掉的逻辑：保留ISBN输入框内容（业务需求：重置时不清除ISBN）
+        # self.le_isbn_pic.clear()
+        # 清空价格输入框
         self.le_price.clear()
+        # 清空出版社输入框
         self.le_publisher.clear()
+        
+        # ===================== 2. 重置表格模型筛选状态 =====================
+        # 调用模型的reset方法：恢复所有数据显示，取消之前的搜索/筛选条件
         self.model.reset()
+        # ===================== 3. 更新状态栏反馈 =====================
+        # 状态栏显示当前表格总记录数 + 软件版本信息（self.appver为版本号字符串）
         self.statusBar.showMessage(
             "共 " + str(self.model.rowCount()) + " 条记录" + self.appver)
 
@@ -670,19 +863,53 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         #             self.model.deleteItem(bookinfo[0])
 
         # ################## 多选删除 ##############
+        
+        """
+        槽函数：响应图书列表表格（tv_booklist）的右键菜单请求事件
+        核心逻辑：
+        1. 校验表格是否有数据，无数据则不生成菜单
+        2. 获取表格中选中的所有单元格索引，去重后得到选中行索引
+        3. 提取选中行对应的ISBN列表（ISBN为图书唯一标识）
+        4. 生成右键菜单并获取用户选择的操作（如删除）
+        5. 若选择“删除”，遍历ISBN列表删除对应记录，更新日志和状态栏
+        6. 仅当有有效选中行时才触发菜单逻辑
+        
+        @param pos: 右键点击的位置（屏幕坐标），用于定位显示右键菜单
+        @type pos: QPoint
+        """
+        # ===================== 1. 校验表格是否有数据 =====================
+        # 表格模型行数>0时才处理右键菜单（无数据时不显示菜单）
         if self.model.rowCount() > 0:
+            # ===================== 2. 获取选中行索引（去重） =====================
+            # 获取所有选中单元格的索引（包含多列，需去重得到行索引）
             indexs = self.tv_booklist.selectedIndexes()
+            # 去重：通过集合提取唯一的行索引（避免选中多列时重复处理同一行）
             indexlist = set(index.row() for index in indexs)
+            # ===================== 3. 提取选中行的ISBN列表（唯一标识） =====================
             isbnlist = []
             for aindex in indexlist:
+                # 从表格模型中获取指定行的完整数据，提取第0列（ISBN）
                 isbnlist.append(self.model.getItem(aindex)[0])
+            
+            # ===================== 4. 日志记录选中信息（便于调试） =====================
             LOG.info(f"选中信息  {len(isbnlist)} 项:   {isbnlist}")
+                   
+            # ===================== 5. 生成右键菜单并处理用户操作 =====================
+            # 仅当有有效ISBN（选中行）时生成右键菜单
             if len(isbnlist) > 0:
+                # 生成右键菜单（genLoveMenu为自定义方法，显示菜单并返回用户选择的动作）
+                # 注：genLoveMenu内部会根据pos定位菜单，并将选择的动作赋值给self.action
                 self.genLoveMenu(pos)
+                
+                # ===================== 6. 执行删除操作 =====================
+                # 若用户选择的动作是“删除”（self.dele为删除动作对象）
                 if self.action == self.dele:
+                    # 遍历ISBN列表，逐个删除对应图书记录（ISBN为唯一标识）
                     for isbn in isbnlist:
                         self.model.deleteItem(isbn)
                         LOG.info(f"删除信息： {isbn}")
+                    # ===================== 7. 更新状态栏（反馈删除结果） =====================
+                    # 状态栏显示当前剩余记录数 + 软件版本信息
                     self.statusBar.showMessage("共 " +
                                                str(self.model.rowCount()) +
                                                " 条记录" + self.appver)
@@ -790,28 +1017,52 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
     def refreshBookInfo(self, ISBN):
         """
-        根据ISBN，通过豆瓣接口获取图书相信信息，并刷新图书详细信息子窗口
+        核心方法：根据ISBN从豆瓣接口获取图书完整信息，刷新图书详情子窗口的内容与布局
+        功能包含：
+        1. 调用豆瓣API获取图书基础信息
+        2. 下载图书封面图片并显示
+        3. 构建富文本展示图书核心信息（作者、出版、评分等）
+        4. 计算图书推荐度并展示
+        5. 自适应调整详情窗口文本框高度，优化显示效果
+    
+        @param ISBN: 图书唯一标识ISBN13，用于调用豆瓣API获取信息
+        @type ISBN: str
         """
-
+        # ===================== 1. 调用豆瓣API获取图书完整信息 =====================
+        # get_douban_isbn为已实现的方法，返回包含图书所有字段的列表（索引对应固定字段）
         douban_bookinfo = self.get_douban_isbn(ISBN)
+            
+        # ===================== 2. 下载图书封面图片（处理反爬限制） =====================
+        # 提取封面图片URL（douban_bookinfo[9]为封面小图URL）
         url = douban_bookinfo[9]
+        # 构造Referer请求头：豆瓣图片防盗链，需指定来源域名（从封面URL提取域名）
         ref = 'https://' + url.split('/')[2]
-
+        
+        # 请求头：模拟浏览器，避免图片请求被拒绝（403 Forbidden）
         header = {
             'User-Agent':
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1823.79'
         }
         header['Referer'] = ref
+        # 发送GET请求下载封面图片数据
         res = requests.get(douban_bookinfo[9], headers=header)
+        # 将图片二进制数据转换为QImage（PyQt6可识别的图片格式）
         img = QImage.fromData(res.content)
 
         # self.CW_bookinfo = BookInfo.BookInfo(parent=self)
+        # 将QImage转换为QPixmap，设置到详情窗口的封面标签（lb_bookcover）
         self.CW_bookinfo.lb_bookcover.setPixmap(QPixmap.fromImage(img))
 
+        # ===================== 3. 构建富文本信息，填充到文本框（tb_bookinfo） =====================
+        # 清空文本框（可选，若需保留历史可注释）
+        # self.CW_bookinfo.tb_bookinfo.clear()
+        
+        # 标题：白色粗体大号字体（书名）
         self.CW_bookinfo.tb_bookinfo.setText(
             '<b><font color="white" size="5">' + douban_bookinfo[1] +
             '</font></b>')
 
+        # 追加核心信息：作者、出版社、价格、出版日期、ISBN（换行+粗体标签）
         self.CW_bookinfo.tb_bookinfo.append('<br><b>作者: </b>' +
                                             douban_bookinfo[2])
         self.CW_bookinfo.tb_bookinfo.append('<br><b>出版: </b>' +
@@ -823,16 +1074,42 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.CW_bookinfo.tb_bookinfo.append('<br><b>ISBN: </b>' +
                                             douban_bookinfo[0])
 
+        # 评分信息：平均分 + 评价人数（douban_bookinfo[11]为评分字典，含average/numRaters）
         self.CW_bookinfo.tb_bookinfo.append(
             '<br><b>评分: </b>' + str(douban_bookinfo[11]['average']) + '分/ ' +
             str(douban_bookinfo[11]['numRaters']) + '人')
+        # 豆瓣链接：白色超链接样式（douban_bookinfo[12]为图书详情页URL）
         self.CW_bookinfo.tb_bookinfo.append(
             '<br><b>链接: &emsp;&emsp;&emsp;&emsp;&emsp; </b>[<a style="color: #FFFFFF;" href="' + douban_bookinfo[12] + '"> 豆瓣 </a>]')
-
-        Recomm = ((float(douban_bookinfo[11]['average'])) - 2.5) * \
-            math.log(float(douban_bookinfo[11]['numRaters']))
-        self.CW_bookinfo.tb_bookinfo.append(
-            '<br><b>推荐: </b>' + str(round(Recomm)))
+        
+        # ===================== 4. 计算图书推荐度（自定义公式） =====================
+        # 推荐度公式：(豆瓣平均分 - 2.5) × ln(评价人数) → 兼顾评分和评价人数的综合推荐值
+        # 注：2.5为基础分（过滤低分图书），ln为自然对数（放大评价人数的权重）
+        
+        try:
+            avg_score = float(douban_bookinfo[11]['average'])  # 豆瓣平均分
+            raters_count = float(douban_bookinfo[11]['numRaters'])  # 评价人数
+            # 避免对数计算异常（评价人数为0时ln无意义，默认推荐度0）
+            if raters_count <= 0:
+                recommend_score = 0.0
+            else:
+                recommend_score = (avg_score - 2.5) * math.log(raters_count)
+            # 四舍五入取整，追加到文本框
+            self.CW_bookinfo.tb_bookinfo.append(
+                '<br><b>推荐: </b>' + str(round(recommend_score))
+            )
+        except Exception as e:
+            # 异常处理：评分/人数格式错误时显示推荐度0
+            LOG.warning(f"计算推荐度失败（ISBN：{ISBN}）：{e}")
+            self.CW_bookinfo.tb_bookinfo.append('<br><b>推荐: </b>0')
+        
+        
+        
+        
+        # Recomm = ((float(douban_bookinfo[11]['average'])) - 2.5) * \
+        #     math.log(float(douban_bookinfo[11]['numRaters']))
+        # self.CW_bookinfo.tb_bookinfo.append(
+        #     '<br><b>推荐: </b>' + str(round(Recomm)))
 
         # r = requests.get(book_dict['image'])
         # im = cv.imdecode(np.frombuffer(r.content, np.uint8), cv.IMREAD_COLOR) # 直接解码网络数据
@@ -841,24 +1118,34 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # self.CW_bookinfo.tb_bookinfo.append('<a href="https://www.douban.com">douban</a>')
 
         # self.Dialog.setWindowTitle("图书信息 - " + douban_bookinfo[1])
-
+        
+        # ===================== 5. 日志记录与窗口配置 =====================
+        # 日志记录：记录封面信息获取情况（字段数量+完整信息），便于调试
         LOG.info(f'获取封面信息 {len(douban_bookinfo)} 项: {douban_bookinfo}')
         # self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
 
         # self.Dialog.show()
-
+        # 设置详情窗口标题：“图书信息 - 书名”
         self.CW_bookinfo.setWindowTitle("图书信息 - " + douban_bookinfo[1])
         self.CW_bookinfo.show()
+        
+        # ===================== 6. 自适应调整文本框高度（布局适配） =====================
+        # 获取文本框当前Y坐标（垂直位置）
         tb_y = self.CW_bookinfo.tb_bookinfo.pos().y()
-
+        
+        # 计算文本框所需高度：文档内容高度 + 上下内边距（margin）
         tb_height = self.CW_bookinfo.tb_bookinfo.document().size().height() + \
             self.CW_bookinfo.tb_bookinfo.contentsMargins().top() + \
             self.CW_bookinfo.tb_bookinfo.contentsMargins().bottom()
+            
+        # 固定文本框高度（四舍五入），避免内容溢出/空白
         self.CW_bookinfo.tb_bookinfo.setFixedHeight(round(tb_height))
-        move_y = 0  # 311-round(tb_height)
-        self.CW_bookinfo.tb_bookinfo.setGeometry(self.CW_bookinfo.tb_bookinfo.pos().x(),
-                                                 tb_y+move_y, self.CW_bookinfo.tb_bookinfo.width(),
-                                                 self.CW_bookinfo.tb_bookinfo.height())
+        # 调整文本框垂直位置（move_y=0表示不调整，可根据需要修改）
+        move_y = 0  # 311-round(tb_height) # 注释为历史调整逻辑，保留供参考
+        self.CW_bookinfo.tb_bookinfo.setGeometry(self.CW_bookinfo.tb_bookinfo.pos().x(), # 保持X坐标不变
+                                                 tb_y+move_y, # 调整Y坐标
+                                                 self.CW_bookinfo.tb_bookinfo.width(), # 保持宽度不变
+                                                 self.CW_bookinfo.tb_bookinfo.height()) # 已固定的高度
 
     def get_column_data(self, column_index):
         """
@@ -889,20 +1176,37 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
     @pyqtSlot()
     def on_pb_search_douban_clicked(self):
         """
-        打开豆瓣搜索子窗口
+        槽函数：响应“豆瓣搜索”按钮点击事件，打开豆瓣图书搜索子窗口
+        核心逻辑：
+        1. 实例化豆瓣搜索子窗口并关联父窗口
+        2. 绑定子窗口的图书信息信号到当前窗口的处理方法
+        3. 自动填充主窗口的书名关键词到子窗口搜索框（关键词长度≥2时）
+        4. 设置子窗口为模态（阻塞父窗口操作）并显示
         """
+        # ---------------- 注释掉的旧实现（保留供参考） ----------------
+        # 旧方式：手动初始化UI文件构建对话框（已替换为直接实例化BookSearch类）
         # self.Dialog = QtWidgets.QDialog()
         # self.CW_booksearch = Ui_Dialog_S()
         # self.CW_booksearch.setupUi(self.Dialog)
         # self.Dialog.setModal(True)
         # self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
         # self.Dialog.show()
+    
+        # 1. 实例化豆瓣搜索子窗口，指定当前窗口为父窗口（用于信号传递、窗口层级管理）
         bs = BookSearch.BookSearch(self)
+        # 2. 绑定子窗口的自定义信号（bookinfoSignal）到当前窗口的信号处理方法（getDialogSignal）
+        #    作用：子窗口选中图书后，将图书信息传递到当前窗口的getDialogSignal方法处理
         bs.bookinfoSignal.connect(self.getDialogSignal)
+        # 3. 自动填充搜索关键词：获取主窗口书名输入框的内容并去除首尾空格
         search = self.le_bookname.text().strip()
+        # 仅当关键词长度≥2时填充到子窗口搜索框（避免空/过短关键词无效搜索）
         if len(search) >= 2:
             bs.le_search_douban.setText(search)
+            # 4. 设置子窗口为模态窗口：
+        #    - 模态窗口会阻塞父窗口的所有操作，直到子窗口关闭
+        #    - 保证用户先完成搜索操作，再返回主窗口
         bs.setModal(True)
+        # 5. 显示豆瓣搜索子窗口
         bs.show()
 
     def getDialogSignal(self, connect):
