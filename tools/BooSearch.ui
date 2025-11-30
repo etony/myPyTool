@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>查询</string>
+   <string>图书搜索</string>
   </property>
   <property name="sizeGripEnabled">
    <bool>true</bool>

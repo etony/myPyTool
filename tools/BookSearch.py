@@ -13,10 +13,10 @@ Module: BookSearch.py
 
 from PyQt6.QtCore import pyqtSlot, QModelIndex, pyqtSignal
 # PyQt6UI组件：应用程序、对话框
-from PyQt6.QtWidgets import QApplication, QDialog
+from PyQt6.QtWidgets import QApplication, QDialog, QMessageBox
 
 # 导入UI界面文件（由Qt Designer生成，定义搜索对话框的控件）
-from Ui_BooSearch import Ui_Dialog_S
+from Ui_BooSearch import Ui_Dialog
 # 系统模块：程序入口、命令行参数
 import sys
 # HTTP请求模块：调用豆瓣API
@@ -28,7 +28,7 @@ import pandas as pd
 import numpy as np
 
 
-class BookSearch(QDialog, Ui_Dialog_S):
+class BookSearch(QDialog, Ui_Dialog):
     """
     豆瓣图书搜索对话框类
     继承关系：
@@ -68,9 +68,16 @@ class BookSearch(QDialog, Ui_Dialog_S):
         # 豆瓣图书搜索API地址（公开接口）
         url = "https://api.douban.com/v2/book/search"
         # 获取搜索框中用户输入的关键词
-        search_str = self.le_search_douban.text()
+        search_str = self.le_search_douban.text().strip()
         # 跳过空关键词搜索
         if not search_str:
+            QMessageBox.warning(
+                self,                # 父窗口（主窗口）
+                "警告",              # 提示框标题
+                "搜索关键字不能为空！",    # 提示内容
+                QMessageBox.StandardButton.Ok  # 确认按钮
+            )  
+            
             return
         # API请求参数：q=搜索关键词，apikey=豆瓣开放平台密钥（示例密钥，建议替换为自己的）
         params = {
