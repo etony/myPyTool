@@ -467,9 +467,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             # df.insert(loc=5, column='评分', value=0)
             # df.insert(loc=6, column='人数', value=0)
             # 索引重置：将pandas默认的0起始索引改为1起始（符合用户对“第1行”的直观认知）
-            print(df.shape)
             df = df.dropna(axis=0, subset=["ISBN"])
-            print(df.shape)
             df.index = df.index + 1
             # 空值填充：将DataFrame中的NaN/空值替换为空字符串（避免表格显示“NaN”，提升UI体验）
             df.fillna('', inplace=True)
@@ -676,8 +674,9 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         else:
             # ===================== 8. 无效数据处理（返回固定长度空值） =====================
             # 响应数据残缺时，填充13个空格，保证返回列表长度统一，避免调用方索引越界
-            for i in range(13):
-                bookinfo.append(" ")
+            # for i in range(13):
+            #     bookinfo.append(" ")
+            return None
         
         # ===================== 9. 返回格式化后的图书信息 =====================        
         return bookinfo
@@ -1169,7 +1168,14 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # ===================== 1. 调用豆瓣API获取图书完整信息 =====================
         # get_douban_isbn为已实现的方法，返回包含图书所有字段的列表（索引对应固定字段）
         douban_bookinfo = self.get_douban_isbn(ISBN)
-            
+        if not douban_bookinfo: 
+            QtWidgets.QMessageBox.warning(
+                self,                # 父窗口（主窗口）
+                "错误",              # 提示框标题
+                "获取信息有误，无法展示图书信息！",    # 提示内容
+                QtWidgets.QMessageBox.StandardButton.Ok  # 确认按钮
+                )
+            return   
         # ===================== 2. 下载图书封面图片（处理反爬限制） =====================
         # 提取封面图片URL（douban_bookinfo[9]为封面小图URL）
         url = douban_bookinfo[9]
