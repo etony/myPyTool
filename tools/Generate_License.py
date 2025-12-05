@@ -17,6 +17,16 @@ from datetime import datetime, timedelta
 from cryptography.fernet import Fernet
 
 import uuid
+
+
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import padding
+
+
 def get_mac_address():
 
 
@@ -47,7 +57,7 @@ class Genera_Lic(QDialog, Ui_Ge_Lic):
         self.dt_date.setDateTime(QDateTime.fromString(self.now_time, 'yyyy-MM-dd hh:mm:ss'))
         # self.le_duration_days.setValidator(QIntValidator().setRange(0, 1096))
         intValidator = QIntValidator()
-        intValidator.setRange(1, 1096)
+        intValidator.setRange(1, 100)
         self.le_duration_days.setValidator(intValidator)
 
     @pyqtSlot()
@@ -62,6 +72,7 @@ class Genera_Lic(QDialog, Ui_Ge_Lic):
         keyfile = os.path.join(self.folderPath, 'License.key')
         self.key = Fernet.generate_key()
         print(self.key)
+        print(keyfile)
         mac_address = self.le_mac.text()
         start_date= self.dt_date.text()
         duration_days = self.le_duration_days.text()
@@ -85,7 +96,7 @@ class Genera_Lic(QDialog, Ui_Ge_Lic):
         }
         
         encrypted_info = fernet.encrypt(json.dumps(license_info).encode())
-        with open('license.key', 'wb') as file:
+        with open(keyfile, 'wb') as file:
             file.write(encrypted_info)
 
     def verify_time_limited_license(self,key,Licfilepath):
@@ -99,6 +110,68 @@ class Genera_Lic(QDialog, Ui_Ge_Lic):
         duration = timedelta(days=int(license_info['duration_days']))
 
         return  start_date + duration
+
+    @pyqtSlot()
+    def on_pb_create_key_clicked(self):
+        private_key = rsa.generate_private_key(
+            public_exponent=65537,
+            key_size=2048,
+            backend=default_backend()
+        )
+        public_key = private_key.public_key()
+        
+        # store private key
+        pem = private_key.private_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PrivateFormat.PKCS8,
+            encryption_algorithm=serialization.NoEncryption()
+        )
+        with open('private_key.pem', 'wb') as f:
+            f.write(pem)
+        
+        # stroe public key
+        pem = public_key.public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo
+        )
+        with open('public_key.pem', 'wb') as f:
+            f.write(pem)
+
+
+    def decrypt_encrypt(self):
+        with open("private_key.pem", "rb") as key_file:
+            private_key = serialization.load_pem_private_key(
+                key_file.read(),
+                password=None,
+                backend=default_backend()
+            )
+
+        with open("public_key.pem", "rb") as key_file:
+            public_key = serialization.load_pem_public_key(
+                key_file.read(),
+                backend=default_backend()
+            )    
+        message = '加密内容'
+        encrypted = public_key.encrypt(
+            message,
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            )
+        )
+
+        original_message = private_key.decrypt(
+            encrypted,
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            )
+        )
+        print(original_message)
+
+        # https://blog.csdn.net/photon222/article/details/109447327
 
 
 

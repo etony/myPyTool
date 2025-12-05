@@ -21,10 +21,10 @@ class Ui_Ge_Lic(object):
         self.label_6.setGeometry(QtCore.QRect(20, 190, 56, 16))
         self.label_6.setObjectName("label_6")
         self.pb_ver = QtWidgets.QPushButton(parent=Ge_Lic)
-        self.pb_ver.setGeometry(QtCore.QRect(120, 190, 80, 24))
+        self.pb_ver.setGeometry(QtCore.QRect(120, 190, 61, 24))
         self.pb_ver.setObjectName("pb_ver")
         self.pb_create = QtWidgets.QPushButton(parent=Ge_Lic)
-        self.pb_create.setGeometry(QtCore.QRect(270, 190, 80, 24))
+        self.pb_create.setGeometry(QtCore.QRect(200, 190, 61, 24))
         self.pb_create.setObjectName("pb_create")
         self.layoutWidget = QtWidgets.QWidget(parent=Ge_Lic)
         self.layoutWidget.setGeometry(QtCore.QRect(120, 30, 235, 151))
@@ -74,6 +74,9 @@ class Ui_Ge_Lic(object):
         self.label_5 = QtWidgets.QLabel(parent=self.layoutWidget1)
         self.label_5.setObjectName("label_5")
         self.verticalLayout.addWidget(self.label_5, 0, QtCore.Qt.AlignmentFlag.AlignRight)
+        self.pb_create_key = QtWidgets.QPushButton(parent=Ge_Lic)
+        self.pb_create_key.setGeometry(QtCore.QRect(280, 190, 61, 24))
+        self.pb_create_key.setObjectName("pb_create_key")
 
         self.retranslateUi(Ge_Lic)
         QtCore.QMetaObject.connectSlotsByName(Ge_Lic)
@@ -90,6 +93,7 @@ class Ui_Ge_Lic(object):
         self.label_3.setText(_translate("Ge_Lic", "授权时长(天):"))
         self.label_4.setText(_translate("Ge_Lic", " 备注信息:"))
         self.label_5.setText(_translate("Ge_Lic", "保存地址:"))
+        self.pb_create_key.setText(_translate("Ge_Lic", "密  钥"))
 
 
 if __name__ == "__main__":
