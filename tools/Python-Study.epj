@@ -2,7 +2,7 @@
   "header": {
     "comment": "eric project file for project Python-Study",
     "copyright": "Copyright (C) 2025 etony.an@gmail.com, etony.an@gmail.com",
-    "saved": "2025-12-05, 10:40:51"
+    "saved": "2025-12-05, 17:10:22"
   },
   "project": {
     "AUTHOR": "etony.an@gmail.com",
@@ -102,6 +102,7 @@
       "Ui_generate_license.py",
       "Ui_imageconver.py",
       "Ui_sqlmap.py",
+      "generate_license.py",
       "image-conver.py",
       "model.py",
       "myMusicPlayer.py",

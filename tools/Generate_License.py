@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 """
-Module implementing Genera_Lic.
+Module implementing Ge_Lic.
 """
+
 import sys,time,os
 from PyQt6.QtCore import pyqtSlot, QDateTime
 from PyQt6.QtWidgets import QDialog
@@ -26,7 +27,6 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 
-
 def get_mac_address():
 
 
@@ -35,7 +35,7 @@ def get_mac_address():
 
     return ':'.join(("%012X" % mac)[i:i+2] for i in range(0, 12, 2))
 
-class Genera_Lic(QDialog, Ui_Ge_Lic):
+class Ge_Lic(QDialog, Ui_Ge_Lic):
     """
     Class documentation goes here.
     """
@@ -62,6 +62,9 @@ class Genera_Lic(QDialog, Ui_Ge_Lic):
 
     @pyqtSlot()
     def on_pb_ver_clicked(self):
+        """
+        Slot documentation goes here.
+        """
         self.Licfilepath, licType = QFileDialog.getOpenFileName(
             self, "选择存储文件", ".", "*.key;;All Files(*)") 
         
@@ -69,6 +72,9 @@ class Genera_Lic(QDialog, Ui_Ge_Lic):
 
     @pyqtSlot()
     def on_pb_create_clicked(self):
+        """
+        Slot documentation goes here.
+        """
         keyfile = os.path.join(self.folderPath, 'License.key')
         self.key = Fernet.generate_key()
         print(self.key)
@@ -82,10 +88,13 @@ class Genera_Lic(QDialog, Ui_Ge_Lic):
 
     @pyqtSlot()
     def on_pb_path_clicked(self):
+        """
+        Slot documentation goes here.
+        """
         self.folderPath = QFileDialog.getExistingDirectory(
             self, "选择存储文件夹", ".")
         self.le_path.setText(self.folderPath)
-
+        
     def generate_time_limited_license(self,mac_address, key, start_date, duration_days,keyfile):    
     
         fernet = Fernet(key)    
@@ -110,7 +119,7 @@ class Genera_Lic(QDialog, Ui_Ge_Lic):
         duration = timedelta(days=int(license_info['duration_days']))
 
         return  start_date + duration
-
+    
     @pyqtSlot()
     def on_pb_create_key_clicked(self):
         private_key = rsa.generate_private_key(
@@ -180,7 +189,7 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setStyleSheet(qdarkstyle.load_stylesheet())  # 默认样式：暗黑样式
 
-    gl = Genera_Lic()
+    gl = Ge_Lic()
     gl.setWindowTitle("授权文件生成器")
     gl.show()
     # 运行应用
