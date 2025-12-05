@@ -2,7 +2,7 @@
   "header": {
     "comment": "eric project file for project Python-Study",
     "copyright": "Copyright (C) 2025 etony.an@gmail.com, etony.an@gmail.com",
-    "saved": "2025-08-30, 23:33:16"
+    "saved": "2025-12-05, 17:10:22"
   },
   "project": {
     "AUTHOR": "etony.an@gmail.com",
@@ -12,6 +12,7 @@
     "DOCUMENTATIONPARMS": {},
     "EMAIL": "etony.an@gmail.com",
     "EMBEDDED_VENV": false,
+    "EMBEDDED_VENV_TYPE": "standard",
     "EOL": 0,
     "FILETYPES": {
       "*.e4p": "OTHERS",
@@ -44,6 +45,7 @@
       "QRmaker.ui",
       "Rpassword.ui",
       "TXT2EPUB/Txt2epub.ui",
+      "generate_license.ui",
       "imageconver.ui",
       "imagexif.ui",
       "sqlmap.ui"
@@ -85,6 +87,7 @@
       "BookInfo.py",
       "BookList.py",
       "BrowerPasswd.py",
+      "Generate_License.py",
       "QRmaker.py",
       "Rpassword.py",
       "TXT2EPUB/Ui_Txt2epub.py",
@@ -96,8 +99,10 @@
       "Ui_MusicPlayer_v3.py",
       "Ui_QRmaker.py",
       "Ui_Rpassword.py",
+      "Ui_generate_license.py",
       "Ui_imageconver.py",
       "Ui_sqlmap.py",
+      "generate_license.py",
       "image-conver.py",
       "model.py",
       "myMusicPlayer.py",

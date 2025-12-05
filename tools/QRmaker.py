@@ -4,9 +4,9 @@
 Module implementing QRmaker.
 """
 
-from PyQt6.QtCore import pyqtSlot, QSize, Qt, QRectF, QSizeF
+from PyQt6.QtCore import pyqtSlot, QSize, Qt
 from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog, QMessageBox
-from PyQt6.QtGui import QImage, QPixmap, QPainter,QMovie,QPainterPath
+from PyQt6.QtGui import QImage, QPixmap, QPainter,QMovie
 
 from Ui_QRmaker import Ui_MainWindow
 
