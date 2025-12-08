@@ -68,9 +68,9 @@
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>124</x>
      <y>30</y>
-     <width>235</width>
+     <width>231</width>
      <height>151</height>
     </rect>
    </property>
@@ -108,12 +108,12 @@
     <rect>
      <x>11</x>
      <y>31</y>
-     <width>101</width>
-     <height>141</height>
+     <width>111</width>
+     <height>151</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
+    <item alignment="Qt::AlignRight">
      <widget class="QLabel" name="label">
       <property name="text">
        <string>用户机MAC地址:</string>

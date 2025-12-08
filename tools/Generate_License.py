@@ -51,6 +51,7 @@ class Ge_Lic(QDialog, Ui_Ge_Lic):
         self.setupUi(self)
         
         self.le_mac.setInputMask('HH:HH:HH:HH:HH:HH;_')
+        self.le_mac.setText(get_mac_address())
         
         self.dt_date.setCalendarPopup(True)
         self.now_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
