@@ -417,7 +417,7 @@
        <rect>
         <x>10</x>
         <y>180</y>
-        <width>361</width>
+        <width>391</width>
         <height>26</height>
        </rect>
       </property>
@@ -436,9 +436,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_16">
+        <widget class="QPushButton" name="pb_out_conver_chapter">
          <property name="text">
-          <string/>
+          <string>转换(每章)</string>
          </property>
         </widget>
        </item>
@@ -456,13 +456,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_17">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="pb_out_modi">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -472,13 +465,6 @@
          </property>
          <property name="text">
           <string>修   改</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_18">
-         <property name="text">
-          <string/>
          </property>
         </widget>
        </item>

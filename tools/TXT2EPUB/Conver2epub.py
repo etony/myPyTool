@@ -286,7 +286,49 @@ class Conver2txt():
                     ITEM_DOCUMENT = 9
                     ITEM_COVER = 10
                     '''
+    def conver_chapter(self, fanjian=False):
+        
+        cur_dir = os.path.dirname(self.txtfile)
+        filename = os.path.splitext(os.path.basename(self.txtfile))[0]
+        ext = os.path.splitext(self.txtfile)[1]
+        charpter_numb = 0
+        print(f'{cur_dir}  {filename}  {ext} ')
+        print(self.txtfile)
+        
+    
+        for item in self.book.get_items():
+            # print(
+            #     f'item类型:  {item.get_type()} name: {item.get_name()} id: {item.get_id()}')
 
+            if ((item.get_type() == ebooklib.ITEM_IMAGE) 
+                or (item.get_type() == ebooklib.ITEM_COVER)
+                ) and ((item.get_name().find('cover') >= 0) 
+                       or (item.id.find('cover') >= 0)):
+                file_name, file_extension = os.path.splitext(
+                    item.get_name())
+                coverpath = os.path.join(
+                    self.dirname, 'cover'+file_extension)
+                # if  not os.path.exists(coverpath): os.mkdir(coverpath)
+
+                with open(coverpath, 'wb') as ff:
+                    ff.write(item.get_content())
+                    # print('cover 已提取')
+
+            if item.get_type() == ebooklib.ITEM_DOCUMENT:
+                soup = BeautifulSoup(
+                    item.get_content().decode('utf-8'), 'xml')
+                charpter_numb = charpter_numb + 1
+                file_charpter = os.path.join(cur_dir, f'{filename}{charpter_numb}{ext}')
+                with open(file_charpter, 'a', encoding='utf-8') as f:                    
+                    if fanjian:
+                        cc = OpenCC('t2s')
+                        f.write(cc.convert(soup.text))
+    
+                    else:
+                        f.write(soup.text)
+        
+        
+        
     def get_info(self):
         # book = epub.read_epub(self.epubfile)
         book_info = {'title': '未知', 'creator': 'etony.an@gmail.com',

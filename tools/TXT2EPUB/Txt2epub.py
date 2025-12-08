@@ -384,6 +384,35 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             logger.info(f'指定转换文件:{out_txtpath}')
 
     @pyqtSlot()
+    def on_pb_out_conver_chapter_clicked(self):
+        """
+        槽函数：响应「转换(EPUB→TXT)」按钮点击事件(按章节导出)
+        核心逻辑：
+        1. 初始化EPUB→TXT转换类；
+        2. 设置输出编码（若用户自定义）；
+        3. 执行转换（支持繁简转换）；
+        4. 记录日志和状态栏提示。
+        """
+        # 初始化转换类
+        self.conver2txt = Conver2txt(
+            self.le_in_epub.text(), self.le_out_txt.text())
+
+        # 设置输出编码（非默认项时）
+        if self.cb_out_code.currentIndex() != 0:
+            encode = self.cb_out_code.currentText()
+            self.conver2txt.set_code(encode)
+            
+        # 获取繁简转换开关状态
+        fanjian = self.chb_fanjian.isChecked()
+        # 执行按章节转换(传入繁简转换参数)
+        self.conver2txt.conver_chapter(fanjian=fanjian)
+        
+        logger.info(f'文件转换完成！  {self.le_out_txt.text()}')
+        self.statusBar.showMessage(f"文件转换完成！  {self.le_out_txt.text()}")
+        
+        
+        
+    @pyqtSlot()
     def on_pb_out_conver_clicked(self):
         """
         槽函数：响应「转换(EPUB→TXT)」按钮点击事件
