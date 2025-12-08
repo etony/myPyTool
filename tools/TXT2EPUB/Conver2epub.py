@@ -6,13 +6,14 @@ Created on Tue Aug  1 09:04:38 2023
 """
 import ebooklib
 from ebooklib import epub
-#from pymobi import mobi
+# from pymobi import mobi
 from bs4 import BeautifulSoup
 import re
 import os
 import datetime
-from opencc import OpenCC # pip install opencc-python-reimplemented
+from opencc import OpenCC  # pip install opencc-python-reimplemented
 # from kindlestrip import KindleStrip
+
 
 class Conver2epub():
     def __init__(self, txtfile, epubfile):
@@ -228,15 +229,15 @@ class Conver2txt():
         self.book.set_unique_metadata('DC', 'contributor', bookinfo['contrib'])
         self.book.set_unique_metadata('DC', 'description',
                                       '请注意，该EPUB文档由TXT文本文件转换生成，原始内容源于互联网。')
-        ## 重建书签
+        # 重建书签
         # toc = []
-        
+
         # for item in self.book.get_items():
         #     if item.get_type()== ebooklib.ITEM_DOCUMENT:
 
         #         toc.append(epub.Link(item.get_name(), item.get_id(), 'intro'))
 
-        # self.book.toc = tuple(toc)     
+        # self.book.toc = tuple(toc)
         epub.write_epub(bookinfo['filename'], self.book, {})
 
     def conver(self, fanjian=False):
@@ -246,9 +247,17 @@ class Conver2txt():
             for item in self.book.get_items():
                 # print(
                 #     f'item类型:  {item.get_type()} name: {item.get_name()} id: {item.get_id()}')
-                if ((item.get_type() == ebooklib.ITEM_IMAGE) or (item.get_type() == ebooklib.ITEM_COVER)) and (item.get_name().find('cover') >= 0):
-                    coverpath = os.path.join(self.dirname, item.get_name())
+
+                if ((item.get_type() == ebooklib.ITEM_IMAGE) 
+                    or (item.get_type() == ebooklib.ITEM_COVER)
+                    ) and ((item.get_name().find('cover') >= 0) 
+                           or (item.id.find('cover') >= 0)):
+                    file_name, file_extension = os.path.splitext(
+                        item.get_name())
+                    coverpath = os.path.join(
+                        self.dirname, 'cover'+file_extension)
                     # if  not os.path.exists(coverpath): os.mkdir(coverpath)
+
                     with open(coverpath, 'wb') as ff:
                         ff.write(item.get_content())
                         # print('cover 已提取')
@@ -312,6 +321,7 @@ class Conver2txt():
             if (item.get_name().find('cover') >= 0):
                 return item.get_content()
 
+
 class epub2mobi():
     def __init__(self, epubfile, mobifile, code='utf-8'):
         self.mobifile = mobifile
@@ -320,12 +330,13 @@ class epub2mobi():
         self.dirname, self.filename = os.path.split(epubfile)
 
         self.book = epub.read_epub(self.epubfile)
+
     def e2mobi(self):
         title = self.book.get_metadata("DC", "title")[0][0]
         author = self.book.get_metadata("DC", "creator")[0][0]
 
         mobi_book = mobi.MobiBook()
-        
+
         for item in self.book.get_items():
             if item.get_type() == ebooklib.ITEM_DOCUMENT:
                 print('==================================')
@@ -333,25 +344,22 @@ class epub2mobi():
                 print('----------------------------------')
                 print(item.get_content().decode('utf-8'))
                 print('==================================')
-                
-                mobi_book.add_chapter(item.get_name(),item.get_content().decode('utf-8'))
-        
-        
+
+                mobi_book.add_chapter(
+                    item.get_name(), item.get_content().decode('utf-8'))
+
         mobi_book.save(self.mobifile)
-        
-        
-        
-        
+
     def convert_epub_to_mobi(self):
-    # 使用ebooklib读取EPUB文件
+        # 使用ebooklib读取EPUB文件
         book = ebooklib.epub.read_epub(self.epubfile)
-        
+
         # 使用KindleStrip进行转换
         # ks = KindleStrip()
         # ks.input_file = self.epubfile
         # ks.output_file = self.mobifile
         # ks.strip()
-        
+
         # print(f"转换完成，MOBI文件已保存到：{self.mobifile}")
         #         content += item.get_content().decode('utf-8')
         # # for item_id, href in self.book.spine:
