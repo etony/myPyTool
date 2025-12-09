@@ -271,7 +271,7 @@ class Conver2txt():
 
                     else:
                         f.write(soup.text)
-                    f.write('==================================')
+                    f.write('(-本章结束-)')
 
                     '''
                     ITEM_UNKNOWN = 0
