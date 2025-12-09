@@ -7,9 +7,9 @@ import os
 import re
 import sys
 import datetime
-from loguru import logger # 日志库（替代原生logging，更简洁）
-import chardet # 自动检测文件编码
-from opencc import OpenCC # 繁简转换工具
+from loguru import logger  # 日志库（替代原生logging，更简洁）
+import chardet  # 自动检测文件编码
+from opencc import OpenCC  # 繁简转换工具
 
 from PyQt6.QtCore import pyqtSlot  # PyQt槽函数装饰器
 from PyQt6.QtWidgets import QMainWindow, QDialog
@@ -32,6 +32,7 @@ SPLIT_PATTERN = r"[(（：【]"  # 标题拆分正则
 PROGRESS_TITLE = "处理中"  # 进度弹窗标题
 PROGRESS_LABEL = "请稍候..."  # 进度弹窗提示
 
+
 class Txt2epub(QMainWindow, Ui_MainWindow):
     """
     Txt↔Epub/Mobi 格式转换工具主窗口类
@@ -51,39 +52,38 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
     - PyQt6：GUI交互（文件选择/弹窗/状态栏/图片显示）。
     """
 
-
     def __init__(self, parent=None):
         """
         构造函数：初始化主窗口
-        
+
         @param parent: 父窗口对象（默认None，主窗口无父窗口）
         @type parent: QWidget | None
         """
         # 调用父类构造函数，初始化QMainWindow和UI
         super().__init__(parent)
-        self.setupUi(self) # 加载Qt Designer生成的UI布局
-        
+        self.setupUi(self)  # 加载Qt Designer生成的UI布局
+
         # 初始化核心变量
-        self.coverpath = '' # 存储EPUB封面图片路径
+        self.coverpath = ''  # 存储EPUB封面图片路径
         self.dirname = ""  # 源TXT文件目录
         self.in_dirname = ""  # 源EPUB文件目录
         self.epubpath = ""  # 目标EPUB路径
         self.out_txtpath = ""  # 目标TXT路径
         self.title = ""  # 默认标题
         self.conver2txt = None  # 转换类实例缓存
-        
+
         self.setFixedSize(self.width(), self.height())  # 固定窗口大小，避免布局错乱
         self.setWindowTitle("Txt↔Epub/Mobi 转换工具")
-        
+
         # 配置日志：按日分割，格式包含时间/级别/模块.函数/消息
         logger.add(
-            '日志_{time:YYYY-MM-DD}.log', # 日志文件名（按日期）
-            rotation="1 day", # 每日分割新日志文件
+            '日志_{time:YYYY-MM-DD}.log',  # 日志文件名（按日期）
+            rotation="1 day",  # 每日分割新日志文件
             format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {module}.{function} : {message}",
             retention="7 days",  # 保留7天日志
-            enqueue=True  # 异步日志，避免阻塞UI                   
-            ) 
-        logger.info('程序加载完成.')# 记录程序启动日志
+            enqueue=True  # 异步日志，避免阻塞UI
+        )
+        logger.info('程序加载完成.')  # 记录程序启动日志
         # self.lb_cover.clicked.connect(self.on_lb_cover_clicked)
 
     @pyqtSlot()
@@ -104,42 +104,42 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         title = self.le_title.text().strip()       # 自定义EPUB标题
         author = self.le_author.text().strip()     # 自定义EPUB作者
         reg = self.te_reg.toPlainText().strip()    # 章节匹配正则表达式
-        
+
         # 校验源文件是否存在（核心前置条件）
         if os.path.exists(txtfile):
             # 初始化TXT→EPUB转换类
             conver2 = Conver2epub(txtfile, epubfile)
-            
+
             # 按需设置自定义参数（仅当输入非空时覆盖默认值）
             if len(title) > 1:
                 conver2.set_title(title)
             if len(author) > 1:
                 conver2.set_author(author)
             if len(self.coverpath) > 1:
-                conver2.set_cover(self.coverpath)# 设置封面
+                conver2.set_cover(self.coverpath)  # 设置封面
             if len(reg) > 5:
-                conver2.set_reg(reg) # 设置章节匹配正则
+                conver2.set_reg(reg)  # 设置章节匹配正则
             if self.cb_encode.currentIndex() != 0:
                 encode = self.cb_encode.currentText()
-                conver2.set_encode(encode) # 设置TXT文件编码
+                conver2.set_encode(encode)  # 设置TXT文件编码
                 logger.info(
                     f'指定文件编码: {self.cb_encode.currentIndex()}-{encode}')
-                
+
             # 执行核心转换逻辑b')
             conver2.conver()
             logger.info(f'文件转换完成！   {epubfile}')
-            self.statusBar.showMessage("文件转换完成！") # 状态栏提示
-            
+            self.statusBar.showMessage("文件转换完成！")  # 状态栏提示
+
             # 弹窗提示：询问是否打开存储目录
             reply = QMessageBox(QMessageBox.Icon.Information,  # 信息类弹窗
-                                '信息', # 弹窗标题
+                                '信息',  # 弹窗标题
                                 '转换完成,是否打开存储目录？',  # 弹窗内容
                                 QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.No  # 按钮
-                                ).exec() 
-            
+                                ).exec()
+
             # 按用户选择打开目录（跨平台兼容）
             if reply == QMessageBox.StandardButton.Ok:
-                dirname, filename = os.path.split(epubfile) # 拆分目录和文件名
+                dirname, filename = os.path.split(epubfile)  # 拆分目录和文件名
                 logger.info(f'打开存贮目录: {dirname}')
                 if sys.platform == 'win32':
                     # os.system("start explorer %s" %dirname)
@@ -169,12 +169,12 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             # 打开保存对话框（限定EPUB格式）
             epubpath, type = QFileDialog.getSaveFileName(
                 self, "文件保存", output, 'epub(*.epub)')
-            
+
             # 若用户选择了路径（未取消）
             if epubpath != '':
                 self.le_epub.setText(epubpath)  # 更新EPUB路径输入框
                 logger.info(f'指定存储路径: {epubpath}')
-                #self.pb_mobi.setEnabled(True)
+                # self.pb_mobi.setEnabled(True)
         else:
             # 源文件无效时的提示
             logger.info('未指定转换文件！')
@@ -193,7 +193,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         # 恢复默认章节匹配正则
         self.te_reg.setPlainText(
             r"^\s*([第卷][0123456789一二三四五六七八九十零〇百千两]*[章回部节集卷].*)\s*")
-        self.le_title.clear() # 清空标题输入框
+        self.le_title.clear()  # 清空标题输入框
         logger.info('选项重置！')   # 记录重置操作
 
     @pyqtSlot()
@@ -209,31 +209,31 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         """
         # 打开文件选择对话框（限定TXT格式）
         txtpath, txtType = QFileDialog.getOpenFileName(
-            self, "选择源文件", ".", "*.txt;;All Files(*)") 
-        
+            self, "选择源文件", ".", "*.txt;;All Files(*)")
+
         if txtpath != "":
-            self.le_txt.setText(txtpath)# 更新TXT路径输入框
-            
+            self.le_txt.setText(txtpath)  # 更新TXT路径输入框
+
             # 拆分文件路径：目录/文件名/扩展名
             self.dirname, filename = os.path.split(txtpath)
             file_name, extension = os.path.splitext(os.path.basename(txtpath))
             # 自动生成EPUB默认路径（同目录+同文件名+.epub）
             self.epubpath = os.path.join(self.dirname, file_name) + '.epub'
-            self.title = file_name.strip() # 默认标题=文件名（去空格）
-            
+            self.title = file_name.strip()  # 默认标题=文件名（去空格）
+
             # 自动填充EPUB路径、标题、作者输入框
             self.le_epub.setText(self.epubpath)
             self.le_title.setText(self.title)
             self.le_author.setText(self.title)
             logger.info(f'指定转换文件:{txtpath}')
             self.statusBar.showMessage(f'指定转换文件:{txtpath} ')
-            
+
             # 自动检测文件编码（读取前512字节，平衡性能和准确性）
             with open(txtpath, mode='rb') as f:
-                data = f.read(512) # 读取前512字节用于编码检测
-                fileinfo = chardet.detect(data) # chardet核心检测方法
+                data = f.read(512)  # 读取前512字节用于编码检测
+                fileinfo = chardet.detect(data)  # chardet核心检测方法
                 logger.info(f'文件信息: {fileinfo}')
-                
+
                 # 更新状态栏（区分是否检测到语言）
                 if fileinfo['language'] == '':
                     self.statusBar.showMessage(
@@ -241,7 +241,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
                 else:
                     self.statusBar.showMessage(
                         f'指定转换文件:{txtpath} 编码:{chardet.detect(data)["encoding"]} 语言:{chardet.detect(data)["language"]} ')
-                    self.cb_encode.setCurrentIndex(1) # 切换编码下拉框为非默认项
+                    self.cb_encode.setCurrentIndex(1)  # 切换编码下拉框为非默认项
 
     @pyqtSlot()
     def on_pb_cover_clicked(self):
@@ -276,8 +276,8 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         self.Dialog = QDialog()
         self.CW_dir = Ui_Dialog()
         self.CW_dir.setupUi(self.Dialog)
-        self.Dialog.setModal(True) # 模态弹窗：必须关闭弹窗才能操作主窗口
-        
+        self.Dialog.setModal(True)  # 模态弹窗：必须关闭弹窗才能操作主窗口
+
         # 提取源文件和正则参数
         txtfile = self.le_txt.text().strip()
         if os.path.exists(txtfile):
@@ -287,7 +287,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             # 初始化转换类，提取目录
             conver2 = Conver2epub(txtfile, epubfile)
             if len(reg) > 5:
-                conver2.set_reg(reg) # 设置章节正则
+                conver2.set_reg(reg)  # 设置章节正则
             if self.cb_encode.currentIndex() != 0:
                 encode = self.cb_encode.currentText()
                 conver2.set_encode(encode)
@@ -299,7 +299,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             # 将目录逐行添加到弹窗的文本框
             for i in items:
                 self.CW_dir.tb_dir.append(i)
-            
+
             # 固定弹窗大小并显示
             self.Dialog.setFixedSize(self.Dialog.width(), self.Dialog.height())
             self.Dialog.show()
@@ -323,7 +323,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         # 打开EPUB文件选择对话框
         in_epubpath, in_epubType = QFileDialog.getOpenFileName(
             self, "选择源文件", ".", "*.epub;;All Files(*)")
-        
+
         if in_epubpath != "":
             self.le_in_epub.setText(in_epubpath)
 
@@ -346,12 +346,12 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             conver2txt = Conver2txt(
                 self.le_in_epub.text(), self.le_out_txt.text())
             book_info = conver2txt.get_info()  # 提取EPUB元信息
-            
+
             # 填充元信息到界面输入框
             self.le_book_title.setText(book_info['title'])  # 标题
-            self.le_book_creater.setText(book_info['creator']) # 作者
-            self.le_book_contrib.setText(book_info['contrib']) # 贡献者
-            
+            self.le_book_creater.setText(book_info['creator'])  # 作者
+            self.le_book_contrib.setText(book_info['contrib'])  # 贡献者
+
             # 格式化日期（ISO格式→人性化格式）
             date = datetime.datetime.fromisoformat(book_info['date'])
 
@@ -360,10 +360,10 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
 
             # logger.info(f'cover type: {type(conver2txt.get_cover())}')
             # 提取并显示EPUB封面
-            bookcover = conver2txt.get_cover() # 获取封面二进制数据
-            img = QImage.fromData(bookcover) # 二进制数据转QImage
-            cover = QPixmap.fromImage(img) # QImage转QPixmap
-            self.lb_cover.setPixmap(cover) # 显示在界面标签
+            bookcover = conver2txt.get_cover()  # 获取封面二进制数据
+            img = QImage.fromData(bookcover)  # 二进制数据转QImage
+            cover = QPixmap.fromImage(img)  # QImage转QPixmap
+            self.lb_cover.setPixmap(cover)  # 显示在界面标签
             logger.info(f'提取epub文件信息完毕: {book_info}')
 
     @pyqtSlot()
@@ -378,9 +378,9 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         output = os.path.join(self.in_dirname, 'output')
         out_txtpath, type = QFileDialog.getSaveFileName(
             self, "文件保存", output, 'txt(*.txt)')
-        
+
         if out_txtpath != '':
-            self.le_out_txt.setText(out_txtpath) # 更新TXT路径输入框
+            self.le_out_txt.setText(out_txtpath)  # 更新TXT路径输入框
             logger.info(f'指定转换文件:{out_txtpath}')
 
     @pyqtSlot()
@@ -401,17 +401,15 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         if self.cb_out_code.currentIndex() != 0:
             encode = self.cb_out_code.currentText()
             self.conver2txt.set_code(encode)
-            
+
         # 获取繁简转换开关状态
         fanjian = self.chb_fanjian.isChecked()
         # 执行按章节转换(传入繁简转换参数)
         self.conver2txt.conver_chapter(fanjian=fanjian)
-        
+
         logger.info(f'文件转换完成！  {self.le_out_txt.text()}')
         self.statusBar.showMessage(f"文件转换完成！  {self.le_out_txt.text()}")
-        
-        
-        
+
     @pyqtSlot()
     def on_pb_out_conver_clicked(self):
         """
@@ -430,12 +428,12 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         if self.cb_out_code.currentIndex() != 0:
             encode = self.cb_out_code.currentText()
             self.conver2txt.set_code(encode)
-            
+
         # 获取繁简转换开关状态
         fanjian = self.chb_fanjian.isChecked()
         # 执行转换（传入繁简转换参数）
         self.conver2txt.conver(fanjian=fanjian)
-        
+
         logger.info(f'文件转换完成！  {self.le_out_txt.text()}')
         self.statusBar.showMessage(f"文件转换完成！  {self.le_out_txt.text()}")
 
@@ -470,13 +468,13 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
 
         # 勾选状态且文件名有效时，执行繁简转换
         if self.chb_fanjian.isChecked() and (in_file_name != '') and (in_file_name is not None):
-            cc = OpenCC('t2s') # 初始化繁简转换（t2s=繁体→简体）
+            cc = OpenCC('t2s')  # 初始化繁简转换（t2s=繁体→简体）
             in_file_name = cc.convert(in_file_name)  # 转换文件名
 
             # 生成新的TXT路径（简体文件名）
             self.out_txtpath = os.path.join(
                 self.in_dirname, in_file_name) + '.txt'
-            self.le_out_txt.setText(self.out_txtpath) # 更新路径输入框
+            self.le_out_txt.setText(self.out_txtpath)  # 更新路径输入框
 
     @pyqtSlot()
     def on_pb_out_modi_clicked(self):
@@ -497,10 +495,10 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         bookinfo['contrib'] = self.le_book_contrib.text()  # 新贡献者
         bookinfo['date'] = self.le_book_date.text()        # 新日期
         bookinfo['filename'] = self.le_in_epub.text()      # EPUB文件路径
-        
+
         logger.info(f'文件信息：  {bookinfo}')
-        self.conver2txt.modi(bookinfo) # 执行元信息修改
-        
+        self.conver2txt.modi(bookinfo)  # 执行元信息修改
+
         logger.info(f'文件修改完成！  {self.le_out_txt.text()}')
         self.statusBar.showMessage(f"文件修改完成！  {self.le_out_txt.text()}")
 
@@ -518,16 +516,16 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         # 选择目标目录
         dir_path = QFileDialog.getExistingDirectory(
             None, "选择epub文件目录", ".")
-        epubfile = [] # 存储遍历到的EPUB文件
-        
+        epubfile = []  # 存储遍历到的EPUB文件
+
         # 遍历目录（含子目录）下的所有文件
         for root, dirs, files in os.walk(dir_path):
             for file in files:
-                old_file_name = os.path.join(root, file) # 原文件完整路径
+                old_file_name = os.path.join(root, file)  # 原文件完整路径
                 # f_old_file_name = os.path.join(root, 'F_'+file)
                 file_name, file_extension = os.path.splitext(
                     os.path.basename(file))
-                
+
                 # 仅处理EPUB文件
                 if file_extension == '.epub':
                     epubfile.append(file)
@@ -536,7 +534,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
                         conver2txt = Conver2txt(
                             os.path.join(root, file), self.le_out_txt.text())
                         book_info = conver2txt.get_info()
-                        
+
                         # 正则拆分标题（取「(（：【」前的前缀
                         filename = re.split(r"[(（：【]", book_info['title'], maxsplit=1, flags=0)[
                             0] + '_' + book_info['creator']
@@ -550,10 +548,10 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
                         # 重命名失败时记录日志，跳过该文件
                         logger.info(f'重命名失败: {file}')
                         pass
-        # 记录批量重命名结果            
+        # 记录批量重命名结果
         logger.info(f'批量重命名完成: {dir_path} - {len(epubfile)} 个文件')
         self.statusBar.showMessage(f"批量重命名完成: {dir_path} 个文件")
-    
+
     @pyqtSlot()
     def on_lb_image_clicked(self):
         """
@@ -576,10 +574,11 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         1. 从EPUB路径生成MOBI路径（替换扩展名）；
         2. 初始化转换类，执行EPUB→MOBI转换。
         """
-        epubfile = self.le_epub.text().strip() # 获取EPUB路径
-        mobifile = epubfile.rsplit('.', 1)[0]+".mobi" # 生成MOBI路径（替换扩展名）
-        e2mobi = epub2mobi(epubfile,mobifile) # 初始化转换类
-        e2mobi.e2mobi() # 执行转换
+        epubfile = self.le_epub.text().strip()  # 获取EPUB路径
+        mobifile = epubfile.rsplit('.', 1)[0]+".mobi"  # 生成MOBI路径（替换扩展名）
+        e2mobi = epub2mobi(epubfile, mobifile)  # 初始化转换类
+        e2mobi.e2mobi()  # 执行转换
+
 
 if __name__ == "__main__":
     """
@@ -589,4 +588,3 @@ if __name__ == "__main__":
     txt2epub = Txt2epub()         # 创建主窗口实例
     txt2epub.show()               # 显示主窗口
     sys.exit(app.exec())          # 启动事件循环，退出时返回状态码
-
