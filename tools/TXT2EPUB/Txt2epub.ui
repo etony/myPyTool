@@ -52,13 +52,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="pb_dir">
          <property name="text">
           <string>目   录</string>
@@ -66,23 +59,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="pb_reset">
          <property name="text">
           <string>重   置</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_8">
-         <property name="text">
-          <string/>
          </property>
         </widget>
        </item>
@@ -249,8 +228,8 @@
       <property name="geometry">
        <rect>
         <x>380</x>
-        <y>180</y>
-        <width>21</width>
+        <y>190</y>
+        <width>16</width>
         <height>20</height>
        </rect>
       </property>
@@ -417,7 +396,7 @@
        <rect>
         <x>10</x>
         <y>180</y>
-        <width>391</width>
+        <width>361</width>
         <height>26</height>
        </rect>
       </property>

@@ -6,13 +6,24 @@
 """
 import ebooklib
 from ebooklib import epub
-# from pymobi import mobi
+#from pymobi import  mobi
 from bs4 import BeautifulSoup
 import re
 import os
 import datetime
 from opencc import OpenCC  # 用于简繁体转换（需安装opencc-python-reimplemented）
 # from kindlestrip import KindleStrip
+from pymobi import BookMobi
+######
+
+"""
+纯 Python 把 .mobi 转 .txt，不依赖 Calibre
+"""
+import shutil
+from pathlib import Path
+import  mobi
+# https://github.com/iscc/mobi
+######
 
 
 class Conver2epub():
@@ -531,6 +542,88 @@ class epub2mobi():
         # km.set_author(author)
         # km.add_chapter("Chapter 1", content)
         # km.make()
+        
+    def mobi_to_txt(self, mobi_file_path: str, txt_file_path: str = None) -> bool:
+        """
+        将MOBI文件转换为TXT文件
+        :param mobi_file_path: 输入的MOBI文件路径
+        :param txt_file_path: 输出的TXT文件路径，若为None则默认与MOBI同目录、同名
+        :return: 转换成功返回True，失败返回False
+        """
+        # 校验输入文件是否存在
+        if not os.path.exists(mobi_file_path):
+            print(f"错误：MOBI文件不存在，路径为 {mobi_file_path}")
+            return False
+    
+        # 处理输出路径
+        if txt_file_path is None:
+            mobi_dir = os.path.dirname(mobi_file_path)
+            mobi_name = os.path.splitext(os.path.basename(mobi_file_path))[0]
+            txt_file_path = os.path.join(mobi_dir, f"{mobi_name}.txt")
+    
+        try:
+            # 读取MOBI文件
+            with open(mobi_file_path, 'rb') as mobi_f:
+                mobi_data = mobi_f.read()
+                mobi = BookMobi(mobi_data)
+    
+            # 提取文本内容（部分MOBI可能分章节，需遍历拼接）
+            full_text = []
+            # 先添加书籍元数据（可选）
+            full_text.append(f"书名：{mobi.title if mobi.title else '未知'}")
+            full_text.append(f"作者：{mobi.author if mobi.author else '未知'}")
+            full_text.append("=" * 50)  # 分隔符
+            full_text.append("\n")
+    
+            # 提取正文内容
+            content = mobi.get_text()
+            if content:
+                full_text.append(content)
+            else:
+                print("警告：未从MOBI文件中提取到正文内容")
+    
+            # 写入TXT文件
+            with open(txt_file_path, 'w', encoding='utf-8') as txt_f:
+                txt_f.write("\n".join(full_text))
+    
+            print(f"转换成功！TXT文件已保存至：{txt_file_path}")
+            return True
+    
+        except Exception as e:
+            print(f"转换失败，错误信息：{str(e)}")
+            return False
+
+
+    def convert_mobi_to_txt(mobi_path: Path, txt_path: Path = None) -> Path:
+        # https://github.com/iscc/mobi
+        if txt_path is None:
+            txt_path = mobi_path.with_suffix('.txt')
+    
+        # 1. 解压到临时目录
+        tmpdir, filepath = mobi.extract(mobi_path)
+
+    
+        # 2. 找到 html 主文件（content.opf 所在的目录）
+        html_files = sorted(tmpdir.rglob('*.html')) + sorted(tmpdir.rglob('*.htm'))
+        if not html_files:
+            raise RuntimeError('未能在解压目录里找到 html 文件')
+    
+        # 3. 合并所有 html 并提取纯文本
+        text_parts = []
+        for hf in html_files:
+            soup = BeautifulSoup(hf.read_bytes(), 'lxml')
+            text_parts.append(soup.get_text(separator='\n', strip=True))
+    
+        # 4. 写出 txt
+        txt_path.write_text('\n'.join(text_parts), encoding='utf-8')
+    
+        # 5. 清理临时文件
+        shutil.rmtree(tmpdir, ignore_errors=True)
+        return txt_path
+
+
+
+
 # if __name__ == "__main__":
 
 #     cover2 = Conver2epub('从前有座灵剑山.txt', '从前有座灵剑山.epub')
