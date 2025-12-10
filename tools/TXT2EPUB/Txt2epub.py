@@ -84,6 +84,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
             enqueue=True  # 异步日志，避免阻塞UI
         )
         logger.info('程序加载完成.')  # 记录程序启动日志
+        self.pb_epub.setDisabled(True)
         # self.lb_cover.clicked.connect(self.on_lb_cover_clicked)
 
     @pyqtSlot()
@@ -213,6 +214,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
 
         if txtpath != "":
             self.le_txt.setText(txtpath)  # 更新TXT路径输入框
+            self.pb_epub.setEnabled(True)
 
             # 拆分文件路径：目录/文件名/扩展名
             self.dirname, filename = os.path.split(txtpath)
@@ -253,7 +255,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         3. 记录封面路径和日志。
         """
         self.coverpath, coverType = QFileDialog.getOpenFileName(
-            self, "选择封面图片", ".", "*.jpg;;All Files(*)")
+            self, "选择封面图片", ".", COVER_FORMATS)
 
         if self.coverpath != "":
             # 加载图片并显示在界面
@@ -559,7 +561,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         逻辑与on_pb_cover_clicked完全一致，提供便捷操作。
         """
         self.coverpath, coverType = QFileDialog.getOpenFileName(
-            self, "选择封面图片", ".", "*.jpg;;All Files(*)")
+            self, "选择封面图片", ".", COVER_FORMATS)
 
         if self.coverpath != "":
             cover = QPixmap(self.coverpath)
