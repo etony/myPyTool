@@ -13,7 +13,7 @@ import os
 import datetime
 from opencc import OpenCC  # 用于简繁体转换（需安装opencc-python-reimplemented）
 # from kindlestrip import KindleStrip
-from pymobi import BookMobi
+# from pymobi import BookMobi
 ######
 
 """

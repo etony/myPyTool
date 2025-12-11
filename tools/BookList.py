@@ -1275,8 +1275,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         
         # ===================== 6. 自适应调整文本框高度（布局适配） =====================
         # 获取文本框当前Y坐标（垂直位置）
-        tb_y = self.CW_bookinfo.tb_bookinfo.pos().y()
-        
+        # tb_y = self.CW_bookinfo.tb_bookinfo.pos().y()
+        tb_y = 110
         # 计算文本框所需高度：文档内容高度 + 上下内边距（margin）
         tb_height = self.CW_bookinfo.tb_bookinfo.document().size().height() + \
             self.CW_bookinfo.tb_bookinfo.contentsMargins().top() + \
@@ -1285,7 +1285,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # 固定文本框高度（四舍五入），避免内容溢出/空白
         self.CW_bookinfo.tb_bookinfo.setFixedHeight(round(tb_height))
         # 调整文本框垂直位置（move_y=0表示不调整，可根据需要修改）
-        move_y = 0  # 311-round(tb_height) # 注释为历史调整逻辑，保留供参考
+        move_y = 311-round(tb_height)  # 311-round(tb_height) # 注释为历史调整逻辑，保留供参考
+        print(f'高： {round(311-tb_height)}')
         self.CW_bookinfo.tb_bookinfo.setGeometry(self.CW_bookinfo.tb_bookinfo.pos().x(), # 保持X坐标不变
                                                  tb_y+move_y, # 调整Y坐标
                                                  self.CW_bookinfo.tb_bookinfo.width(), # 保持宽度不变
