@@ -49,6 +49,7 @@ logging.basicConfig(
 bclass = {'默认': 0, '默认分类': 0, '计划': 1, '已读': 2}
 # 表格列名（与数据字典字段一一对应）
 bcol = ['ISBN', '书名', '作者', '出版', '价格', '评分', '人数', '分类', '书柜']
+bcollong = ['ISBN', '书名', '作者', '出版', '价格', '评分', '人数', '分类', '书柜', '封面', '出版日期', '详情页', '推荐度', '页数']
 # 初始数据字典（用于构建空DataFrame）
 bdict = {
     'ISBN': [],
@@ -1377,24 +1378,35 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
 
     @pyqtSlot()
     def on_pb_export_clicked(self):
+        isbnlist = self.model.getlist(0)
+        
+        if len(isbnlist) <= 0 :
+            QtWidgets.QMessageBox.warning(
+                self,                # 父窗口（主窗口）
+                "错误",              # 提示框标题
+                "导出信息为空，请确认！",    # 提示内容
+                QtWidgets.QMessageBox.StandardButton.Ok  # 确认按钮
+            )
+            return
+            
+        self.csvNamepath = ""
+        self.csvNamepath, csvType = QFileDialog.getSaveFileName(
+            self, "保存存储文件", ".", "*.csv;;All Files(*)")
+
         
         # 清空导出列表
         self.bookinfolist = []
-        isbnlist = self.model.getlist(0)
+        
         # 初始化刷新计数（用于进度提示）
         self.number = 0
-        # 构建进度提示字符串（格式：信息更新: 总数量/）
-        self.barstr = '信息导出:' + str(len(isbnlist)) + '/'
-        print(f'isbnlist: {isbnlist}')
-
-        # ===================== 2. 多线程配置（核心：避免UI阻塞） =====================
+     
         self.pb_export.setEnabled(False)
         
         self.worker = ExportBookinfoList(isbnlist)
 
         self.worker.finished.connect((lambda: self.pb_export.setEnabled(True)))  # 结束后通知结束
         self.worker.finished.connect(lambda: self.statusBar.showMessage(
-            "共共 " + str(self.model.rowCount()) + " 条记录" + self.appver))
+            "共 " + str(self.model.rowCount()) + " 条记录" + self.appver))
         self.worker.finished.connect(self.exportlist)
         # 工作对象完成 → 销毁工作对象（释放内存，避免泄漏）
         self.worker.progress_signal.connect(self.getBookInfo)  # 完成后删除对象
@@ -1404,9 +1416,24 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
     def getBookInfo(self,isbn):
 
         bookinfo = self.get_douban_isbn(isbn)
+        del bookinfo[11]
         self.bookinfolist.append(bookinfo)
     def exportlist(self):
-        print(self.bookinfolist)
+        try:
+            if self.csvNamepath != "":                
+                df = pd.DataFrame(self.bookinfolist,columns = bcollong)
+                df.to_csv(self.csvNamepath, index=False)
+                QtWidgets.QMessageBox.information(self, "提示", "保存成功！",
+                    QtWidgets.QMessageBox.StandardButton.Ok  # 确认按钮
+                )
+        except PermissionError as e:
+            QtWidgets.QMessageBox.warning(
+                self,                # 父窗口（主窗口）
+                "错误",              # 提示框标题
+                f"文件写入失败：\n{str(e)} \n\n\n请检查文件是否被其他程序占用或以管理员身份运行本程序！",    # 提示内容
+                QtWidgets.QMessageBox.StandardButton.Ok  # 确认按钮
+            )
+
         
 class ExportBookinfoList(QThread):
     
@@ -1425,6 +1452,41 @@ class ExportBookinfoList(QThread):
 
             self.progress_signal.emit(isbn)   # 发送当前刷新的ISBN
         self.finished.emit()  # 发出结束的信号
+ 
+class DouBanApi:
+
+    def __init__(self, value):
+        self.value = value
+        self.url_isbn = "https://api.douban.com/v2/book/isbn/"
+        self.url_search = "https://api.douban.com/v2/book/search"
+
+        # API密钥（apikey）：豆瓣开放平台申请，用于提升API调用限额，避免请求被拦截
+        # apikey=0df993c66c0c636e29ecbb5344252a4a
+        # apikey=0ac44ae016490db2204ce0a042db2916
+        self.payload_isbn = {'apikey': '0ab215a8b1977939201640fa14c66bab'}
+        self.payload_search = {'apikey': '0ab215a8b1977939201640fa14c66bab'}
+        # 请求头：模拟iPhone移动端浏览器，规避豆瓣API的反爬机制（PC端请求易被限制）
+        self.headers = {
+            "Referer":
+            "https://m.douban.com/tv/american", # 模拟移动端来源页，提升请求合法性
+            "User-Agent":
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"
+        }           
+    
+    def get_bookinfo_by_isbn(self,isbn):
+        self.isbn= isbn
+        response = requests.post(self.url_isbn, data=self.payload, headers=self.headers)
+        book_dict = json.loads(response.text)
+        bookinfo =[]
+        return bookinfo
+        
+    def search_bookinfo_by_name(self, bookname):
+        self.url_search['q']= bookname
+        response = requests.get(self.payload_search, params=self.url_search, headers=self.headers)
+        booklist = response.json()['books']
+        books = []
+        return books
+
         
 if __name__ == "__main__":
     # 创建应用程序
