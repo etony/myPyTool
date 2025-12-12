@@ -2,7 +2,7 @@
   "header": {
     "comment": "eric tasks file for project Python-Study",
     "warning": "This file was generated automatically, do not edit.",
-    "saved": "2025-12-09, 14:30:26"
+    "saved": "2025-12-11, 19:52:59"
   },
   "ProjectScanFilter": "*/Ui_*.py",
   "Tasks": [
@@ -12,12 +12,12 @@
       "priority": 1,
       "lineno": 61,
       "completed": false,
-      "created": 1765247314.37035,
+      "created": 1765453976.3343318,
       "type": 1,
-      "uid": "{3c3a464a-bcd6-4180-85b0-82ed885d2b00}",
+      "uid": "{bc89a640-5b3c-47e8-ae01-f4f6db654f9a}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\BookInfo.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\BookInfo.py"
     },
     {
       "summary": "TODO: \u4e0e\u201c\u4e0b\u4e00\u4e2a\u201d\u6309\u94ae\u5bf9\u9f50\u7684\u5f85\u5b8c\u5584\u9879",
@@ -25,12 +25,12 @@
       "priority": 1,
       "lineno": 95,
       "completed": false,
-      "created": 1765247314.3727818,
+      "created": 1765453976.3353355,
       "type": 1,
-      "uid": "{b36619f7-c5b3-43f5-ba23-948443ccc55c}",
+      "uid": "{39d9df6f-8bc7-4b15-a35f-6af8a30154f5}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\BookInfo.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\BookInfo.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -38,12 +38,12 @@
       "priority": 1,
       "lineno": 87,
       "completed": false,
-      "created": 1765247314.4113739,
+      "created": 1765453976.3353355,
       "type": 1,
-      "uid": "{9f843abf-2fc1-45f3-b611-2f87e4a0cd68}",
+      "uid": "{4744a3a4-80fa-4ba7-9d3e-1860929e0443}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\BrowerPasswd.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\BrowerPasswd.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -51,12 +51,12 @@
       "priority": 1,
       "lineno": 131,
       "completed": false,
-      "created": 1765247314.413848,
+      "created": 1765453976.3363316,
       "type": 1,
-      "uid": "{d861b19d-3eff-4e0a-a377-a09250d053f8}",
+      "uid": "{d5ffebdd-13a4-4b09-a63c-0b9c6c08079f}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\BrowerPasswd.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\BrowerPasswd.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -64,12 +64,12 @@
       "priority": 1,
       "lineno": 152,
       "completed": false,
-      "created": 1765247314.4162025,
+      "created": 1765453976.3363316,
       "type": 1,
-      "uid": "{10162948-f3bf-4621-bc28-1224c670a770}",
+      "uid": "{7480a5ee-9dd9-4610-8407-cc3c8fb1ff78}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\BrowerPasswd.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\BrowerPasswd.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -77,12 +77,12 @@
       "priority": 1,
       "lineno": 174,
       "completed": false,
-      "created": 1765247314.418416,
+      "created": 1765453976.337332,
       "type": 1,
-      "uid": "{fb16b57b-550d-4148-a388-5127b7d1f25a}",
+      "uid": "{f7318a6a-96f7-4177-92ce-8e192e5cae68}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\BrowerPasswd.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\BrowerPasswd.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -90,12 +90,12 @@
       "priority": 1,
       "lineno": 190,
       "completed": false,
-      "created": 1765247314.4206154,
+      "created": 1765453976.3383317,
       "type": 1,
-      "uid": "{5451d43f-1596-4d0c-aa19-5a3c59aec744}",
+      "uid": "{0f84c227-8ca1-498d-98f6-89a7dfdd0149}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\BrowerPasswd.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\BrowerPasswd.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -103,12 +103,12 @@
       "priority": 1,
       "lineno": 210,
       "completed": false,
-      "created": 1765247314.4228973,
+      "created": 1765453976.3383317,
       "type": 1,
-      "uid": "{fee31c36-2209-4a9f-b2a3-b3c50a72c10d}",
+      "uid": "{80356bdc-0478-4892-929a-a1ffbe742d4a}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\BrowerPasswd.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\BrowerPasswd.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -116,12 +116,12 @@
       "priority": 1,
       "lineno": 52,
       "completed": false,
-      "created": 1765247314.441763,
+      "created": 1765453976.3393316,
       "type": 1,
-      "uid": "{96356a95-d4a1-40e8-ba68-a3a1f5ee2d41}",
+      "uid": "{f24489fc-9831-439d-83de-a59bbec85ba1}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\QRmaker.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\QRmaker.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -129,12 +129,12 @@
       "priority": 1,
       "lineno": 79,
       "completed": false,
-      "created": 1765247314.4483528,
+      "created": 1765453976.340332,
       "type": 1,
-      "uid": "{0df3af85-3953-4f06-8696-d42a0db5b849}",
+      "uid": "{725c0eaf-d155-4146-a4dc-f96ba33a351a}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\QRmaker.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\QRmaker.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -142,12 +142,12 @@
       "priority": 1,
       "lineno": 98,
       "completed": false,
-      "created": 1765247314.452149,
+      "created": 1765453976.340332,
       "type": 1,
-      "uid": "{27f174f9-49b1-40f3-9234-aa2499e2de80}",
+      "uid": "{279dfa31-ed8d-4467-976e-6a51176807b7}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\QRmaker.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\QRmaker.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -155,12 +155,12 @@
       "priority": 1,
       "lineno": 120,
       "completed": false,
-      "created": 1765247314.455492,
+      "created": 1765453976.341505,
       "type": 1,
-      "uid": "{65904c7c-62ad-494d-b2b6-fe248d6a4447}",
+      "uid": "{804ecdc8-a615-463c-8a0d-38678cfaeaf4}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\QRmaker.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\QRmaker.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -168,12 +168,12 @@
       "priority": 1,
       "lineno": 175,
       "completed": false,
-      "created": 1765247314.458744,
+      "created": 1765453976.3425043,
       "type": 1,
-      "uid": "{88b962e8-8100-4fd3-9ab5-0eb193ab4fd3}",
+      "uid": "{f017425e-d18c-45de-ae7f-5d15d06104bc}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\QRmaker.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\QRmaker.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -181,12 +181,12 @@
       "priority": 1,
       "lineno": 213,
       "completed": false,
-      "created": 1765247314.462261,
+      "created": 1765453976.343506,
       "type": 1,
-      "uid": "{9223ecdb-7e93-4280-9f28-50aeaf117ba3}",
+      "uid": "{d0800cb9-7997-4567-9c96-9c7d53e05f0c}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\QRmaker.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\QRmaker.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -194,12 +194,12 @@
       "priority": 1,
       "lineno": 227,
       "completed": false,
-      "created": 1765247314.4648955,
+      "created": 1765453976.3445039,
       "type": 1,
-      "uid": "{fd08b11b-caaa-4cce-8bd9-ca2409721ed1}",
+      "uid": "{18d2c3cb-a340-4106-a097-293ea6f18e22}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\QRmaker.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\QRmaker.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -207,12 +207,12 @@
       "priority": 1,
       "lineno": 290,
       "completed": false,
-      "created": 1765247314.4676437,
+      "created": 1765453976.3464553,
       "type": 1,
-      "uid": "{f889a9d9-9bb6-4201-a885-b2a6df2ad160}",
+      "uid": "{f7e3e9a5-ffbf-4dae-89fe-84a16c78e427}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\QRmaker.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\QRmaker.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -220,12 +220,12 @@
       "priority": 1,
       "lineno": 302,
       "completed": false,
-      "created": 1765247314.470473,
+      "created": 1765453976.3474758,
       "type": 1,
-      "uid": "{8c9a4e15-acd6-4148-bc53-2f044b0350d7}",
+      "uid": "{9f416b9b-2e8c-4bb3-8a09-bf74df5968bf}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\QRmaker.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\QRmaker.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -233,12 +233,12 @@
       "priority": 1,
       "lineno": 323,
       "completed": false,
-      "created": 1765247314.4732583,
+      "created": 1765453976.348475,
       "type": 1,
-      "uid": "{b0cae480-6a0a-4e98-817e-aae31c2f519e}",
+      "uid": "{290a093c-49f7-46db-b318-d11e2c5fbd71}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\QRmaker.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\QRmaker.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -246,12 +246,12 @@
       "priority": 1,
       "lineno": 42,
       "completed": false,
-      "created": 1765247314.4771774,
+      "created": 1765453976.349479,
       "type": 1,
-      "uid": "{e8217ed0-5c32-4d80-8546-0d4e3bdca091}",
+      "uid": "{0dd657f2-fd7d-4699-9c1c-3598c3351a45}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\Rpassword.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\Rpassword.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -259,12 +259,12 @@
       "priority": 1,
       "lineno": 74,
       "completed": false,
-      "created": 1765247314.480145,
+      "created": 1765453976.350459,
       "type": 1,
-      "uid": "{da2a113a-8a36-48ec-a44d-91acb9112da7}",
+      "uid": "{b58deb88-0dc0-4b9d-afa5-6097abc7c775}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\Rpassword.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\Rpassword.py"
     },
     {
       "summary": "WARNING: Any manual changes made to this file will be lost when pyuic6 is",
@@ -272,12 +272,12 @@
       "priority": 1,
       "lineno": 5,
       "completed": false,
-      "created": 1765247314.4832313,
+      "created": 1765453976.3536336,
       "type": 2,
-      "uid": "{5737739e-c772-4c2e-ad40-d2980a032f0d}",
+      "uid": "{fa056b12-ce4d-47a5-a9b6-39bf48f6cf22}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\Ui_BooSearch.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\Ui_BookInfo.py"
     },
     {
       "summary": "WARNING: Any manual changes made to this file will be lost when pyuic6 is",
@@ -285,12 +285,12 @@
       "priority": 1,
       "lineno": 5,
       "completed": false,
-      "created": 1765247314.4862385,
+      "created": 1765453976.3546338,
       "type": 2,
-      "uid": "{0a84b3f1-c530-4c7f-8dec-fd2f372653d7}",
+      "uid": "{793da42c-5683-4e3b-985f-24e5953897dc}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\Ui_BookInfo.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\Ui_BookList.py"
     },
     {
       "summary": "WARNING: Any manual changes made to this file will be lost when pyuic6 is",
@@ -298,12 +298,12 @@
       "priority": 1,
       "lineno": 5,
       "completed": false,
-      "created": 1765247314.4903364,
+      "created": 1765453976.3566337,
       "type": 2,
-      "uid": "{98b36604-48d6-4431-87f4-8e5621c1cc6b}",
+      "uid": "{3d20b8f0-0101-472b-ba38-8caa9f24b795}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\Ui_BookList.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\Ui_BrowerPasswd.py"
     },
     {
       "summary": "WARNING: Any manual changes made to this file will be lost when pyuic6 is",
@@ -311,12 +311,12 @@
       "priority": 1,
       "lineno": 5,
       "completed": false,
-      "created": 1765247314.4997566,
+      "created": 1765453976.3576338,
       "type": 2,
-      "uid": "{22c02e71-5880-42d0-ba2e-a5847ee0b17a}",
+      "uid": "{fb465f7d-296b-455d-82dc-b81ecfa21888}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\Ui_BrowerPasswd.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\Ui_MusicPlayer.py"
     },
     {
       "summary": "WARNING: Any manual changes made to this file will be lost when pyuic6 is",
@@ -324,12 +324,12 @@
       "priority": 1,
       "lineno": 5,
       "completed": false,
-      "created": 1765247314.5128682,
+      "created": 1765453976.3596337,
       "type": 2,
-      "uid": "{ac3217a1-c347-46aa-9a4b-c9385ace514e}",
+      "uid": "{ca12bd30-7b37-4bf2-9c6a-7ad82d4eda89}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\Ui_MusicPlayer.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\Ui_MusicPlayer_v3.py"
     },
     {
       "summary": "WARNING: Any manual changes made to this file will be lost when pyuic6 is",
@@ -337,12 +337,12 @@
       "priority": 1,
       "lineno": 5,
       "completed": false,
-      "created": 1765247314.5304391,
+      "created": 1765453976.3606339,
       "type": 2,
-      "uid": "{13ca3ad4-f0b0-45d6-82a9-b31c59df4aac}",
+      "uid": "{3908a6a6-e9a1-41ca-9fd9-1546c5eebf9e}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\Ui_MusicPlayer_v3.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\Ui_QRmaker.py"
     },
     {
       "summary": "WARNING: Any manual changes made to this file will be lost when pyuic6 is",
@@ -350,12 +350,12 @@
       "priority": 1,
       "lineno": 5,
       "completed": false,
-      "created": 1765247314.5492992,
+      "created": 1765453976.3627641,
       "type": 2,
-      "uid": "{798e7045-b916-436a-88b8-aee55b89fa4c}",
+      "uid": "{7e6e7dfd-4d36-4f5a-b0e0-541942efa244}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\Ui_QRmaker.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\Ui_Rpassword.py"
     },
     {
       "summary": "WARNING: Any manual changes made to this file will be lost when pyuic6 is",
@@ -363,12 +363,12 @@
       "priority": 1,
       "lineno": 5,
       "completed": false,
-      "created": 1765247314.554261,
+      "created": 1765453976.3647692,
       "type": 2,
-      "uid": "{138c3176-1dfc-4b2c-9fae-dd95875a2251}",
+      "uid": "{c621762b-9177-44f1-8a5a-4f6127f62f1b}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\Ui_Rpassword.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\Ui_generate_license.py"
     },
     {
       "summary": "WARNING: Any manual changes made to this file will be lost when pyuic6 is",
@@ -376,12 +376,12 @@
       "priority": 1,
       "lineno": 5,
       "completed": false,
-      "created": 1765247314.5774014,
+      "created": 1765453976.3667636,
       "type": 2,
-      "uid": "{6e4ae0ac-308f-43b8-bf22-8697d577a8e7}",
+      "uid": "{9ee4aac4-26a5-42ee-a8d4-ee127c840f0a}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\Ui_generate_license.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\Ui_imageconver.py"
     },
     {
       "summary": "WARNING: Any manual changes made to this file will be lost when pyuic6 is",
@@ -389,25 +389,12 @@
       "priority": 1,
       "lineno": 5,
       "completed": false,
-      "created": 1765247314.591545,
+      "created": 1765453976.368764,
       "type": 2,
-      "uid": "{07ff1092-fbc9-4c6a-857c-05c4d19add61}",
+      "uid": "{339af749-f094-42e9-8ea0-f6dc61ae3b3c}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\Ui_imageconver.py"
-    },
-    {
-      "summary": "WARNING: Any manual changes made to this file will be lost when pyuic6 is",
-      "description": "",
-      "priority": 1,
-      "lineno": 5,
-      "completed": false,
-      "created": 1765247314.611798,
-      "type": 2,
-      "uid": "{ee4765f6-3d9f-4ddd-ab73-a24d7e7202d2}",
-      "parent_uid": "",
-      "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\Ui_sqlmap.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\Ui_sqlmap.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -415,12 +402,12 @@
       "priority": 1,
       "lineno": 43,
       "completed": false,
-      "created": 1765247314.627338,
+      "created": 1765453976.3707647,
       "type": 1,
-      "uid": "{e931af2c-6580-4f75-bc3c-279f8fd4328b}",
+      "uid": "{5bdbdba4-199c-42d3-b2e0-954668f80c72}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\image-conver.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\image-conver.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -428,12 +415,12 @@
       "priority": 1,
       "lineno": 125,
       "completed": false,
-      "created": 1765247314.632408,
+      "created": 1765453976.37292,
       "type": 1,
-      "uid": "{fafcb3a8-b765-4cae-951b-829e839ec23a}",
+      "uid": "{e0a67bc9-2f43-4654-9999-d649b03dc52f}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\image-conver.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\image-conver.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -441,12 +428,12 @@
       "priority": 1,
       "lineno": 224,
       "completed": false,
-      "created": 1765247314.6445215,
+      "created": 1765453976.3749194,
       "type": 1,
-      "uid": "{c5499215-e01a-4ca9-a855-f9bd8be2e0eb}",
+      "uid": "{6ea8ec7d-9052-4b18-907d-8a05e088c45e}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\myMusicPlayer.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\myMusicPlayer.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -454,12 +441,12 @@
       "priority": 1,
       "lineno": 264,
       "completed": false,
-      "created": 1765247314.656777,
+      "created": 1765453976.3769193,
       "type": 1,
-      "uid": "{bbfac91a-6f4e-466a-9b15-ec4a77a8a95c}",
+      "uid": "{0c985398-f84b-4526-82a9-f4bf83933589}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\myMusicPlayer.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\myMusicPlayer.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -467,12 +454,12 @@
       "priority": 1,
       "lineno": 285,
       "completed": false,
-      "created": 1765247314.6655095,
+      "created": 1765453976.3789194,
       "type": 1,
-      "uid": "{de048f0e-658e-48c6-8f1e-baa2a68e51de}",
+      "uid": "{e20ab0c3-0eaf-4227-91b7-a50213aa6b63}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\myMusicPlayer.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\myMusicPlayer.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -480,12 +467,12 @@
       "priority": 1,
       "lineno": 302,
       "completed": false,
-      "created": 1765247314.6718636,
+      "created": 1765453976.3820536,
       "type": 1,
-      "uid": "{4692feff-8bee-496a-87fb-6e3b109e593f}",
+      "uid": "{6ec6e70d-120d-448b-8f9c-910f83bf093a}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\myMusicPlayer.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\myMusicPlayer.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -493,12 +480,12 @@
       "priority": 1,
       "lineno": 324,
       "completed": false,
-      "created": 1765247314.6774197,
+      "created": 1765453976.3840532,
       "type": 1,
-      "uid": "{f4c3a8ef-5f40-4872-b538-be83b169edb5}",
+      "uid": "{85471a61-1b94-4b11-b035-c2a0009ab762}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\myMusicPlayer.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\myMusicPlayer.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -506,12 +493,12 @@
       "priority": 1,
       "lineno": 341,
       "completed": false,
-      "created": 1765247314.6827323,
+      "created": 1765453976.3860564,
       "type": 1,
-      "uid": "{694c0223-d1be-4cbf-b9ea-d3b675dba32c}",
+      "uid": "{a049c456-3401-45ce-b44a-ac1c4048fd63}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\myMusicPlayer.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\myMusicPlayer.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -519,12 +506,12 @@
       "priority": 1,
       "lineno": 50,
       "completed": false,
-      "created": 1765247314.6890252,
+      "created": 1765453976.3890533,
       "type": 1,
-      "uid": "{70e8595a-acf9-4000-bd18-3157f22837a5}",
+      "uid": "{f6bc0b5e-494d-47da-a0cc-0db99348d33c}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -532,12 +519,12 @@
       "priority": 1,
       "lineno": 60,
       "completed": false,
-      "created": 1765247314.69475,
+      "created": 1765453976.391054,
       "type": 1,
-      "uid": "{8f86e0b6-183b-400a-bb9a-f4168f787826}",
+      "uid": "{2078e9ba-0b9c-435c-954f-ff2a4f0911f9}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -545,12 +532,12 @@
       "priority": 1,
       "lineno": 70,
       "completed": false,
-      "created": 1765247314.7006574,
+      "created": 1765453976.3940535,
       "type": 1,
-      "uid": "{0da9488b-b57e-4a13-9b82-43502b50f01b}",
+      "uid": "{ccdb3058-2039-4482-a991-c999ce034323}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -558,12 +545,12 @@
       "priority": 1,
       "lineno": 80,
       "completed": false,
-      "created": 1765247314.706887,
+      "created": 1765453976.396054,
       "type": 1,
-      "uid": "{731bb127-60cd-437d-9dda-ba585af9ea63}",
+      "uid": "{602307b4-a7ee-4b3e-aadc-c2fa718f8a5d}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -571,12 +558,12 @@
       "priority": 1,
       "lineno": 90,
       "completed": false,
-      "created": 1765247314.712866,
+      "created": 1765453976.3990533,
       "type": 1,
-      "uid": "{eeba0e5b-aa8e-4647-9ec1-400e77192268}",
+      "uid": "{6ed657e1-b64b-4f8d-bd29-391da0d89161}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -584,12 +571,12 @@
       "priority": 1,
       "lineno": 100,
       "completed": false,
-      "created": 1765247314.7190473,
+      "created": 1765453976.4010532,
       "type": 1,
-      "uid": "{0be9a76c-3988-4050-898d-0a55feec1190}",
+      "uid": "{cb16965d-c390-406d-a381-d4060ac539cb}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -597,12 +584,12 @@
       "priority": 1,
       "lineno": 110,
       "completed": false,
-      "created": 1765247314.7267067,
+      "created": 1765453976.4040527,
       "type": 1,
-      "uid": "{3040a620-f314-4f8d-9372-275fbebd5e35}",
+      "uid": "{a7f66681-c62f-4a25-bda1-ab72e766cdf7}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -610,12 +597,12 @@
       "priority": 1,
       "lineno": 120,
       "completed": false,
-      "created": 1765247314.7328737,
+      "created": 1765453976.4070532,
       "type": 1,
-      "uid": "{9182a9f8-1965-4ef6-9b48-f18ea073676c}",
+      "uid": "{e20c8cf2-4702-44a7-9c30-b50b0869eb0d}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -623,12 +610,12 @@
       "priority": 1,
       "lineno": 132,
       "completed": false,
-      "created": 1765247314.738858,
+      "created": 1765453976.4100547,
       "type": 1,
-      "uid": "{c93c4c0d-78ae-4609-8a97-3c660e030539}",
+      "uid": "{f15c73d0-3d73-4904-ab8f-0beb1d63da74}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -636,12 +623,12 @@
       "priority": 1,
       "lineno": 144,
       "completed": false,
-      "created": 1765247314.7449644,
+      "created": 1765453976.4120536,
       "type": 1,
-      "uid": "{69c9911c-8a7d-4504-bd7c-e975de7eb752}",
+      "uid": "{ab5d8a38-71dd-41c1-b819-a46c6dc3bda4}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -649,12 +636,12 @@
       "priority": 1,
       "lineno": 156,
       "completed": false,
-      "created": 1765247314.7510254,
+      "created": 1765453976.4150534,
       "type": 1,
-      "uid": "{54a11699-1482-4789-93e1-e347428c736b}",
+      "uid": "{0912a8fe-137a-4038-ab55-6503a23e40c7}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -662,12 +649,12 @@
       "priority": 1,
       "lineno": 168,
       "completed": false,
-      "created": 1765247314.7571597,
+      "created": 1765453976.418054,
       "type": 1,
-      "uid": "{22a580b1-e044-444c-8326-f227e03e70c2}",
+      "uid": "{954a09e4-7aed-4267-8f97-181566c430a0}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -675,12 +662,12 @@
       "priority": 1,
       "lineno": 178,
       "completed": false,
-      "created": 1765247314.7633693,
+      "created": 1765453976.4210532,
       "type": 1,
-      "uid": "{034957d0-5d16-45de-9281-858bfca90419}",
+      "uid": "{f0a6c06c-8f62-4492-86d8-a35b9c4727d9}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -688,12 +675,12 @@
       "priority": 1,
       "lineno": 188,
       "completed": false,
-      "created": 1765247314.7696083,
+      "created": 1765453976.424053,
       "type": 1,
-      "uid": "{017503ef-dcaa-4eec-bbb6-bfff0772fc1a}",
+      "uid": "{b4f45fa2-a8f3-4afa-8786-94e6abc49984}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -701,12 +688,12 @@
       "priority": 1,
       "lineno": 220,
       "completed": false,
-      "created": 1765247314.7758927,
+      "created": 1765453976.4260535,
       "type": 1,
-      "uid": "{18296e4f-78f8-46f0-ab90-0c9cf0a3a695}",
+      "uid": "{5b3b32c0-b9af-43c6-88ac-fe537b38121b}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -714,12 +701,12 @@
       "priority": 1,
       "lineno": 230,
       "completed": false,
-      "created": 1765247314.782173,
+      "created": 1765453976.429053,
       "type": 1,
-      "uid": "{b91588f5-f5a7-4adc-a94b-85b082152068}",
+      "uid": "{03ebcf1a-de12-4e59-b502-94001fd7017e}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -727,12 +714,12 @@
       "priority": 1,
       "lineno": 240,
       "completed": false,
-      "created": 1765247314.7884455,
+      "created": 1765453976.4320533,
       "type": 1,
-      "uid": "{b6dda4bc-084a-4557-a9d0-25d37f2b8336}",
+      "uid": "{00f8582b-3635-46ae-92cf-2fe39e978efd}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -740,12 +727,12 @@
       "priority": 1,
       "lineno": 250,
       "completed": false,
-      "created": 1765247314.7947955,
+      "created": 1765453976.4350533,
       "type": 1,
-      "uid": "{1b5095a2-f401-4a25-a361-f8d8eae61538}",
+      "uid": "{e88cb0cb-b325-4e7a-8274-c56eda4af254}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -753,12 +740,12 @@
       "priority": 1,
       "lineno": 260,
       "completed": false,
-      "created": 1765247314.8011286,
+      "created": 1765453976.4380536,
       "type": 1,
-      "uid": "{f4d1dcb4-806a-4ba8-bc02-0f093e671468}",
+      "uid": "{4aa6d378-2f24-4908-bced-5e32b71d2ff4}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -766,12 +753,12 @@
       "priority": 1,
       "lineno": 270,
       "completed": false,
-      "created": 1765247314.8075564,
+      "created": 1765453976.441055,
       "type": 1,
-      "uid": "{9f4fc24e-6c8e-49af-8d66-9ae7e7efe13c}",
+      "uid": "{021f256d-83ea-470e-bc7d-357f9688bb08}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -779,12 +766,12 @@
       "priority": 1,
       "lineno": 280,
       "completed": false,
-      "created": 1765247314.8140225,
+      "created": 1765453976.4441738,
       "type": 1,
-      "uid": "{7c1d178f-337c-4e5c-84d1-2a02b9ded94a}",
+      "uid": "{c49f0ff8-9086-4549-8947-2f46e2654853}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -792,12 +779,12 @@
       "priority": 1,
       "lineno": 293,
       "completed": false,
-      "created": 1765247314.8205552,
+      "created": 1765453976.4471738,
       "type": 1,
-      "uid": "{dd5b0fb5-da00-411a-aba1-82438d12163d}",
+      "uid": "{a1ac5388-9e55-4799-b35b-f3d7e897331d}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -805,12 +792,12 @@
       "priority": 1,
       "lineno": 306,
       "completed": false,
-      "created": 1765247314.8271134,
+      "created": 1765453976.4501739,
       "type": 1,
-      "uid": "{129410c7-0718-485f-add0-47183d2df31f}",
+      "uid": "{37d7fe20-a60a-4126-b3af-bba2556178fc}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -818,12 +805,12 @@
       "priority": 1,
       "lineno": 319,
       "completed": false,
-      "created": 1765247314.8337133,
+      "created": 1765453976.4536393,
       "type": 1,
-      "uid": "{89582c12-dc78-45f1-97fc-a74b4f68d473}",
+      "uid": "{869201ce-2543-4e6c-8c0a-2fa6caaf8573}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -831,12 +818,12 @@
       "priority": 1,
       "lineno": 330,
       "completed": false,
-      "created": 1765247314.8403907,
+      "created": 1765453976.4566395,
       "type": 1,
-      "uid": "{9285a2bb-7dfb-4b8e-9eba-f95b54152e12}",
+      "uid": "{75596443-1444-4c48-a9cd-dd47af871401}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
     },
     {
       "summary": "TODO: not implemented yet",
@@ -844,12 +831,25 @@
       "priority": 1,
       "lineno": 412,
       "completed": false,
-      "created": 1765247314.8471177,
+      "created": 1765453976.459639,
       "type": 1,
-      "uid": "{1553c1ce-f4ea-43f6-9107-4f19565f16de}",
+      "uid": "{66586c45-6ea0-40d1-ac2b-826d383bec53}",
       "parent_uid": "",
       "expanded": false,
-      "filename": "D:\\work\\GIT\\Python-Study\\tools\\sqlmapui.py"
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\sqlmapui.py"
+    },
+    {
+      "summary": "WARNING: Any manual changes made to this file will be lost when pyuic6 is",
+      "description": "",
+      "priority": 1,
+      "lineno": 5,
+      "completed": false,
+      "created": 1765453976.486801,
+      "type": 2,
+      "uid": "{c70ee229-aa15-49a0-9e50-e4a25a330a0a}",
+      "parent_uid": "",
+      "expanded": false,
+      "filename": "D:\\work\\GIT\\myPyTool\\tools\\Ui_BooSearch.py"
     }
   ]
 }
