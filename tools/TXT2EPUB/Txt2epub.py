@@ -14,7 +14,7 @@ from opencc import OpenCC  # 繁简转换工具
 from PyQt6.QtCore import pyqtSlot  # PyQt槽函数装饰器
 from PyQt6.QtWidgets import QMainWindow, QDialog
 from PyQt6.QtWidgets import QApplication, QFileDialog, QMessageBox
-from PyQt6.QtGui import QPixmap, QImage  # PyQt图片处理
+from PyQt6.QtGui import QIcon, QPixmap, QImage  # PyQt图片处理
 
 # 自定义UI类（Qt Designer生成）
 from Ui_Txt2epub import Ui_MainWindow
@@ -74,7 +74,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
 
         self.setFixedSize(self.width(), self.height())  # 固定窗口大小，避免布局错乱
         self.setWindowTitle("Txt↔Epub/Mobi 转换工具")
-
+        self.setWindowIcon(QIcon('bookinfo.ico'))
         # 配置日志：按日分割，格式包含时间/级别/模块.函数/消息
         logger.add(
             '日志_{time:YYYY-MM-DD}.log',  # 日志文件名（按日期）
@@ -408,9 +408,10 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         fanjian = self.chb_fanjian.isChecked()
         # 执行按章节转换(传入繁简转换参数)
         self.conver2txt.conver_chapter(fanjian=fanjian)
-
-        logger.info(f'文件转换完成！  {self.le_out_txt.text()}')
-        self.statusBar.showMessage(f"文件转换完成！  {self.le_out_txt.text()}")
+        
+        cur_dir= os.path.dirname(self.txtfileself.le_out_txt.text())
+        logger.info(f'文件按章节转换完成！  {cur_dir}')
+        self.statusBar.showMessage(f"文件按章节转换完成！  {cur_dir}")
 
     @pyqtSlot()
     def on_pb_out_conver_clicked(self):
