@@ -98,20 +98,20 @@
           <string/>
          </property>
          <property name="text">
-          <string>导    出</string>
+          <string>保    存</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pb_template">
+        <widget class="QPushButton" name="pb_export">
          <property name="toolTip">
-          <string>识别ISBN图片，获取ISBN编码</string>
+          <string>导出图书信息列表</string>
          </property>
          <property name="statusTip">
           <string/>
          </property>
          <property name="text">
-          <string>模    板</string>
+          <string>导    出</string>
          </property>
         </widget>
        </item>
@@ -168,7 +168,20 @@
           <string/>
          </property>
          <property name="text">
-          <string>保    存</string>
+          <string>更    新</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pb_template">
+         <property name="toolTip">
+          <string>识别ISBN图片，获取ISBN编码</string>
+         </property>
+         <property name="statusTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>模    板</string>
          </property>
         </widget>
        </item>

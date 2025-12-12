@@ -671,6 +671,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             recommend = round((float(rating['average']) - 2.5) *
                               math.log(float(rating['numRaters']) + 1)) 
             bookinfo.append(str(recommend)) # 13: 推荐度（字符串格式）
+            bookinfo.append(book_dict['pages']) # 14: 页数
         else:
             # ===================== 8. 无效数据处理（返回固定长度空值） =====================
             # 响应数据残缺时，填充13个空格，保证返回列表长度统一，避免调用方索引越界
@@ -1374,7 +1375,57 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
             df = self.model._data
             df.head(0).to_csv(csvNamepath, index=False)
 
+    @pyqtSlot()
+    def on_pb_export_clicked(self):
+        
+        # 清空导出列表
+        self.bookinfolist = []
+        isbnlist = self.model.getlist(0)
+        # 初始化刷新计数（用于进度提示）
+        self.number = 0
+        # 构建进度提示字符串（格式：信息更新: 总数量/）
+        self.barstr = '信息导出:' + str(len(isbnlist)) + '/'
+        print(f'isbnlist: {isbnlist}')
 
+        # ===================== 2. 多线程配置（核心：避免UI阻塞） =====================
+        self.pb_export.setEnabled(False)
+        
+        self.worker = ExportBookinfoList(isbnlist)
+
+        self.worker.finished.connect((lambda: self.pb_export.setEnabled(True)))  # 结束后通知结束
+        self.worker.finished.connect(lambda: self.statusBar.showMessage(
+            "共共 " + str(self.model.rowCount()) + " 条记录" + self.appver))
+        self.worker.finished.connect(self.exportlist)
+        # 工作对象完成 → 销毁工作对象（释放内存，避免泄漏）
+        self.worker.progress_signal.connect(self.getBookInfo)  # 完成后删除对象
+        # 线程退出 → 销毁线程对象（释放内存）
+        self.worker.start()
+
+    def getBookInfo(self,isbn):
+
+        bookinfo = self.get_douban_isbn(isbn)
+        self.bookinfolist.append(bookinfo)
+    def exportlist(self):
+        print(self.bookinfolist)
+        
+class ExportBookinfoList(QThread):
+    
+    progress_signal = pyqtSignal(str)
+    
+    def __init__(self, isbnlist):
+        """
+        初始化刷新线程
+        :param isbn_list: 需要刷新的ISBN列表
+        """
+        super(ExportBookinfoList, self).__init__()
+        self.isbnlist = isbnlist
+
+    def run(self):
+        for isbn in self.isbnlist:
+
+            self.progress_signal.emit(isbn)   # 发送当前刷新的ISBN
+        self.finished.emit()  # 发出结束的信号
+        
 if __name__ == "__main__":
     # 创建应用程序
     app = QApplication(sys.argv)
