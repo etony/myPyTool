@@ -1455,7 +1455,29 @@ class ExportBookinfoList(QThread):
         self.finished.emit()  # 发出结束的信号
  
 class DouBanApi:
-
+    """
+    豆瓣图书API封装类
+    功能：
+        1. 通过ISBN精准查询单本图书信息
+        2. 通过书名模糊搜索多本图书信息
+        3. 自动清洗图书数据（价格、作者/译者格式）
+        4. 计算图书推荐度（基于评分和评价人数）
+    依赖：
+        - requests: 发送HTTP请求（需提前安装：pip install requests）
+        - math: 推荐度计算（自然对数）
+        - logging: 日志记录
+        - json: 响应数据解析
+    豆瓣API文档参考：https://developers.douban.com/wiki/?title=book_v2
+    """
+    """
+    豆瓣图书API封装类
+    核心特性：
+        - 自动处理API请求头（模拟移动端，规避反爬）
+        - 全字段容错（避免KeyError/TypeError）
+        - 数据清洗（价格、作者/译者格式统一）
+        - 异常捕获（网络错误、解析错误、计算错误）
+        - 连接复用（Session减少TCP握手开销）
+    """    
     def __init__(self, value:str):
         self.value = value
         self.url_isbn = "https://api.douban.com/v2/book/isbn/"
@@ -1492,17 +1514,29 @@ class DouBanApi:
         return current            
 
     def _clean_price(self, price: str) -> str:
-        """清洗价格字段"""
+        """
+        价格字段清洗（统一格式）
+        处理场景：
+            - 原始价格可能包含"CNY"（如"CNY 99.00"）
+            - 原始价格可能包含"元"（如"99.00元"）
+            - 原始价格可能有首尾空格（如" 99.00 "）
+        :param price: 原始价格字符串
+        :return: 清洗后的价格（如"99.00"）
+        """
         if not price:
             return ""
         return price.replace("CNY", "").replace("元", "").strip()
 
     def _calculate_recommend(self, average: str, num_raters: str) -> int:
         """
-        计算推荐度，带异常容错
-        :param average: 平均分（字符串/数字）
-        :param num_raters: 评价人数（字符串/数字）
-        :return: 推荐度（整数）
+        计算图书推荐度（自定义公式，带全量容错）
+        公式逻辑：
+            - (平均分 - 2.5)：过滤低分图书（平均分<2.5时推荐度为负/0）
+            - × ln(评价人数 + 1)：评价人数越多，权重越高（+1避免ln(0)异常）
+            - round：四舍五入为整数，便于展示
+        :param average: 豆瓣平均分（可能为字符串/空值/非数字）
+        :param num_raters: 评价人数（可能为字符串/空值/非数字）
+        :return: 推荐度（整数，异常时返回0）
         """
         try:
             avg = float(average) if average else 0.0
@@ -1518,19 +1552,40 @@ class DouBanApi:
     
     def get_bookinfo_by_isbn(self,isbn:str) -> Optional[List[str]]:
         """
-        通过ISBN获取图书信息
-        :param isbn: 图书ISBN
-        :return: 格式化的图书信息列表，无效时返回None
+        通过ISBN精准查询单本图书信息（核心方法）
+        :param isbn: 图书ISBN编号（如"9787115428028"）
+        :return: 格式化图书信息列表（固定15个元素）/None（无效数据/异常）
+        返回列表索引说明：
+            0: ISBN编号
+            1: 书名
+            2: 作者+译者（格式："作者1/作者2 译者: 译者1/译者2"）
+            3: 出版社
+            4: 价格（清洗后）
+            5: 豆瓣平均分
+            6: 评价人数
+            7: 分类（默认"计划"）
+            8: 书柜位置（默认"未设置"）
+            9: 封面小图URL
+            10: 出版日期
+            11: 完整评分信息（字符串化字典）
+            12: 豆瓣图书详情页URL
+            13: 推荐度（整数转字符串）
+            14: 页数
         """
+        # 前置校验：ISBN为空直接返回None
         if not isbn:
             LOG.warning("ISBN为空")
             return None
-        
+        # 拼接完整请求URL：基础URL + ISBN（豆瓣ISBN接口要求ISBN拼在URL后）
         self.url_isbn = self.url_isbn + isbn
         url = f"{self.url_isbn}{isbn}"
         
         try:
+            # 发送GET请求（豆瓣ISBN接口仅支持GET，原代码误用POST）
+            # 参数说明：params传递API Key，timeout避免网络卡死
+
             response = requests.post(url, data=self.payload_isbn, headers=self.headers)
+            # 解析JSON响应（豆瓣API返回UTF-8编码的JSON）
             book_dict = json.loads(response.text)
         except requests.exceptions.RequestException as e:
             LOG.error(f"ISBN {isbn} 请求失败：{str(e)}")
@@ -1540,7 +1595,8 @@ class DouBanApi:
             return None
         
         bookinfo =[]
-         
+        
+        # 过滤残缺数据：字段数<最小阈值 → 返回None 
         if len(book_dict) > 5:
             # ===================== 5. 数据清洗与格式化 =====================
             # 处理作者+译者：作者用/分隔，有译者则追加“译者:XXX”
@@ -1597,18 +1653,20 @@ class DouBanApi:
         
     def search_bookinfo_by_name(self, bookname:str)  -> Optional[List[str]]:
         """
-        通过书名搜索图书信息
-        :param bookname: 图书名称
-        :return: 图书信息列表的列表
+        通过书名模糊搜索多本图书信息
+        :param bookname: 图书名称（支持模糊匹配，如"Python编程"）
+        :return: 图书信息列表的列表（每个子列表格式同get_bookinfo_by_isbn）
         """
+        # 前置校验：书名为空直接返回空列表
         if not bookname:
             LOG.warning("搜索书名为空")
             return []
         
         self.payload_search['q']= bookname
         try:
-            
+            # 发送GET请求（豆瓣搜索接口仅支持GET）
             response = requests.get(self.url_search, params=self.payload_search, headers=self.headers)
+            # 解析搜索结果（豆瓣返回格式：{"count":20, "start":0, "total":3000, "books":[...]}）
             """
             {
               "count": 20,
@@ -1637,7 +1695,9 @@ class DouBanApi:
                 # print('==='*30)
                 # print(book_dict)
                 # 过滤无ISBN13的图书（ISBN13是唯一标识，必须存在）
+                # 过滤无ISBN13的图书（ISBN13是唯一标识，必须存在）
                 if ('isbn13' not in book_dict):
+                    LOG.debug(f"跳过无ISBN13的图书：书名={self._get_safe_value(book_dict, ['title'])}")
                     continue
                 # 1. 处理作者+译者：作者用/分隔，有译者则追加“译者:XXX”
                 author = '/'.join(book_dict['author'])  # 作者列表转字符串
