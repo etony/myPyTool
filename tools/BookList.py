@@ -31,6 +31,7 @@ import BookInfo
 
 import qdarkstyle
 
+from typing import List, Optional, Dict, Any
 
 # 初始化日志对象（确保全局已定义，若未定义可补充：LOG = logging.getLogger(__name__)）
 LOG = logging.getLogger(os.path.basename(sys.argv[0]))
@@ -1455,11 +1456,11 @@ class ExportBookinfoList(QThread):
  
 class DouBanApi:
 
-    def __init__(self, value):
+    def __init__(self, value:str):
         self.value = value
         self.url_isbn = "https://api.douban.com/v2/book/isbn/"
         self.url_search = "https://api.douban.com/v2/book/search"
-
+        self.key='0ab215a8b1977939201640fa14c66bab'
         # API密钥（apikey）：豆瓣开放平台申请，用于提升API调用限额，避免请求被拦截
         # apikey=0df993c66c0c636e29ecbb5344252a4a
         # apikey=0ac44ae016490db2204ce0a042db2916
@@ -1471,21 +1472,206 @@ class DouBanApi:
             "https://m.douban.com/tv/american", # 模拟移动端来源页，提升请求合法性
             "User-Agent":
             "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"
-        }           
+        } 
+            
+            
+    def _get_safe_value(self, data: Dict[str, Any], keys: List[str], default: Any = "") -> Any:
+        """
+        安全获取嵌套字典的值，避免KeyError
+        :param data: 源字典
+        :param keys: 嵌套键列表（如['images', 'small']）
+        :param default: 默认值
+        :return: 目标值或默认值
+        """
+        current = data
+        for key in keys:
+            if isinstance(current, dict) and key in current:
+                current = current[key]
+            else:
+                return default
+        return current            
+
+    def _clean_price(self, price: str) -> str:
+        """清洗价格字段"""
+        if not price:
+            return ""
+        return price.replace("CNY", "").replace("元", "").strip()
+
+    def _calculate_recommend(self, average: str, num_raters: str) -> int:
+        """
+        计算推荐度，带异常容错
+        :param average: 平均分（字符串/数字）
+        :param num_raters: 评价人数（字符串/数字）
+        :return: 推荐度（整数）
+        """
+        try:
+            avg = float(average) if average else 0.0
+            num = float(num_raters) if num_raters else 0.0
+            if avg < 2.5 or num < 0:
+                return 0
+            # 推荐度公式：(平均分 - 2.5) × ln(评价人数 + 1)
+            recommend = (avg - 2.5) * math.log(num + 1)
+            return round(recommend)
+        except (ValueError, math.DomainError):
+            LOG.error(f"计算推荐度失败：平均分={average}，评价人数={num_raters}")
+            return 0
     
-    def get_bookinfo_by_isbn(self,isbn):
-        self.isbn= isbn
-        response = requests.post(self.url_isbn, data=self.payload, headers=self.headers)
-        book_dict = json.loads(response.text)
-        bookinfo =[]
-        return bookinfo
+    def get_bookinfo_by_isbn(self,isbn:str) -> Optional[List[str]]:
+        """
+        通过ISBN获取图书信息
+        :param isbn: 图书ISBN
+        :return: 格式化的图书信息列表，无效时返回None
+        """
+        if not isbn:
+            LOG.warning("ISBN为空")
+            return None
         
-    def search_bookinfo_by_name(self, bookname):
-        self.url_search['q']= bookname
-        response = requests.get(self.payload_search, params=self.url_search, headers=self.headers)
-        booklist = response.json()['books']
+        self.url_isbn = self.url_isbn + isbn
+        url = f"{self.url_isbn}{isbn}"
+        
+        try:
+            response = requests.post(url, data=self.payload_isbn, headers=self.headers)
+            book_dict = json.loads(response.text)
+        except requests.exceptions.RequestException as e:
+            LOG.error(f"ISBN {isbn} 请求失败：{str(e)}")
+            return None
+        except json.JSONDecodeError:
+            LOG.error(f"ISBN {isbn} 响应解析失败：{response.text}")
+            return None
+        
+        bookinfo =[]
+         
+        if len(book_dict) > 5:
+            # ===================== 5. 数据清洗与格式化 =====================
+            # 处理作者+译者：作者用/分隔，有译者则追加“译者:XXX”
+            author = '/'.join(book_dict['author'])
+            if len(book_dict['translator']) > 0:
+                author += ' 译者: '
+                author += '/'.join(book_dict['translator'])
+            # 提取评分信息（包含平均分、评价人数）
+            rating = book_dict['rating']
+            # 清洗价格：移除CNY/元符号，去除首尾空格（兼容不同格式的价格字符串）
+            price = book_dict['price']
+            price = price.replace('CNY', '').replace('元', '').strip()
+
+            # ===================== 6. 填充图书信息列表（按固定索引） =====================
+            bookinfo.append(isbn)                          # 0: ISBN
+            bookinfo.append(book_dict['title'])            # 1: 书名
+            bookinfo.append(author)                        # 2: 作者+译者
+            bookinfo.append(book_dict['publisher'])        # 3: 出版社
+            bookinfo.append(price)                         # 4: 价格（清洗后）
+            bookinfo.append(rating['average'])             # 5: 豆瓣平均分
+            bookinfo.append(rating['numRaters'])           # 6: 评价人数
+            bookinfo.append('计划')                        # 7: 分类（默认值）
+            bookinfo.append('未设置')                      # 8: 书柜位置（默认值）
+            bookinfo.append(book_dict['images']['small'])  # 9: 封面小图URL（替代原image字段）
+            bookinfo.append(book_dict['pubdate'])          # 10: 出版日期
+            bookinfo.append(book_dict['rating'])           # 11: 完整评分字典（含平均分/人数）
+            bookinfo.append(book_dict['alt'])              # 12: 豆瓣图书详情页URL
+    
+            # ===================== 7. 计算图书推荐度（自定义公式） =====================
+            # 日志记录评分信息（便于调试推荐度计算）
+            LOG.info(f"ISBN {isbn} 评分信息：{rating}")
+            LOG.info(f"ISBN {isbn} 完整图书信息：{book_dict}")
+            
+            # 推荐度公式：(平均分 - 2.5) × ln(评价人数 + 1)
+            # 设计逻辑：
+            # - 减2.5：过滤低分图书（平均分<2.5时推荐度为负）
+            # - +1：避免评价人数为0时ln(0)抛出数学异常
+            # - round：四舍五入取整
+            # recommend = round((float(rating['average']) - 2.5) *
+            #                   math.log(float(rating['numRaters']) + 1)) 
+            recommend = self._calculate_recommend(rating['average'], rating['numRaters'])
+            bookinfo.append(str(recommend)) # 13: 推荐度（字符串格式）
+            bookinfo.append(book_dict['pages']) # 14: 页数
+        else:
+            # ===================== 8. 无效数据处理（返回固定长度空值） =====================
+            # 响应数据残缺时，填充13个空格，保证返回列表长度统一，避免调用方索引越界
+            # for i in range(13):
+            #     bookinfo.append(" ")
+            return []
+        
+        # ===================== 9. 返回格式化后的图书信息 =====================        
+        return bookinfo        
+
+        
+    def search_bookinfo_by_name(self, bookname:str)  -> Optional[List[str]]:
+        """
+        通过书名搜索图书信息
+        :param bookname: 图书名称
+        :return: 图书信息列表的列表
+        """
+        if not bookname:
+            LOG.warning("搜索书名为空")
+            return []
+        
+        self.payload_search['q']= bookname
+        try:
+            
+            response = requests.get(self.url_search, params=self.payload_search, headers=self.headers)
+            """
+            {
+              "count": 20,
+              "start": 0,
+              "total": 3000,
+              "books": [
+                  {},
+                  {},
+                  ....
+            }
+            """
+            booklist = response.json()['books']
+        except requests.exceptions.RequestException as e:
+            LOG.error(f"搜索书名 {bookname} 请求失败：{str(e)}")
+            return []
+        except json.JSONDecodeError:
+            LOG.error(f"搜索书名 {bookname} 响应解析失败：{response.text}")
+            return []
         books = []
+        
+        for book_dict in booklist:
+            # 单本图书的信息列表（按字段顺序整理）
+            bookinfo = []
+            # 过滤无效数据（字段过少的图书）
+            if len(book_dict) > 5:
+                # print('==='*30)
+                # print(book_dict)
+                # 过滤无ISBN13的图书（ISBN13是唯一标识，必须存在）
+                if ('isbn13' not in book_dict):
+                    continue
+                # 1. 处理作者+译者：作者用/分隔，有译者则追加“译者:XXX”
+                author = '/'.join(book_dict['author'])  # 作者列表转字符串
+                if len(book_dict['translator']) > 0:
+                    author += ' 译者: '
+                    author += '/'.join(book_dict['translator'])  # 存在译者时
+                 # 2. 处理评分、价格等字段
+                rating = book_dict['rating']  # 评分信息（包含平均分、评价人数）
+                price = book_dict['price'] # 价格（可能为空）
+                # 清洗价格：移除CNY/元符号，去除首尾空格
+                price = price.replace('CNY', '').replace('元', '').strip()
+                # 3. 按顺序填充核心字段（与表格列对应）
+                bookinfo.append(book_dict['isbn13'])          # 0: ISBN13
+                bookinfo.append(book_dict['title'])           # 1: 书名
+                bookinfo.append(author)                       # 2: 作者+译者
+                bookinfo.append(book_dict['publisher'])       # 3: 出版社
+                bookinfo.append(price)                        # 4: 价格（清洗后）
+                bookinfo.append(rating['average'])            # 5: 豆瓣平均分
+                bookinfo.append(rating['numRaters'])          # 6: 评价人数
+                bookinfo.append('计划')                       # 7: 分类（默认“计划”）
+                bookinfo.append('未设置')                     # 8: 书柜位置（默认“未设置”）
+                # 补充扩展字段（不展示在表格，但用于传递给父窗口）
+                bookinfo.append(book_dict['images']['small']) # 9: 图书封面小图URL
+                bookinfo.append(book_dict['pubdate'])         # 10: 出版日期
+                bookinfo.append(book_dict['rating'])          # 11: 完整评分信息
+                bookinfo.append(book_dict['alt'])             # 12: 豆瓣图书详情页URL
+
+                # 将单本图书信息加入总列表
+                books.append(bookinfo)        
+        
         return books
+    
+    def __del__(self):
+        pass
 
         
 if __name__ == "__main__":
