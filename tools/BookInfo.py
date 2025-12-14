@@ -15,7 +15,7 @@ from Ui_BookInfo import Ui_Dialog
 # 系统模块（用于程序入口、命令行参数处理）
 import sys
 # from PyQt6 import QtCore, QtWidgets  # , QtGui
-
+from BookList import DouBanApi
 
 class BookInfo(QDialog, Ui_Dialog):
     """

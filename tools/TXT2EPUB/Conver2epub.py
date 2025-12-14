@@ -377,6 +377,8 @@ class Conver2txt():
             fanjian (bool): 是否进行繁简转换（True为繁体转简体）
         """
         cur_dir = os.path.dirname(self.txtfile) # 输出目录
+        if not os.path.exists(cur_dir):
+            os.mkdir(cur_dir)
         # 解析文件名（不含扩展名）和扩展名
         filename = os.path.splitext(os.path.basename(self.txtfile))[0]
         ext = os.path.splitext(self.txtfile)[1]
