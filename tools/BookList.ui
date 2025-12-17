@@ -92,7 +92,7 @@
        <item>
         <widget class="QPushButton" name="pb_save">
          <property name="toolTip">
-          <string>导出图书信息列表</string>
+          <string>保存图书信息</string>
          </property>
          <property name="statusTip">
           <string/>

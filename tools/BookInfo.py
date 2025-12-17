@@ -15,7 +15,8 @@ from Ui_BookInfo import Ui_Dialog
 # 系统模块（用于程序入口、命令行参数处理）
 import sys
 # from PyQt6 import QtCore, QtWidgets  # , QtGui
-from BookList import DouBanApi
+# from BookList import DouBanApi
+from doubanapi import DouBanApi
 
 class BookInfo(QDialog, Ui_Dialog):
     """
@@ -45,6 +46,7 @@ class BookInfo(QDialog, Ui_Dialog):
         self.indx = indx if indx is not None else 0
         # 加载UI界面（由Ui_Dialog提供的setupUi方法，初始化对话框的控件）
         self.setupUi(self)
+        self.setFixedSize(self.width(), self.height())
 
     @pyqtSlot()
     def on_pb_next_clicked(self):

@@ -54,6 +54,7 @@ class BookSearch(QDialog, Ui_Dialog):
         super().__init__(parent)
         # 加载UI界面（初始化对话框的控件：搜索框、按钮、表格视图等）
         self.setupUi(self)
+        self.setFixedSize(self.width(), self.height())
 
     @pyqtSlot()
     def on_pb_search_douban_clicked(self):
