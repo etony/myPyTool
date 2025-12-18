@@ -1192,7 +1192,8 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         }
         header['Referer'] = ref
         # 发送GET请求下载封面图片数据
-        res = requests.get(douban_bookinfo[9], headers=header)
+
+        res = requests.get(douban_bookinfo[9], headers=header, timeout=5)
         # 将图片二进制数据转换为QImage（PyQt6可识别的图片格式）
         img = QImage.fromData(res.content)
 
@@ -1645,6 +1646,7 @@ class DouBanApi:
             # 响应数据残缺时，填充13个空格，保证返回列表长度统一，避免调用方索引越界
             # for i in range(13):
             #     bookinfo.append(" ")
+            LOG.info(f"ISBN {isbn} 图书信息不完整！")
             return []
         
         # ===================== 9. 返回格式化后的图书信息 =====================        

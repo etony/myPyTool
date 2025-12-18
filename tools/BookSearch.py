@@ -95,7 +95,7 @@ class BookSearch(QDialog, Ui_Dialog):
             
         # 发送GET请求调用豆瓣API
         response = requests.get(url, params=params, headers=headers)
-
+        
         # 解析API返回的JSON数据，提取图书列表
         booklist = response.json()['books']
         # 初始化清洗后的图书信息列表（存储最终要展示/传递的数据）

@@ -22,7 +22,7 @@ import math
 import logging
 import requests
 import json
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any,ByteString
 
 # ===================== 全局配置与常量定义 =====================
 # 日志配置：初始化日志器，记录关键操作和异常（便于问题排查）
@@ -300,7 +300,20 @@ class DouBanApi:
                 books.append(bookinfo)        
         
         return books
-    
+    def get_img_by_url(self, url:str)  -> Optional[ByteString]:    
+        ref = 'https://' + url.split('/')[2]
+        headers= self.headers
+        headers['Referer'] = ref
+        try:
+            res = requests.get(url, headers=headers, timeout=5)
+            if res.status_code == 200:
+                return res.content
+            else:
+                print(f'获取图书封面失败:{url}')
+        except Exception as  e:
+            
+            print(f'获取图书封面失败:{e}')
+        
     def __del__(self):
         pass
 

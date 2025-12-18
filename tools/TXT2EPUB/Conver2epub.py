@@ -353,7 +353,7 @@ class Conver2txt():
                     else:
                         f.write(soup.text)
                     # 写入章节结束标记
-                    f.write('(-本章结束-)')
+                    f.write('(-- 本章结束 --)')
 
                     '''
                     ITEM_UNKNOWN = 0
@@ -456,26 +456,47 @@ class Conver2txt():
         """
         # 尝试通过ID获取封面        
         # book = epub.read_epub(self.epubfile)
-        cover = self.book.get_item_with_id('cover')
-        if (cover.get_type() == ebooklib.ITEM_IMAGE) or (cover.get_type() == ebooklib.ITEM_COVER):
-            return cover.get_content()
-
-        # 尝试通过另一ID获取封面
-        cover = self.book.get_item_with_id('cover-img')
-        if (cover.get_type() == ebooklib.ITEM_IMAGE) or (cover.get_type() == ebooklib.ITEM_COVER):
-            return cover.get_content()
-
-        # 尝试从封面类型项目中获取
-        items = self.book.get_items_of_type(ebooklib.ITEM_COVER)
-        if len(items):
-            return items[1].get_content()
-
-        # 尝试从图片类型项目中查找含"cover"名称的图片
-        items = self.book.get_items_of_type(ebooklib.ITEM_IMAGE)
-        for item in items:
-            if (item.get_name().find('cover') >= 0):
-                return item.get_content()
-
+        try:
+            cover = self.book.get_item_with_id('cover')
+            # print(f'cover: {cover.get_type()}')
+            if (cover.get_type() == ebooklib.ITEM_IMAGE) or (cover.get_type() == ebooklib.ITEM_COVER):
+                return cover.get_content()
+        except:
+            pass
+        
+        try:
+            # 尝试通过另一ID获取封面
+            cover = self.book.get_item_with_id('cover-img')
+            # print(f'cover-img: {cover.get_type()}')
+            if (cover.get_type() == ebooklib.ITEM_IMAGE) or (cover.get_type() == ebooklib.ITEM_COVER):
+                return cover.get_content()
+        except:
+            pass
+        
+        try:
+            cover = self.book.get_item_with_id('cover-image')
+            # print(f'cover-image: {cover.get_type()}')
+            if (cover.get_type() == ebooklib.ITEM_IMAGE) or (cover.get_type() == ebooklib.ITEM_COVER):
+                return cover.get_content()
+        except:
+            pass
+        
+        try:            
+            # 尝试从封面类型项目中获取
+            items = self.book.get_items_of_type(ebooklib.ITEM_COVER)
+            if len(items):
+                return items[1].get_content()
+        except:
+            pass
+        
+        try:
+            # 尝试从图片类型项目中查找含"cover"名称的图片
+            items = self.book.get_items_of_type(ebooklib.ITEM_IMAGE)
+            for item in items:
+                if (item.get_name().find('cover') >= 0):
+                    return item.get_content()
+        except:
+            pass
 
 class epub2mobi():
     """EPUB文件转换为MOBI格式的处理类（未完全实现）"""

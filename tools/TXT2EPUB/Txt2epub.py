@@ -362,10 +362,13 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
 
             # logger.info(f'cover type: {type(conver2txt.get_cover())}')
             # 提取并显示EPUB封面
-            bookcover = conver2txt.get_cover()  # 获取封面二进制数据
-            img = QImage.fromData(bookcover)  # 二进制数据转QImage
-            cover = QPixmap.fromImage(img)  # QImage转QPixmap
-            self.lb_cover.setPixmap(cover)  # 显示在界面标签
+            try:
+                bookcover = conver2txt.get_cover()  # 获取封面二进制数据
+                img = QImage.fromData(bookcover)  # 二进制数据转QImage
+                cover = QPixmap.fromImage(img)  # QImage转QPixmap
+                self.lb_cover.setPixmap(cover)  # 显示在界面标签
+            except  Exception as e:
+                logger.info(f'提取epub文件封面失败: {e}')
             logger.info(f'提取epub文件信息完毕: {book_info}')
 
     @pyqtSlot()
