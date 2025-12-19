@@ -75,6 +75,8 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         self.setFixedSize(self.width(), self.height())  # 固定窗口大小，避免布局错乱
         self.setWindowTitle("Txt↔Epub/Mobi 转换工具")
         self.setWindowIcon(QIcon('bookinfo.ico'))
+        self.lb_cover.setPixmap(QPixmap("cover.jpeg"))
+        self.lb_image.setPixmap(QPixmap("cover.jpeg"))
         # 配置日志：按日分割，格式包含时间/级别/模块.函数/消息
         logger.add(
             '日志_{time:YYYY-MM-DD}.log',  # 日志文件名（按日期）
