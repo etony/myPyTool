@@ -5,15 +5,12 @@ Created on Tue Jun  4 10:50:48 2024
 @author: admin
 """
 
-import os
+
 from bs4 import BeautifulSoup
-from datetime import datetime
 from time import sleep
 import requests
 import ssl
 from tcping import Ping
-import json
-
 import webbrowser
 
 ssl._create_default_https_context = ssl._create_unverified_context
@@ -66,6 +63,7 @@ def pingip(ipAddress):
     ping.ping(2)  # ping命令执行次数
 
     res = ping.result.table  # 以表格形式展现（ping.result.raw  # 原始形态，ping.result.rows  # 行显示）
+    print(res)
     ret = ping.result.raw
     retlist = list(ret.split('\n'))
     loss = retlist[2].split(',')[3].split(' ')[1]  # 获取丢包率
