@@ -1,8 +1,8 @@
 {
   "header": {
     "comment": "eric project file for project Python-Study",
-    "copyright": "Copyright (C) 2025 etony.an@gmail.com, etony.an@gmail.com",
-    "saved": "2025-12-21, 21:17:41"
+    "copyright": "Copyright (C) 2026 etony.an@gmail.com, etony.an@gmail.com",
+    "saved": "2026-01-03, 14:35:30"
   },
   "project": {
     "AUTHOR": "etony.an@gmail.com",
@@ -49,7 +49,6 @@
       "imageconver.ui",
       "imagexif.ui",
       "obavip.ui",
-      "obtain-available-ip.ui",
       "sqlmap.ui"
     ],
     "HASH": "713421f9ee85a958350bed4b14e81efef19da617",
@@ -104,14 +103,12 @@
       "Ui_generate_license.py",
       "Ui_imageconver.py",
       "Ui_obavip.py",
-      "Ui_obtain-available-ip.py",
       "Ui_sqlmap.py",
       "generate_license.py",
       "image-conver.py",
       "model.py",
       "myMusicPlayer.py",
       "obavip.py",
-      "obtain-available-ip.py",
       "sqlmapui.py"
     ],
     "SOURCESDIR": "",
