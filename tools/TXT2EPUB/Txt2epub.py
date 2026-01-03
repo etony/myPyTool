@@ -128,7 +128,7 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
                 logger.info(
                     f'指定文件编码: {self.cb_encode.currentIndex()}-{encode}')
 
-            # 执行核心转换逻辑b')
+            # 执行核心转换逻辑
             conver2.conver()
             logger.info(f'文件转换完成！   {epubfile}')
             self.statusBar.showMessage("文件转换完成！")  # 状态栏提示
@@ -418,6 +418,23 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         logger.info(f'文件按章节转换完成！  {cur_dir}')
         self.statusBar.showMessage(f"文件按章节转换完成！  {cur_dir}")
 
+        # 弹窗提示：询问是否打开存储目录
+        reply = QMessageBox(QMessageBox.Icon.Information,  # 信息类弹窗
+                            '信息',  # 弹窗标题
+                            '转换完成,是否打开存储目录？',  # 弹窗内容
+                            QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.No  # 按钮
+                            ).exec()
+
+        # 按用户选择打开目录（跨平台兼容）
+        if reply == QMessageBox.StandardButton.Ok:
+          
+            logger.info(f'打开存贮目录: {cur_dir}')
+            if sys.platform == 'win32':
+                # os.system("start explorer %s" %cur_dir)
+                os.startfile(cur_dir)  # Windows打开目录
+            elif sys.platform == 'linux':
+                os.system('xdg-open "%s"' % cur_dir)  # Linux打开目录        
+
     @pyqtSlot()
     def on_pb_out_conver_clicked(self):
         """
@@ -444,6 +461,25 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
 
         logger.info(f'文件转换完成！  {self.le_out_txt.text()}')
         self.statusBar.showMessage(f"文件转换完成！  {self.le_out_txt.text()}")
+        
+        # 弹窗提示：询问是否打开存储目录
+        reply = QMessageBox(QMessageBox.Icon.Information,  # 信息类弹窗
+                            '信息',  # 弹窗标题
+                            '转换完成,是否打开存储目录？',  # 弹窗内容
+                            QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.No  # 按钮
+                            ).exec()
+
+        # 按用户选择打开目录（跨平台兼容）
+        if reply == QMessageBox.StandardButton.Ok:
+            dirname, filename = os.path.split(self.le_out_txt.text())  # 拆分目录和文件名
+            logger.info(f'打开存贮目录: {dirname}')
+            if sys.platform == 'win32':
+                # os.system("start explorer %s" %dirname)
+                os.startfile(dirname)  # Windows打开目录
+            elif sys.platform == 'linux':
+                os.system('xdg-open "%s"' % dirname)  # Linux打开目录
+        
+        
 
     @pyqtSlot()
     def on_pb_out_reset_clicked(self):
