@@ -247,7 +247,7 @@ class DouBanApi:
                   ....
             }
             """
-            print(response.json())
+            # print(response.json())
 
             booklist = response.json()['books']
         except requests.exceptions.RequestException as e:
@@ -321,20 +321,21 @@ if __name__ == "__main__":
     # 初始化API实例
     douban_api = DouBanApi()    
     
-    test_isbn = "9787115428028"  # Python编程：从入门到实践（第二版）ISBN
-    isbn_result = douban_api.get_bookinfo_by_isbn(test_isbn)
-    print("=" * 80)
-    print(f"ISBN {test_isbn} 查询结果：")
-    if isbn_result:
-        for idx, value in enumerate(isbn_result):
-            print(f"  索引{idx}：{value}")
-    else:
-        print("  查询失败（无效ISBN/网络异常/数据残缺）")    
+    # test_isbn = "9787115428028"  # Python编程：从入门到实践（第二版）ISBN
+    # isbn_result = douban_api.get_bookinfo_by_isbn(test_isbn)
+    # print("=" * 80)
+    # print(f"ISBN {test_isbn} 查询结果：")
+    # if isbn_result:
+    #     for idx, value in enumerate(isbn_result):
+    #         print(f"  索引{idx}：{value}")
+    # else:
+    #     print("  查询失败（无效ISBN/网络异常/数据残缺）")    
         
-    # test_bookname = "Python编程"
-    # search_result = douban_api.search_bookinfo_by_name(test_bookname)
+    test_bookname = "Python编程"
+    search_result = douban_api.search_bookinfo_by_name(test_bookname)
     # print("=" * 80)
     # print(f"书名「{test_bookname}」搜索结果（共{len(search_result)}本）：")
     # for idx, book in enumerate(search_result[:3]):  # 仅打印前3本
-    #     print(f"  第{idx+1}本：ISBN={book[0]}，书名={book[1]}")    
+    #     print(f"  第{idx+1}本：ISBN={book[0]}，书名={book[1]}")   
+    print(search_result)
     

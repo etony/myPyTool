@@ -26,6 +26,7 @@ from PyQt6.QtGui import QStandardItemModel, QStandardItem
 # 数据处理模块：DataFrame、数组操作
 import pandas as pd
 import numpy as np
+from doubanapi import DouBanApi
 
 
 class BookSearch(QDialog, Ui_Dialog):
@@ -70,6 +71,8 @@ class BookSearch(QDialog, Ui_Dialog):
         url = "https://api.douban.com/v2/book/search"
         # 获取搜索框中用户输入的关键词
         search_str = self.le_search_douban.text().strip()
+        douban_api = DouBanApi()
+        
         # 跳过空关键词搜索
         if not search_str:
             QMessageBox.warning(
@@ -81,69 +84,73 @@ class BookSearch(QDialog, Ui_Dialog):
             
             return
         # API请求参数：q=搜索关键词，apikey=豆瓣开放平台密钥（示例密钥，建议替换为自己的）
-        params = {
-            'q': search_str,
-            'apikey': '0ac44ae016490db2204ce0a042db2916'}
+        search_result = douban_api.search_bookinfo_by_name(search_str.strip())
         
-        # 请求头：模拟iPhone移动端浏览器，避免豆瓣API反爬限制
-        headers = {
-            "Referer":
-            "https://m.douban.com/tv/american", # 来源页，模拟正常访问
-            "User-Agent":
-            "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"
-        }
+        # params = {
+        #     'q': search_str,
+        #     'apikey': '0ac44ae016490db2204ce0a042db2916'}
+        
+        # # 请求头：模拟iPhone移动端浏览器，避免豆瓣API反爬限制
+        # headers = {
+        #     "Referer":
+        #     "https://m.douban.com/tv/american", # 来源页，模拟正常访问
+        #     "User-Agent":
+        #     "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"
+        # }
             
-        # 发送GET请求调用豆瓣API
-        response = requests.get(url, params=params, headers=headers)
+        # # 发送GET请求调用豆瓣API
+        # response = requests.get(url, params=params, headers=headers)
         
-        # 解析API返回的JSON数据，提取图书列表
-        booklist = response.json()['books']
-        # 初始化清洗后的图书信息列表（存储最终要展示/传递的数据）
-        self.books = []
-        # 遍历每本图书，清洗和整理数据
-        for book_dict in booklist:
-            # 单本图书的信息列表（按字段顺序整理）
-            bookinfo = []
-            # 过滤无效数据（字段过少的图书）
-            if len(book_dict) > 5:
-                # print('==='*30)
-                # print(book_dict)
-                # 过滤无ISBN13的图书（ISBN13是唯一标识，必须存在）
-                if ('isbn13' not in book_dict):
-                    continue
-                # 1. 处理作者+译者：作者用/分隔，有译者则追加“译者:XXX”
-                author = '/'.join(book_dict['author'])  # 作者列表转字符串
-                if len(book_dict['translator']) > 0:
-                    author += ' 译者: '
-                    author += '/'.join(book_dict['translator'])  # 存在译者时
-                 # 2. 处理评分、价格等字段
-                rating = book_dict['rating']  # 评分信息（包含平均分、评价人数）
-                price = book_dict['price'] # 价格（可能为空）
-                # 清洗价格：移除CNY/元符号，去除首尾空格
-                price = price.replace('CNY', '').replace('元', '').strip()
-                # 3. 按顺序填充核心字段（与表格列对应）
-                bookinfo.append(book_dict['isbn13'])          # 0: ISBN13
-                bookinfo.append(book_dict['title'])           # 1: 书名
-                bookinfo.append(author)                       # 2: 作者+译者
-                bookinfo.append(book_dict['publisher'])       # 3: 出版社
-                bookinfo.append(price)                        # 4: 价格（清洗后）
-                bookinfo.append(rating['average'])            # 5: 豆瓣平均分
-                bookinfo.append(rating['numRaters'])          # 6: 评价人数
-                bookinfo.append('计划')                       # 7: 分类（默认“计划”）
-                bookinfo.append('未设置')                     # 8: 书柜位置（默认“未设置”）
-                # 补充扩展字段（不展示在表格，但用于传递给父窗口）
-                bookinfo.append(book_dict['images']['small']) # 9: 图书封面小图URL
-                bookinfo.append(book_dict['pubdate'])         # 10: 出版日期
-                bookinfo.append(book_dict['rating'])          # 11: 完整评分信息
-                bookinfo.append(book_dict['alt'])             # 12: 豆瓣图书详情页URL
+        # # 解析API返回的JSON数据，提取图书列表
+        # booklist = response.json()['books']
+        # # 初始化清洗后的图书信息列表（存储最终要展示/传递的数据）
+        # self.books = []
+        # # 遍历每本图书，清洗和整理数据
+        # for book_dict in booklist:
+        #     # 单本图书的信息列表（按字段顺序整理）
+        #     bookinfo = []
+        #     # 过滤无效数据（字段过少的图书）
+        #     if len(book_dict) > 5:
+        #         # print('==='*30)
+        #         # print(book_dict)
+        #         # 过滤无ISBN13的图书（ISBN13是唯一标识，必须存在）
+        #         if ('isbn13' not in book_dict):
+        #             continue
+        #         # 1. 处理作者+译者：作者用/分隔，有译者则追加“译者:XXX”
+        #         author = '/'.join(book_dict['author'])  # 作者列表转字符串
+        #         if len(book_dict['translator']) > 0:
+        #             author += ' 译者: '
+        #             author += '/'.join(book_dict['translator'])  # 存在译者时
+        #          # 2. 处理评分、价格等字段
+        #         rating = book_dict['rating']  # 评分信息（包含平均分、评价人数）
+        #         price = book_dict['price'] # 价格（可能为空）
+        #         # 清洗价格：移除CNY/元符号，去除首尾空格
+        #         price = price.replace('CNY', '').replace('元', '').strip()
+        #         # 3. 按顺序填充核心字段（与表格列对应）
+        #         bookinfo.append(book_dict['isbn13'])          # 0: ISBN13
+        #         bookinfo.append(book_dict['title'])           # 1: 书名
+        #         bookinfo.append(author)                       # 2: 作者+译者
+        #         bookinfo.append(book_dict['publisher'])       # 3: 出版社
+        #         bookinfo.append(price)                        # 4: 价格（清洗后）
+        #         bookinfo.append(rating['average'])            # 5: 豆瓣平均分
+        #         bookinfo.append(rating['numRaters'])          # 6: 评价人数
+        #         bookinfo.append('计划')                       # 7: 分类（默认“计划”）
+        #         bookinfo.append('未设置')                     # 8: 书柜位置（默认“未设置”）
+        #         # 补充扩展字段（不展示在表格，但用于传递给父窗口）
+        #         bookinfo.append(book_dict['images']['small']) # 9: 图书封面小图URL
+        #         bookinfo.append(book_dict['pubdate'])         # 10: 出版日期
+        #         bookinfo.append(book_dict['rating'])          # 11: 完整评分信息
+        #         bookinfo.append(book_dict['alt'])             # 12: 豆瓣图书详情页URL
 
-                # 将单本图书信息加入总列表
-                self.books.append(bookinfo)
+        #         # 将单本图书信息加入总列表
+        #         self.books.append(bookinfo)
 
-        # ========== 构建搜索结果表格 ==========
-        # 1. 提取前9个核心字段（对应表格列），转换为DataFrame（方便批量处理）
-        # np.array(self.books)[:, 0:9]：取所有行的0-8列（前9个字段）
-        df = pd.DataFrame(np.array(self.books)[:, 0:9])
+        # # ========== 构建搜索结果表格 ==========
+        # # 1. 提取前9个核心字段（对应表格列），转换为DataFrame（方便批量处理）
+        # # np.array(self.books)[:, 0:9]：取所有行的0-8列（前9个字段）
+        # df = pd.DataFrame(np.array(self.books)[:, 0:9])
+        
+        df = pd.DataFrame(np.array(search_result)[:, 0:9])
         # 2. 创建标准项表格模型（行数=DataFrame行数，列数=DataFrame列数）
         self.table_model = QStandardItemModel(df.shape[0], df.shape[1])
         # 3. 设置表格表头（与核心字段对应）
