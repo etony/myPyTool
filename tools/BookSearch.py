@@ -84,7 +84,7 @@ class BookSearch(QDialog, Ui_Dialog):
             
             return
         # API请求参数：q=搜索关键词，apikey=豆瓣开放平台密钥（示例密钥，建议替换为自己的）
-        search_result = douban_api.search_bookinfo_by_name(search_str.strip())
+        self.search_result = douban_api.search_bookinfo_by_name(search_str.strip())
         
         # params = {
         #     'q': search_str,
@@ -150,7 +150,7 @@ class BookSearch(QDialog, Ui_Dialog):
         # # np.array(self.books)[:, 0:9]：取所有行的0-8列（前9个字段）
         # df = pd.DataFrame(np.array(self.books)[:, 0:9])
         
-        df = pd.DataFrame(np.array(search_result)[:, 0:9])
+        df = pd.DataFrame(np.array(self.search_result)[:, 0:9])
         # 2. 创建标准项表格模型（行数=DataFrame行数，列数=DataFrame列数）
         self.table_model = QStandardItemModel(df.shape[0], df.shape[1])
         # 3. 设置表格表头（与核心字段对应）
@@ -178,7 +178,7 @@ class BookSearch(QDialog, Ui_Dialog):
         @type index: QModelIndex
         """
         # 获取双击行的索引，提取对应的图书信息
-        bookinfo = self.books[index.row()]
+        bookinfo = self.search_result[index.row()]
         # 调试用：打印选中的图书信息（可删除）
         print("选中的图书信息：", bookinfo)
         # 发射自定义信号，将图书信息传递给父窗口
