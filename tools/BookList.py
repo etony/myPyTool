@@ -433,7 +433,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # ===================== 8. 初始化状态栏显示 =====================
         # 状态栏默认显示软件版本号，给用户版本反馈
         self.statusBar.showMessage(self.appver)
-        self.pb_insert.setEnabled(False)
+        # self.pb_insert.setEnabled(False)
     # ===================== 按钮槽函数 =====================
     @pyqtSlot()
     def on_pb_load_clicked(self):
