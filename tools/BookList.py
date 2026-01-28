@@ -433,7 +433,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         # ===================== 8. 初始化状态栏显示 =====================
         # 状态栏默认显示软件版本号，给用户版本反馈
         self.statusBar.showMessage(self.appver)
-        self.pb_insert.setEnabled(False)
+        self.pb_insert.setEnabled(True)
     # ===================== 按钮槽函数 =====================
     @pyqtSlot()
     def on_pb_load_clicked(self):
@@ -1290,7 +1290,7 @@ class BLmainWindow(QMainWindow, Ui_mainWindow):
         self.CW_bookinfo.tb_bookinfo.setFixedHeight(round(tb_height))
         # 调整文本框垂直位置（move_y=0表示不调整，可根据需要修改）
         move_y = 311-round(tb_height)  # 311-round(tb_height) # 注释为历史调整逻辑，保留供参考
-        print(f'高： {round(311-tb_height)}')
+        # print(f'高： {round(311-tb_height)}')
         self.CW_bookinfo.tb_bookinfo.setGeometry(self.CW_bookinfo.tb_bookinfo.pos().x(), # 保持X坐标不变
                                                  tb_y+move_y, # 调整Y坐标
                                                  self.CW_bookinfo.tb_bookinfo.width(), # 保持宽度不变

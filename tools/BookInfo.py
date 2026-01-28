@@ -16,7 +16,7 @@ from Ui_BookInfo import Ui_Dialog
 import sys
 # from PyQt6 import QtCore, QtWidgets  # , QtGui
 # from BookList import DouBanApi
-from doubanapi import DouBanApi
+# from doubanapi import DouBanApi
 
 class BookInfo(QDialog, Ui_Dialog):
     """
