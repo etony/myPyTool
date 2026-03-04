@@ -408,13 +408,14 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         if self.cb_out_code.currentIndex() != 0:
             encode = self.cb_out_code.currentText()
             self.conver2txt.set_code(encode)
-
+         
+        
         # 获取繁简转换开关状态
         fanjian = self.chb_fanjian.isChecked()
         # 执行按章节转换(传入繁简转换参数)
         self.conver2txt.conver_chapter(fanjian=fanjian)
         
-        cur_dir= os.path.dirname(self.txtfileself.le_out_txt.text())
+        cur_dir= os.path.dirname(self.le_out_txt.text())
         logger.info(f'文件按章节转换完成！  {cur_dir}')
         self.statusBar.showMessage(f"文件按章节转换完成！  {cur_dir}")
 
@@ -453,6 +454,11 @@ class Txt2epub(QMainWindow, Ui_MainWindow):
         if self.cb_out_code.currentIndex() != 0:
             encode = self.cb_out_code.currentText()
             self.conver2txt.set_code(encode)
+
+        # 设置输出文件的章节分隔符    
+        chapter_Sep = self.cb_out_chapter.currentText()
+        self.conver2txt.set_sep(chapter_Sep)
+             
 
         # 获取繁简转换开关状态
         fanjian = self.chb_fanjian.isChecked()

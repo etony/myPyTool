@@ -274,6 +274,7 @@ class Conver2txt():
         self.txtfile = txtfile  # 输出TXT文件路径
         self.epubfile = epubfile # 输入EPUB文件路径
         self.code = code # 编码格式
+        self.sep = ''
         self.dirname, filename = os.path.split(txtfile)  # 解析输出目录
 
         # 读取EPUB书籍对象
@@ -282,7 +283,11 @@ class Conver2txt():
     def set_code(self, code='utf-8'):
         """设置输出文件的编码格式"""
         self.code = code
-
+        
+    def set_sep(self, sep):
+        """设置输出文件的章节分隔符"""
+        self.sep = sep
+        
     def modi(self, bookinfo):
         """
         修改EPUB元数据并重新保存
@@ -353,8 +358,9 @@ class Conver2txt():
                     else:
                         f.write(soup.text)
                     # 写入章节结束标记
-                    f.write('(-- 本章结束 --)')
-
+                    if len(self.sep)>=1:
+                        f.write(self.sep)
+                            
                     '''
                     ITEM_UNKNOWN = 0
                     ITEM_IMAGE = 1
